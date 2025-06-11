@@ -1,0 +1,20 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <link rel="icon" type="image/png"   href="/assets/wepik-export-20240217134649iiib-C7X8pk3-.png"  />
+    <link rel="stylesheet" href="https://unpkg.com/aos@next/dist/aos.css" />
+    <link rel="stylesheet" href="" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Infan-Jioun-Portfolio</title>
+    <script type="module" crossorigin src="/assets/index-CR0kuAjf.js"></script>
+    <link rel="stylesheet" crossorigin href="/assets/index-dRMjqLUb.css">
+  </head>
+  <body>
+    <div id="root"></div>
+    <script src="https://unpkg.com/aos@next/dist/aos.js"></script>
+    <script>
+      AOS.init();
+    </script>
+  </body>
+</html>

@@ -1,566 +1,463 @@
-
-
-import { Button, Dialog, DialogBody, DialogFooter, DialogHeader, IconButton, Input, Textarea, Typography } from '@material-tailwind/react';
+import { Input, Textarea, Button, Spinner } from '@material-tailwind/react';
 import React, { useEffect, useState } from 'react';
 import { useForm } from 'react-hook-form';
-import { MdDeleteOutline } from 'react-icons/md';
-import { Link, useNavigate } from 'react-router-dom';
-import Swal from 'sweetalert2';
+import { MdDeleteOutline, MdSearch } from 'react-icons/md';
+import { useNavigate } from 'react-router-dom';
 import toast from 'react-hot-toast';
 import Select from "react-select";
-
+import { motion, AnimatePresence } from 'framer-motion';
 import { Helmet } from 'react-helmet';
 import useAxiosSecure from '../../Hooks/useAxiosSecure';
 import useAddFood from '../../Hooks/useAddFood';
 import useAuth from '../../Hooks/useAuth';
-import { XMarkIcon } from "@heroicons/react/24/outline";
-import { CardElement, useElements, useStripe } from '@stripe/react-stripe-js';
-import { FaCcStripe } from "react-icons/fa";
-import Stripe from 'stripe';
-
+import bangladeshGeoData from '../../../../public/District-Upzilas.json';
+import { Dialog, DialogTitle, DialogContent, Box, Typography, DialogActions, Tooltip } from '@mui/material';
+import { Elements } from "@stripe/react-stripe-js";
+import { loadStripe } from "@stripe/stripe-js";
+import StripePayment from './StripePayment/StripePayment';
+import SSLCommerzPayment from './SSLCommerzPayment/SSLCommerzPayment';
 
 const CheckoutForm = () => {
-    const navigate = useNavigate()
-    // const stripe = useStripe();
+    const navigate = useNavigate();
     const axiosSecure = useAxiosSecure();
-    const [stateOptions, setStateOptions] = useState([]);
-    const [localCountry, setLocalCountry] = useState(null);
-    const [selectedStateCategory, setStateProductCategory] = useState(null);
-    const [districtOption, setDistrictOption] = useState([]);
-    const [selectedDistrict, setSelectedDistrict] = useState(null);
-    const [loading, setLoading] = useState(false);
-    const [quantities, setQuantities] = useState({});
-    const [cartFood, refetch] = useAddFood();
+    const [cartFood, refetch, handleRemove] = useAddFood();
     const { user } = useAuth();
-    const [selectedUpazila, setSelectedUpazila] = useState(null);
-    const [upazilaOptions, setUpazilaOptions] = useState([]);
-    const [open, setOpen] = React.useState(false);
-    const [clientSecret, setClientSecret] = useState("");
-    const [transactionId, setTransactionId] = useState("");
-   
- const naviagte = useNavigate();
-    const {
-        register, handleSubmit, formState: { errors },
-        setValue,
-    } = useForm({
-        defaultValues: {
-             customerName : user?.displayName || "Default name", email: user?.email || "Default Email  "
-        },
+    const [isProcessing, setIsProcessing] = useState(false);
+    const [selectedPaymentMethod, setSelectedPaymentMethod] = useState(null);
+    const {restaurantName} = cartFood;
+
+    const stripeKey = import.meta.env.VITE_STRIPE_PAYMENT || "";
+    const stripePromise = loadStripe(stripeKey);
+    const [loadingGeo, setLoadingGeo] = useState({
+        division: false,
+        district: false,
+        upazila: false
     });
-    const handleOpen = () => setOpen(!open);
+
+    const [divisions, setDivisions] = useState([]);
+    const [districts, setDistricts] = useState([]);
+    const [upazilas, setUpazilas] = useState([]);
+    const [openModal, setOpenModal] = useState(false);
+
+    const {
+        register,
+        handleSubmit,
+        formState: { errors, isValid },
+        setValue,
+        watch,
+        trigger
+    } = useForm({
+        mode: "onChange",
+        defaultValues: {
+            customerName: '',
+            contactNumber: '',
+            address: '',
+            country: '',
+            division: '',
+            district: '',
+            upazila: ''
+        }
+    });
+
+    const watchFields = watch();
+
+    const handlePaymentMethodSelect = (method) => {
+        setSelectedPaymentMethod(method);
+    };
+
+    const isAddressComplete = () => {
+        if (watch("country") !== "Bangladesh") {
+            return watch("address") && watch("country");
+        }
+        return (
+            watch("address") &&
+            watch("country") &&
+            watch("division") &&
+            watch("district") &&
+            watch("upazila")
+        );
+    };
+
     useEffect(() => {
-        setLoading(true);
-        let options = [];
-        if (localCountry?.value === "Bangladesh") {
-            options = [
-                { value: "Dhaka", label: "Dhaka" },
-                { value: "Chattogram", label: "Chattogram" },
-                { value: "Khulna", label: "Khulna" },
-                { value: "Barishal", label: "Barishal" },
-                { value: "Sylhet", label: "Sylhet" },
-                { value: "Rangpur", label: "Rangpur" },
-                { value: "Rajshahi", label: "Rajshahi" }
-            ];
-        }
-
-        const district = {
-            Dhaka: [
-                { value: "Dhaka", label: "Dhaka" },
-                { value: "Faridpur", label: "Faridpur" },
-                { value: "Gazipur", label: "Gazipur" },
-                { value: "Gopalganj", label: "Gopalganj" },
-                { value: "Kishoreganj", label: "Kishoreganj" },
-                { value: "Madaripur", label: "Madaripur" },
-                { value: "Manikganj", label: "Manikganj" },
-                { value: "Munshiganj", label: "Munshiganj" },
-                { value: "Mymensingh", label: "Mymensingh" },
-                { value: "Narsingdi", label: "Narsingdi" },
-                { value: "Narayanganj", label: "Narayanganj" },
-                { value: "Tangail", label: "Tangail" },
-                { value: "Shariatpur", label: "Shariatpur" },
-                { value: "Netrokona", label: "Netrokona" }
-            ],
-            Chattogram: [
-                { value: "Chattogram", label: "Chattogram" },
-                { value: "Bandarban", label: "Bandarban" },
-                { value: "Brahmanbaria", label: "Brahmanbaria" },
-                { value: "Chandpur", label: "Chandpur" },
-                { value: "Feni", label: "Feni" },
-                { value: "Khagrachari", label: "Khagrachari" },
-                { value: "Lakshmipur", label: "Lakshmipur" },
-                { value: "Noakhali", label: "Noakhali" },
-                { value: "Rangamati", label: "Rangamati" },
-                { value: "Cox_sBazar", label: "Cox_sBazar" }
-            ],
-            Khulna: [
-                { value: "Khulna", label: "Khulna" },
-                { value: "Bagerhat", label: "Bagerhat" },
-                { value: "Chuadanga", label: "Chuadanga" },
-                { value: "Jessore", label: "Jessore" },
-                { value: "Jhenaidah", label: "Jhenaidah" },
-                { value: "Kushtia", label: "Kushtia" },
-                { value: "Meherpur", label: "Meherpur" },
-                { value: "Mongla", label: "Mongla" },
-                { value: "Satkhira", label: "Satkhira" }
-            ],
-            Barishal: [
-                { value: "Barishal", label: "Barishal" },
-                { value: "Barguna", label: "Barguna" },
-                { value: "Bhola", label: "Bhola" },
-                { value: "Jhalokathi", label: "Jhalokathi" },
-                { value: "Patuakhali", label: "Patuakhali" },
-                { value: "Pirojpur", label: "Pirojpur" },
-
-            ],
-            Sylhet: [
-                { value: "Sylhet", label: "Sylhet" },
-                { value: "Habiganj", label: "Habiganj" },
-                { value: "Moulvibazar", label: "Moulvibazar" },
-                { value: "Sunamganj", label: "Sunamganj" },
-                { value: "Mymensingh", label: "Mymensingh" },
-            ],
-            Rangpur: [
-                { value: "Rangpur", label: "Rangpur" },
-                { value: "Dinajpur", label: "Dinajpur" },
-                { value: "Gaibandha", label: "Gaibandha" },
-                { value: "Kurigram", label: "Kurigram" },
-                { value: "Lalmonirhat", label: "Lalmonirhat" },
-                { value: "Nilphamari", label: "Nilphamari" },
-                { value: "Panchagarh", label: "Panchagarh" },
-                { value: "Thakurgaon", label: "Thakurgaon" }, ,
-            ],
-            Rajshahi: [
-                { value: "Rajshahi", label: "Rajshahi" },
-                { value: "Bogra", label: "Bogra" },
-                { value: "Chapai Nawabganj", label: "Chapai Nawabganj" },
-                { value: "Naogaon", label: "Naogaon" },
-                { value: "Natore", label: "Natore" },
-                { value: "Pabna", label: "Pabna" },
-                { value: "Rajshahi", label: "Rajshahi" },
-                { value: "Rangpur", label: "Rangpur" },
-                { value: "Shibganj", label: "Shibganj" },
-            ]
-        };
-
-
-        setStateOptions(options);
-        if (selectedStateCategory) {
-            setDistrictOption(district[selectedStateCategory.value] || []);
-        } else {
-            setDistrictOption([]);
-        }
-
-        setLoading(false);
-    }, [localCountry, selectedStateCategory]);
-    const upazilas = {
-        Dhaka: [
-            { value: "Adabor", label: "Adabor" },
-            { value: "Badda", label: "Badda" },
-            { value: "Banani", label: "Banani" },
-            { value: "Bangshal", label: "Bangshal" },
-            { value: "Cantonment", label: "Cantonment" },
-            { value: "Chawkbazar", label: "Chawkbazar" },
-            { value: "Dhanmondi", label: "Dhanmondi" },
-            { value: "Gendaria", label: "Gendaria" },
-            { value: "Gulshan", label: "Gulshan" },
-            { value: "Hazaribagh", label: "Hazaribagh" },
-            { value: "Jatrabari", label: "Jatrabari" },
-            { value: "Kadamtali", label: "Kadamtali" },
-            { value: "Kafrul", label: "Kafrul" },
-            { value: "Kamrangirchar", label: "Kamrangirchar" },
-            { value: "Khilgaon", label: "Khilgaon" },
-            { value: "Khilkhet", label: "Khilkhet" },
-            { value: "Kotwali", label: "Kotwali" },
-            { value: "Lalbagh", label: "Lalbagh" },
-            { value: "Mirpur", label: "Mirpur" },
-            { value: "Mohammadpur", label: "Mohammadpur" },
-            { value: "Motijheel", label: "Motijheel" },
-            { value: "New Market", label: "New Market" },
-            { value: "Pallabi", label: "Pallabi" },
-            { value: "Paltan", label: "Paltan" },
-            { value: "Ramna", label: "Ramna" },
-            { value: "Sabujbagh", label: "Sabujbagh" },
-            { value: "Shah Ali", label: "Shah Ali" },
-            { value: "Shahbagh", label: "Shahbagh" },
-            { value: "Shyampur", label: "Shyampur" },
-            { value: "Sutrapur", label: "Sutrapur" },
-            { value: "Tejgaon", label: "Tejgaon" },
-            { value: "Turag", label: "Turag" },
-            { value: "Uttara", label: "Uttara" },
-            { value: "Uttarkhan", label: "Uttarkhan" },
-        ],
-        Cox_sBazar: [
-
-            { value: "Cox_sBazar: Sadar", label: "Cox_sBazar: Sadar" },
-            { value: "Chakaria", label: "Chakaria" },
-            { value: "Eidgaon", label: "Eidgaon" },
-            { value: "Ramu", label: "Ramu" },
-            { value: "Teknaf", label: "Teknaf" },
-            { value: "Ukhiya", label: "Ukhiya" },
-
-        ]
-    };
-    useEffect(() => {
-        setLoading(true);
-
-        if (selectedDistrict) {
-            setUpazilaOptions(upazilas[selectedDistrict.value] || []);
-        } else {
-            setUpazilaOptions([]);
-        }
-
-        setLoading(false);
-    }, [selectedDistrict]);
-    const handleUpazilaChange = (selectedOption) => {
-        setSelectedUpazila(selectedOption);
-        setValue("upazila", selectedOption?.value || null);
-    };
-    const handleCategoryChange = (selectedOption) => {
-        setLocalCountry(selectedOption);
-        setValue("category", selectedOption?.value || null);
-        setStateProductCategory(null);
-        setSelectedDistrict(null);
-    };
-
-    const handleProductCategoryChange = (selectedOption) => {
-        setStateProductCategory(selectedOption);
-        setValue("state_category", selectedOption?.value || null);
-        setSelectedDistrict(null);
-    };
-
-    const handleDistrictChange = (selectedOption) => {
-        setSelectedDistrict(selectedOption);
-        setValue("district", selectedOption?.value || null);
-    };
-    const onSubmit = async (data) => {
-        try {
-            const payment = {
-                title : "Paid via Stripe",
-                email: user?.email,
-                foodPrice: parseFloat(total),
-                transactionId: "",
-                date: new Date(),
-                cartFoodId: cartFood.map((item) => item._id),
-                status: "pending",
-                customerName: user?.displayName || "Customer",
-                category: localCountry?.value || "General",
-                state_category: data.state_category || "Unknown",
-                district: data.district || "Unknown",
-                address: data.address || "Unknown Address",
-                contactNumber: parseFloat(data.contactNumber) || "01700000000"
-            };
-          
-            const res = await axiosSecure.post("/create-ssl-payment", payment);
-            console.log("🔍 Response from Backend:", res.data);
-    
-            // If payment uses gateway (SSLCommerz)
-            if (res.data?.gatewayPageURL) {
-                // Redirect to SSLCommerz gateway
-                window.location.replace(res.data.gatewayPageURL);
-            } 
-            // If no gateway used, assume direct payment success
-            else if (res.data.insertedId) {
-                toast.success("✅ Payment successful!");
-                navigate("/dashboard/paymentHistory");
-            } 
-            else {
-                console.error("❌ Gateway URL or Payment ID not received!");
-                toast.error("Payment failed to initialize!");
-            }
-        } catch (error) {
-            console.error("❌ Payment request failed:", error);
-            toast.error("Something went wrong with payment!");
-        }
-    };
-    
-
-    // Calculate Subtotal
-    const subtotal = cartFood.reduce((acc, item) => {
-        const quantity = quantities[item._id] || 1;
-        return acc + item.foodPrice * quantity;
-    }, 0);
-
-    const discount = subtotal * 0.15; // 15% discount
-    const total = subtotal - discount;
-    const safeCartFood = Array.isArray(cartFood) ? cartFood : [];
-
-    // Ensure quantities exist, fallback to an empty object
-    // const quantities = cartFood?.quantities || {};
-
-    // const subtotal = safeCartFood.reduce((acc, item) => {
-    //     const quantity = quantities[item._id] || 1;
-    //     return acc + (item.foodPrice || 0) * quantity; 
-    // }, 0);
-
-    // const discount = subtotal * 0.15; 
-    // const total = subtotal - discount;
-
-    const handleRemove = (id) => {
-        if (user && user.email) {
-            Swal.fire({
-                title: "Are you sure?",
-                text: "You won't be able to revert this!",
-                icon: "warning",
-                showCancelButton: true,
-                confirmButtonColor: "#3085d6",
-                cancelButtonColor: "#d33",
-                confirmButtonText: "Yes, delete it!"
-            }).then((result) => {
-                if (result.isConfirmed) {
-                    axiosSecure.delete(`/addFood/${id}`)
-                        .then(res => {
-                            // console.log(res.data);
-                            refetch()
-                            if (res.data.deletedCount > 0) {
-                                refetch()
-                                Swal.fire({
-                                    title: "Deleted!",
-                                    text: "Your file has been deleted.",
-                                    icon: "success",
-                                    color: "red"
-                                });
-                            }
-                        })
-                }
+        const savedData = JSON.parse(localStorage.getItem("checkoutForm"));
+        if (savedData) {
+            Object.entries(savedData).forEach(([key, value]) => {
+                setValue(key, value, { shouldValidate: true });
             });
         }
-    };
-    useEffect(() => {
-        if (total > 0 && !clientSecret) {
-            axiosSecure.post('/create-payment-intent', { price: total })
-                .then(res => setClientSecret(res.data.clientSecret))
-                .catch(error => console.error("Error creating payment intent:", error));
-        }
-    }, [axiosSecure, total, clientSecret]);
-    // stripe payment
+    }, [setValue]);
 
+    useEffect(() => {
+        localStorage.setItem("checkoutForm", JSON.stringify(watchFields));
+    }, [watchFields]);
+
+    const watchCountry = watch("country");
+    const watchDivision = watch("division");
+    const watchDistrict = watch("district");
+
+    useEffect(() => {
+        if (watchCountry === "Bangladesh") {
+            setLoadingGeo(prev => ({ ...prev, division: true }));
+            setTimeout(() => {
+                const opts = bangladeshGeoData.map(div => ({
+                    value: div.division,
+                    label: div.division
+                }));
+                setDivisions(opts);
+                setLoadingGeo(prev => ({ ...prev, division: false }));
+            }, 400);
+        } else {
+            setDivisions([]); setDistricts([]); setUpazilas([]);
+            setValue("division", ""); setValue("district", ""); setValue("upazila", "");
+        }
+    }, [watchCountry, setValue]);
+
+    useEffect(() => {
+        if (watchDivision) {
+            setLoadingGeo(prev => ({ ...prev, district: true }));
+            setTimeout(() => {
+                const divObj = bangladeshGeoData.find(d => d.division === watchDivision);
+                if (divObj) {
+                    const opts = divObj.districts.map(dist => ({
+                        value: dist.district,
+                        label: dist.district
+                    }));
+                    setDistricts(opts);
+                }
+                setLoadingGeo(prev => ({ ...prev, district: false }));
+            }, 400);
+        } else {
+            setDistricts([]); setUpazilas([]);
+            setValue("district", ""); setValue("upazila", "");
+        }
+    }, [watchDivision, setValue]);
+
+    useEffect(() => {
+        if (watchDistrict) {
+            setLoadingGeo(prev => ({ ...prev, upazila: true }));
+            setTimeout(() => {
+                const divObj = bangladeshGeoData.find(d => d.division === watchDivision);
+                const distObj = divObj?.districts.find(di => di.district === watchDistrict);
+                if (distObj) {
+                    const opts = distObj.upazilas.map(u => ({
+                        value: u,
+                        label: u
+                    }));
+                    setUpazilas(opts);
+                }
+                setLoadingGeo(prev => ({ ...prev, upazila: false }));
+            }, 400);
+        } else {
+            setUpazilas([]);
+            setValue("upazila", "");
+        }
+    }, [watchDistrict, watchDivision, setValue]);
+
+    const subtotal = cartFood.reduce((acc, item) => acc + item.foodPrice * (item.quantity || 1), 0);
+    const discount = subtotal * 0.15;
+    const total = subtotal - discount;
+
+    const handleOpenModal = () => {
+        if (cartFood.length === 0) {
+            toast.error("Your cart is empty! Please add items before checkout.");
+            return;
+        }
+        setOpenModal(true);
+    };
+
+    const handleCloseModal = () => {
+        setOpenModal(false);
+        setSelectedPaymentMethod(null);
+    };
+
+    const CustomSelect = ({ options, isLoading, placeholder, value, onChange, error, name }) => (
+        <div className="relative">
+            <Select
+                options={options}
+                placeholder={isLoading ? "Loading..." : placeholder}
+                isSearchable
+                isClearable
+                value={options.find(o => o.value === value) || null}
+                onChange={sel => {
+                    onChange(sel?.value || "");
+                    trigger(name);
+                }}
+                className={`text-[#ff1818] ${error ? 'border-red-500 rounded-md' : ''}`}
+                classNamePrefix="select"
+                isLoading={isLoading}
+                noOptionsMessage={() => "No options found"}
+                loadingMessage={() => "Loading..."}
+                components={{
+                    DropdownIndicator: () => (
+                        isLoading
+                            ? <Spinner className="w-4 h-4" />
+                            : <MdSearch className="text-[#ff1818] mr-2" />
+                    )
+                }}
+            />
+            {error && <p className="text-red-500 text-xs mt-1">{error.message}</p>}
+        </div>
+    );
 
     return (
-        <div >
-            <Helmet>
-                <meta charSet="utf-8" />
-                <title>DASHOBARD | CheckoutForm</title>
+        <div className="min-h-screen  mx-auto  bg-white">
+            <Helmet><title>Checkout | Food Delivery</title></Helmet>
+            <motion.div initial={{ opacity: 0 }} animate={{ opacity: 1 }} transition={{ duration: 0.5 }} className="container mx-auto py-8 px-4 bg-red-50">
+                <form className="grid grid-cols-1 lg:grid-cols-2 gap-8 drop-shadow-2xl ">
 
-            </Helmet>
-            <form onSubmit={handleSubmit(onSubmit)} >
-                <div>
-                    <div style={{ backgroundImage: "url()" }} className="  min-h-screen  hero">
-                        <div className="hero-content grid md:grid-cols-2 md:gap-5 lg:flex-row-reverse justify-between  ">
-                            <div className="  w-full  mx-auto  items-baseline  rounded-md ">
-                                <form className="card-body"> 
+                    {/* Left side - Customer Info */}
+                    <motion.div className="bg-white p-6 rounded-lg shadow-md" initial={{ x: -50 }} animate={{ x: 0 }} transition={{ type: "spring", stiffness: 100 }}>
+                        <h2 className="text-2xl font-bold text-[#ff1818] mb-6">Customer Information</h2>
+                        <div className="space-y-4 ">
+                            <div>
+                                <Input
+                                    label="Full Name"
+                                    color="red"
+                                    {...register("customerName", {
+                                        required: "Full name is required",
+                                        minLength: {
+                                            value: 3,
+                                            message: "Name should be at least 3 characters"
+                                        }
+                                    })}
+                                    error={!!errors.customerName}
+                                />
+                                {errors.customerName && (
+                                    <p className="text-red-500 text-xs mt-1">{errors.customerName.message}</p>
+                                )}
+                            </div>
 
-                                    <br />
-                                    <div className="form-control">
-                                        <input
-                                            type="text"
-                                            className="w-full px-3 py-2 border rounded-full focus:ring-2 text-[#ff1818] focus:ring-red-400 outline-none transition"
-                                            placeholder="Enter Your Name"
-                                            name='customerName'
-                                            {...register("customerName", { required: true, minLength: 1, maxLength: 20 })}
+                            <Input label="Email" type="email" color="red" defaultValue={user?.email} readOnly />
 
-                                        />
-                                        {errors.name && <span className="text-[#ff1818]">This field is required</span>}
-                                        <br />
-                                        <div className='md:flex gap-2'>
-                                            <Input type="email" color='red' size="lg" label="Email" name="email" {...register("email", { required: true })} className="text-[#ff1818]" readOnly />
-                                            {errors.email && <span className="text-[#ff1818]">This field is required</span>}
+                            <div>
+                                <Input
+                                    label="Phone Number"
+                                    color="red"
+                                    {...register("contactNumber", {
+                                        required: "Phone number is required",
+                                        pattern: {
+                                            value: /^(?:\+88|01)?\d{11}$/,
+                                            message: "Please enter a valid Bangladeshi phone number"
+                                        }
+                                    })}
+                                    error={!!errors.contactNumber}
+                                />
+                                {errors.contactNumber && (
+                                    <p className="text-red-500 text-xs mt-1">{errors.contactNumber.message}</p>
+                                )}
+                            </div>
 
-                                            <br />
-                                            <Input
-                                                maxLength={11}
-                                                label="Contact Number"
-                                                {...register("contactNumber", { required: true })}
-                                                placeholder="e.g., +1 123-456-7890"
-                                                color='red'
-                                                pattern="^\+\d{1,3}\s\d{1,4}-\d{1,4}-\d{4}$"
-                                                className="appearance-none [&::-webkit-inner-spin-button]:appearance-none [&::-webkit-outer-spin-button]:appearance-none"
-                                                icon={
-                                                    <svg
-                                                        xmlns="http://www.w3.org/2000/svg"
-                                                        viewBox="0 0 24 24"
-                                                        fill="currentColor"
-                                                        className="h-4 w-4 text-[#ff1818]"
-                                                    >
-                                                        <path
-                                                            fill-rule="evenodd"
-                                                            d="M1.5 4.5a3 3 0 0 1 3-3h1.372c.86 0 1.61.586 1.819 1.42l1.105 4.423a1.875 1.875 0 0 1-.694 1.955l-1.293.97c-.135.101-.164.249-.126.352a11.285 11.285 0 0 0 6.697 6.697c.103.038.25.009.352-.126l.97-1.293a1.875 1.875 0 0 1 1.955-.694l4.423 1.105c.834.209 1.42.959 1.42 1.82V19.5a3 3 0 0 1-3 3h-2.25C8.552 22.5 1.5 15.448 1.5 6.75V4.5Z"
-                                                            clip-rule="evenodd"
-                                                        />
-                                                    </svg>
-                                                }
+                            <div>
+                                <label className="block text-sm font-medium text-gray-700 mb-1">Country</label>
+                                <CustomSelect
+                                    options={[{ value: "Bangladesh", label: "Bangladesh" }, { value: "Other", label: "Other Country" }]}
+                                    placeholder="Select Country"
+                                    isLoading={false}
+                                    value={watchCountry || ""}
+                                    onChange={val => {
+                                        setValue("country", val, { shouldValidate: true });
+                                        setValue("division", "");
+                                        setValue("district", "");
+                                        setValue("upazila", "");
+                                    }}
+                                    error={errors.country}
+                                    name="country"
+                                />
+                            </div>
 
-                                            />
-                                            {errors.contactNumber && <span className="text-[#ff1818]">This field is required</span>}
-                                        </div>
-                                        <div className="md:flex gap-3 mt-3">
-                                            <Select
-                                                placeholder="Select Country"
-                                                options={[
-                                                    { value: "Afghanistan", label: "Afghanistan" },
-                                                    { value: "Bangladesh", label: "Bangladesh" },
-
-
-                                                ]}
-                                                value={localCountry}
-                                                onChange={handleCategoryChange}
-                                                isClearable
-                                                className='w-full text-gray-700'
-                                            />
-                                            <br />
-                                            <Select
-                                                placeholder="Select State"
-                                                options={stateOptions}
-                                                value={selectedStateCategory}
-                                                onChange={handleProductCategoryChange}
-                                                isDisabled={loading || stateOptions.length === 0}
-                                                isClearable
-                                                className='w-full text-[#ff1818]'
-                                            />
-                                        </div>
-                                        <br />
-
+                            <AnimatePresence>
+                                {watchCountry === "Bangladesh" && (
+                                    <motion.div className="space-y-4" initial={{ opacity: 0, height: 0 }} animate={{ opacity: 1, height: "auto" }} exit={{ opacity: 0, height: 0 }} transition={{ duration: 0.3 }}>
                                         <div>
-                                            <Select
-                                                placeholder="Select Product District"
-                                                value={selectedDistrict}
-                                                options={districtOption}
-                                                onChange={handleDistrictChange}
-                                                isDisabled={!selectedStateCategory}
-                                                isClearable
-                                                className='text-[#ff1818]'
+                                            <label className="block text-sm font-medium text-gray-700 mb-1">Division</label>
+                                            <CustomSelect
+                                                options={divisions}
+                                                placeholder="Select Division"
+                                                isLoading={loadingGeo.division}
+                                                value={watchDivision || ""}
+                                                onChange={val => {
+                                                    setValue("division", val, { shouldValidate: true });
+                                                    setValue("district", "");
+                                                    setValue("upazila", "");
+                                                }}
+                                                error={errors.division}
+                                                name="division"
                                             />
-
-
                                         </div>
 
+                                        {watchDivision && (
+                                            <motion.div initial={{ opacity: 0 }} animate={{ opacity: 1 }} transition={{ delay: 0.2 }}>
+                                                <label className="block text-sm font-medium text-gray-700 mb-1">District</label>
+                                                <CustomSelect
+                                                    options={districts}
+                                                    placeholder="Select District"
+                                                    isLoading={loadingGeo.district}
+                                                    value={watchDistrict || ""}
+                                                    onChange={val => {
+                                                        setValue("district", val, { shouldValidate: true });
+                                                        setValue("upazila", "");
+                                                    }}
+                                                    error={errors.district}
+                                                    name="district"
+                                                />
+                                            </motion.div>
+                                        )}
 
+                                        {watchDistrict && (
+                                            <motion.div initial={{ opacity: 0 }} animate={{ opacity: 1 }} transition={{ delay: 0.3 }}>
+                                                <label className="block text-sm font-medium text-gray-700 mb-1">Upazila</label>
+                                                <CustomSelect
+                                                    options={upazilas}
+                                                    placeholder="Select Upazila"
+                                                    isLoading={loadingGeo.upazila}
+                                                    value={watch("upazila") || ""}
+                                                    onChange={val => setValue("upazila", val, { shouldValidate: true })}
+                                                    error={errors.upazila}
+                                                    name="upazila"
+                                                />
+                                            </motion.div>
+                                        )}
+                                    </motion.div>
+                                )}
+                            </AnimatePresence>
 
-                                    </div>
-                                    <br />
-                                    <Select
-                                        placeholder="Select Upazila"
-                                        value={selectedUpazila}
-                                        options={upazilaOptions}
-                                        onChange={handleUpazilaChange}
-                                        isDisabled={!selectedDistrict} // Enable when a district is selected
-                                        isClearable
-                                        className='text-[#ff1818]'
-                                    />
-                                    {/* <Input color='red' type="text" size="lg" label="Upzila Name" name="upzilaName" {...register("upzilaName", { required: true })} className=" text-green-400" /> */}
-                                    {errors.upzilaName && <span className="text-[#ff1818]">This field is required</span>}
-                                    <br />
-
-
-                                    <div className="w-full">
-                                        <Textarea color='red' label={`Please Your Full Address ${user?.displayName}`} className='text-[#ff1818]' name='address' {...register("address", { required: true })} />
-                                        {errors.address && <span className="text-[#ff1818]">This field is required</span>}
-                                    </div>
-
-
-
-
-
-                                </form>
-
+                            <div>
+                                <Textarea
+                                    label="Full Address"
+                                    color="red"
+                                    {...register("address", {
+                                        required: "Address is required",
+                                        minLength: {
+                                            value: 10,
+                                            message: "Address should be at least 10 characters"
+                                        }
+                                    })}
+                                    error={!!errors.address}
+                                />
+                                {errors.address && (
+                                    <p className="text-red-500 text-xs mt-1">{errors.address.message}</p>
+                                )}
                             </div>
-                            {/* order */}
-                            <div className="text-center max-w-6xl  md:px-0 lg:text-left">
-                                <div className="mb-11">
-                                    <table className="table border-gray-500 rounded-md border-2">
-
-                                        <tbody>
-                                            {cartFood.map((item, index) => (
-                                                <tr key={index}>
-
-                                                    <td className='p-4  border-2 border-gray-300  w-[700px]  '>
-                                                        <div className="flex md:flex  items-center gap-7">
-                                                            <div className="avatar">
-                                                                <div className="h-16 w-16  md:mr-0 rounded-md overflow-hidden">
-                                                                    <img
-                                                                        src={item.
-                                                                            foodImage}
-                                                                        alt={item.restaurantName}
-
-                                                                        className="object-cover"
-                                                                    />
-                                                                </div>
-                                                            </div>
-                                                            <div className='mr-20 md:mr-0'>
-                                                                <p className="font-bold flex text-[10px] md:text-[10px]">{item.foodName}
-                                                                    <div className="badge ml-3 text-[8px]">×{item.quantity}</div>
-                                                                </p>
-                                                             
-
-                                                                <div className="flex gap-8 mb-4">
-                                                                    <p className="font-bold text-[12px]">${item.foodPrice}.00</p>
-
-                                                                </div>
-                                                                <button onClick={() => handleRemove(item._id)} className="text-red-600 text-sm font-semibold mt-1 hover:underline">
-                                                                    <MdDeleteOutline />
-                                                                </button>
-
-                                                            </div>
-                                                        </div>
-                                                    </td>
-
-
-
-
-
-
-                                                </tr>
-                                            ))}
-                                        </tbody>
-                                    </table>
-
-                                    <div className="mt-6 md:px-20">
-                                        <div className="divider ml-4 divider-error mx-auto"></div>
-
-                                        <div className="flex justify-evenly md:justify-end gap-12">
-                                            <p className="text-center">Subtotal</p>
-                                            <p className="text-center">${subtotal.toFixed(2)}</p>
-                                        </div>
-
-                                        <div className="flex justify-evenly md:justify-end gap-12">
-                                            <p className="text-center">Discount (15%)</p>
-                                            <p className="text-center">${discount.toFixed(2)}</p>
-                                        </div>
-
-                                        <div className="flex justify-evenly md:justify-end gap-12">
-                                            <p className="text-center mr-4">Total</p>
-                                            <p className="text-center ml-3 font-bold text-[#ff1818]">${total.toFixed(2)} </p>
-                                        </div>
-                                    </div>
-
-
-                                    <div className='flex items-center justify-center gap-4 mt-4'>
-
-                                     <Link to={"/dashboard/paymentPage"}>
-                                     <button onClick={handleOpen} className="btn btn-outline hover:bg-white">
-                                            <img className="w-10 drop-shadow-2xl" src="https://i.ibb.co.com/FLXQZjJ1/Stripe.png" alt="Stripe Logo" />
-                                        </button>
-                                     </Link>
-
-                                     
-                                        or
-                                        <button  className='btn  btn-outline hover:bg-white'>
-                                            <img className='w-16' src="https://i.ibb.co.com/9mCGY8wh/ssl-Commerce.png" alt="" />
-                                        </button>
-                                    </div>
-
-                                    <div className='px-3 md:px-1'>
-
-                                        <button className='btn  w-full mt-4  btn-outline bg-[#ff1818] hover:bg-[#ff1818] text-white'>Payment</button>
-
-                                    </div>
-                                </div>
-                            </div>
-
                         </div>
-                    </div>
-                </div>
-            </form>
+                    </motion.div>
 
+                    {/* Right side - Order Summary */}
+                    <motion.div className="drop-shadow-2xl p-6 rounded-lg shadow-md" initial={{ x: 50 }} animate={{ x: 0 }} transition={{ type: "spring", stiffness: 100 }}>
+                        <h2 className="text-2xl font-bold text-[#ff1818] mb-6">Order Summary</h2>
+
+                        {cartFood.length === 0 ? (
+                            <motion.div initial={{ scale: 0.9 }} animate={{ scale: 1 }} className="text-center py-8">
+                                <p className="text-lg text-gray-600">Your cart is empty</p>
+                                <Button color="red" className="mt-4" onClick={() => navigate('/restaurants')}>Browse Menu</Button>
+                            </motion.div>
+                        ) : (
+                            <>
+                                <div className="divide-y drop-shadow-2xl divide-gray-200">
+                                    {cartFood.map(item => (
+                                        <motion.div key={item._id} initial={{ opacity: 0 }} animate={{ opacity: 1 }} className="flex items-center py-4">
+                                            <div className="flex-shrink-0 h-16 w-16 rounded-md overflow-hidden">
+                                                <img src={item.foodImage} alt={item.foodName} className="h-full w-full object-cover" />
+                                            </div>
+                                            <div className="ml-4 flex-1">
+                                                <div className="flex justify-between">
+                                                    <h3 className="text-sm font-medium">{item.foodName}</h3>
+                                                    <p className="ml-4 font-bold">${item.foodPrice.toFixed(2)}</p>
+                                                </div>
+                                                <div className="flex justify-between mt-1">
+                                                    <p className="text-sm text-gray-500">Qty: {item.quantity || 1}</p>
+                                                    <button type="button" className="text-red-500 hover:text-red-700" onClick={() => handleRemove(item._id)}>
+                                                        <MdDeleteOutline size={18} />
+                                                    </button>
+                                                </div>
+                                            </div>
+                                        </motion.div>
+                                    ))}
+                                </div>
+
+                                <div className="mt-6 border-t border-gray-200 pt-6">
+                                    <div className="flex justify-between py-2"><span>Subtotal</span><span>${subtotal.toFixed(2)}</span></div>
+                                    <div className="flex justify-between py-2"><span>Discount (15%)</span><span>-${discount.toFixed(2)}</span></div>
+                                    <div className="flex justify-between py-2 font-bold text-lg"><span>Total</span><span className="text-[#ff1818]">${total.toFixed(2)}</span></div>
+                                </div>
+                                <Box textAlign="center" mt={4}>
+                                    <Tooltip
+                                        title={!isValid ? "Please complete all required fields" : ""}
+                                        placement="top"
+                                    >
+                                        <span>
+                                            <Button
+                                                variant="contained"
+                                                color="primary"
+                                                onClick={handleOpenModal}
+                                                sx={{ px: 4, py: 1.5, fontSize: '16px' }}
+                                                disabled={!isValid || cartFood.length === 0}
+                                            >
+                                                Proceed to Payment
+                                            </Button>
+                                        </span>
+                                    </Tooltip>
+
+                                    <Dialog open={openModal} onClose={handleCloseModal} fullWidth maxWidth="sm">
+                                        <DialogTitle>
+                                            <Typography variant="h6" align="center">
+                                                Select Payment Method
+                                            </Typography>
+                                        </DialogTitle>
+
+                                        <DialogContent>
+                                            <Box sx={{ display: 'flex', justifyContent: 'center', gap: 2, mb: 3 }}>
+                                                <Button 
+                                                    variant={selectedPaymentMethod === 'stripe' ? 'contained' : 'outlined'} 
+                                                    onClick={() => handlePaymentMethodSelect('stripe')}
+                                                >
+                                                    Stripe
+                                                </Button>
+                                                <Button 
+                                                    variant={selectedPaymentMethod === 'sslcommerz' ? 'contained' : 'outlined'} 
+                                                    onClick={() => handlePaymentMethodSelect('sslcommerz')}
+                                                >
+                                                    SSLCommerz
+                                                </Button>
+                                            </Box>
+
+                                            {selectedPaymentMethod === 'stripe' && (
+                                                <Elements stripe={stripePromise}>
+                                                    <StripePayment
+                                                        onClose={handleCloseModal}
+                                                        total={total}
+                                                        cartFood={cartFood}
+                                                        user={user}
+                                                        formData={watchFields}
+                                                        restaurantName={restaurantName}
+                                                        
+                                                    />
+                                                </Elements>
+                                            )}
+
+                                            {selectedPaymentMethod === 'sslcommerz' && (
+                                                <SSLCommerzPayment
+                                                    onClose={handleCloseModal}
+                                                    total={total}
+                                                    cartFood={cartFood}
+                                                    user={user}
+                                                    formData={watchFields}
+                                                    restaurantName={restaurantName}
+                                                />
+                                            )}
+                                        </DialogContent>
+
+                                        <DialogActions>
+                                            <Button onClick={handleCloseModal} color="error">
+                                                Cancel
+                                            </Button>
+                                        </DialogActions>
+                                    </Dialog>
+                                </Box>
+                            </>
+                        )}
+                    </motion.div>
+                </form>
+            </motion.div>
         </div>
     );
 };

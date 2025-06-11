@@ -42,10 +42,48 @@ const noNavbarFooter = ["/dashboard/paymentSuccess"].includes(location.pathname)
   return (
     <div className="min-h-screen">
       {/* Navbar */}
-     {noNavbarFooter || <div className="navbar bg-white shadow-2xl">
+     {noNavbarFooter || <div className="navbar bg-white shadow-2xl px-4 lg:px-38">
     
-        <div className="flex-1">
-          <span className="text-xl font-bold text-[#ff1818]">DASHBOARD</span>
+        <div className="flex-1  text-red-500 font-extrabold text-3xl ">
+        {
+                    user && isAdmin && <Link to={"/dashboard/adminHome"}>
+                      
+
+                        <Typography  className="text-red-500 font-extrabold text-xl drop-shadow-2xl font-Kanit uppercase">
+                          Dashboard
+                        </Typography>
+                     
+                    </Link>
+                  }
+                  {
+                    user && isModerator && <Link to={"/dashboard/moderator"}>
+                  
+                        <Typography  className="text-red-500 font-extrabold text-xl drop-shadow-2xl font-Kanit uppercase">
+                          Dashboard
+                        </Typography>
+                      
+                    </Link>
+                  }
+                  {
+                    user && isOwner && <Link to={"/dashboard/ownerHome"}>
+                    
+
+                        <Typography  className="text-red-500 font-extrabold text-xl drop-shadow-2xl font-Kanit uppercase">
+                          Dashboard
+                        </Typography>
+                      
+                    </Link>
+                  }
+                  {
+                    user && !isAdmin && !isModerator && !isOwner && <Link to={"/dashboard/userHome"}>
+                     
+
+                        <Typography  className="text-red-500 font-extrabold text-xl drop-shadow-2xl font-Kanit uppercase">
+                          Dashboard
+                        </Typography>
+                 
+                    </Link>
+                  }
         </div>
         <Menu>
     <MenuHandler>

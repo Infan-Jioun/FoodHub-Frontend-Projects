@@ -20,7 +20,7 @@ const DistrictRes = () => {
     const [isModerator] = useModerator();
 
     useEffect(() => {
-        axios.get(`http://localhost:5000/restaurantUpload/district/${districtName}`)
+        axios.get(`https://foodhub-backend.vercel.app/restaurantUpload/district/${districtName}`)
             .then(response => setRestaurants(response.data))
             .catch(error => console.error("Error fetching restaurants:", error));
     }, [districtName]);

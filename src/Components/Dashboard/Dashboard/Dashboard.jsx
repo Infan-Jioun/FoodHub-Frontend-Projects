@@ -38,18 +38,18 @@ const handleLogout = () => {
   .then(() => {})
 }
 const location = useLocation();
-const noNavbarFooter = ["/dashboard/paymentSuccess"].includes(location.pathname);
+const noNavbarFooter = ["/dashboard/paymentHistory"].includes(location.pathname);
   return (
     <div className="min-h-screen">
       {/* Navbar */}
-     {noNavbarFooter || <div className="navbar bg-white shadow-2xl px-4 lg:px-38">
+     {noNavbarFooter || <div className="navbar bg-red-50  shadow-2xl px-4 lg:px-38">
     
-        <div className="flex-1  text-red-500 font-extrabold text-3xl ">
+        <div className="flex-1  text-red-500 font-extrabold text-3xl mt-3">
         {
                     user && isAdmin && <Link to={"/dashboard/adminHome"}>
                       
 
-                        <Typography  className="text-red-500 font-extrabold text-xl drop-shadow-2xl font-Kanit uppercase">
+                        <Typography  className="text-red-500 font-extrabold text-xl drop-shadow-2xl font-Kanit uppercase  ">
                           Dashboard
                         </Typography>
                      
@@ -58,7 +58,7 @@ const noNavbarFooter = ["/dashboard/paymentSuccess"].includes(location.pathname)
                   {
                     user && isModerator && <Link to={"/dashboard/moderator"}>
                   
-                        <Typography  className="text-red-500 font-extrabold text-xl drop-shadow-2xl font-Kanit uppercase">
+                        <Typography  className="text-red-500 font-extrabold text-xl drop-shadow-2xl font-Kanit uppercase  ">
                           Dashboard
                         </Typography>
                       
@@ -68,7 +68,7 @@ const noNavbarFooter = ["/dashboard/paymentSuccess"].includes(location.pathname)
                     user && isOwner && <Link to={"/dashboard/ownerHome"}>
                     
 
-                        <Typography  className="text-red-500 font-extrabold text-xl drop-shadow-2xl font-Kanit uppercase">
+                        <Typography  className="text-red-500 font-extrabold text-xl drop-shadow-2xl font-Kanit uppercase  ">
                           Dashboard
                         </Typography>
                       
@@ -78,24 +78,15 @@ const noNavbarFooter = ["/dashboard/paymentSuccess"].includes(location.pathname)
                     user && !isAdmin && !isModerator && !isOwner && <Link to={"/dashboard/userHome"}>
                      
 
-                        <Typography  className="text-red-500 font-extrabold text-xl drop-shadow-2xl font-Kanit uppercase">
+                        <Typography  className="text-red-500 font-extrabold text-xl drop-shadow-2xl font-Kanit uppercase  ">
                           Dashboard
                         </Typography>
                  
                     </Link>
                   }
         </div>
-        <Menu>
-    <MenuHandler>
-                  <Avatar
-                    variant="circular"
-                    alt="tania andrew"
-
-                    className="cursor-pointer w-9 h-9 rounded-full"
-                    src={user?.photoURL || "https://i.ibb.co.com/PGwHS087/profile-Imagw.jpg"}
-                  />
-                </MenuHandler>
-    </Menu>
+        
+    <Button onClick={handleLogout} className="btn bg-red-600 mt-3 drop-shadow-xl  hover:bg-red-50 hover:text-white  ">Logout </Button>
       </div> }
 
       {/* Drawer */}

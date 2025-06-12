@@ -44,9 +44,7 @@ const MyProfile = () => {
           });
           setPreviewImage(data.photo || "");
         })
-        .catch(() => {
-          toast.error("Failed to load user data");
-        });
+        .catch(() => toast.error("Failed to load user data"));
     } else if (user) {
       setProfileData({
         name: user.displayName || "",
@@ -82,25 +80,16 @@ const MyProfile = () => {
   const handleImageUpload = async (file) => {
     try {
       const imageData = await imageUpload(file);
-      return {
-        success: true,
-        url: imageData?.data?.display_url || "",
-      };
+      return { success: true, url: imageData?.data?.display_url || "" };
     } catch (error) {
       console.error("Image upload error:", error);
-      return {
-        success: false,
-        message: "Image upload failed",
-      };
+      return { success: false, message: "Image upload failed" };
     }
   };
 
   const handleInputChange = (e) => {
     const { name, value } = e.target;
-    setProfileData((prev) => ({
-      ...prev,
-      [name]: value,
-    }));
+    setProfileData((prev) => ({ ...prev, [name]: value }));
   };
 
   const updateUserProfileData = async (data) => {
@@ -120,11 +109,7 @@ const MyProfile = () => {
       };
 
       const response = await axiosSecure.put(`/users/${user.email}`, userInfo);
-
-      if (!response.data.success) {
-        throw new Error(response.data.message || "Failed to update database");
-      }
-
+      if (!response.data.success) throw new Error(response.data.message || "Failed to update database");
       return response.data;
     } catch (error) {
       throw error;
@@ -145,37 +130,21 @@ const MyProfile = () => {
     }
 
     try {
-      if (name.length < 3) {
-        throw new Error("Name must be at least 3 characters");
-      }
+      if (name.length < 3) throw new Error("Name must be at least 3 characters");
 
       let imageUrl = profileData.photoURL;
       if (selectedFile) {
         const uploadResult = await handleImageUpload(selectedFile);
-        if (!uploadResult.success) {
-          throw new Error(uploadResult.message);
-        }
+        if (!uploadResult.success) throw new Error(uploadResult.message);
         imageUrl = uploadResult.url;
       }
 
-      const result = await updateUserProfileData({
-        name,
-        photo: imageUrl,
-        dob,
-        phoneNumber,
-        address,
-      });
+      const result = await updateUserProfileData({ name, photo: imageUrl, dob, phoneNumber, address });
 
       if (result.success) {
         toast.success("Profile updated successfully!");
         setSelectedFile(null);
-        setProfileData({
-          name,
-          photoURL: imageUrl,
-          dob,
-          phoneNumber,
-          address,
-        });
+        setProfileData({ name, photoURL: imageUrl, dob, phoneNumber, address });
         setPreviewImage(imageUrl);
         setIsFormVisible(false);
         localStorage.setItem("isFormVisible", "false");
@@ -190,25 +159,23 @@ const MyProfile = () => {
   };
 
   return (
-    <div className="min-h-screen bg-gray-100 flex justify-center items-start py-12 px-4">
-      <div className="bg-white rounded-lg shadow-lg max-w-4xl w-full flex flex-col md:flex-row gap-8 p-8">
-        {/* Left side: Profile photo */}
-        <div className="flex flex-col items-center md:w-1/3">
-          <div className="relative group w-40 h-40 rounded-full border-4 border-gray-300 overflow-hidden shadow-md cursor-pointer">
+    <div className="min-h-screen bg-gray-50 flex justify-center items-start py-12 px-4">
+      <div className="bg-white rounded-xl shadow-2xl max-w-5xl w-full flex flex-col md:flex-row gap-10 p-8">
+        {/* Left: Profile Image */}
+        <div className="flex flex-col items-center md:w-1/3 space-y-4">
+          <div className="relative group w-44 h-44 rounded-full border-4 border-[#ff0000d8] overflow-hidden shadow-xl cursor-pointer transition-transform hover:scale-105">
             <img
               src={previewImage || "https://i.ibb.co/PGwHS087/profile-Imagw.jpg"}
               alt="Profile"
               className="w-full h-full object-cover rounded-full"
             />
-
-            {/* Overlay on hover */}
-            <div className="absolute inset-0 bg-black bg-opacity-50 opacity-0 group-hover:opacity-100 flex flex-col justify-center items-center space-y-3 rounded-full transition-opacity">
+            <div className="absolute inset-0 bg-black bg-opacity-60 opacity-0 group-hover:opacity-100 flex flex-col justify-center items-center space-y-2 rounded-full transition-opacity">
               <button
                 onClick={() => {
                   setCameraMode(true);
                   handleImageClick();
                 }}
-                className="bg-white bg-opacity-80 hover:bg-opacity-100 text-gray-700 px-3 py-1 rounded-full flex items-center space-x-1 text-sm"
+                className="bg-white bg-opacity-80 hover:bg-opacity-100 text-[#ff0000d8] px-3 py-1 rounded-full flex items-center space-x-1 text-sm"
               >
                 <FaPhotoVideo />
                 <span>Camera</span>
@@ -219,7 +186,7 @@ const MyProfile = () => {
                   setCameraMode(false);
                   handleImageClick();
                 }}
-                className="bg-white bg-opacity-80 hover:bg-opacity-100 text-gray-700 px-3 py-1 rounded-full flex items-center space-x-1 text-sm"
+                className="bg-white bg-opacity-80 hover:bg-opacity-100 text-[#ff0000d8] px-3 py-1 rounded-full flex items-center space-x-1 text-sm"
               >
                 <FaCamera />
                 <span>Upload</span>
@@ -228,7 +195,7 @@ const MyProfile = () => {
               {previewImage && (
                 <button
                   onClick={() => setShowImageModal(true)}
-                  className="bg-white bg-opacity-80 hover:bg-opacity-100 text-gray-700 px-3 py-1 rounded-full flex items-center space-x-1 text-sm"
+                  className="bg-white bg-opacity-80 hover:bg-opacity-100 text-[#ff0000d8] px-3 py-1 rounded-full flex items-center space-x-1 text-sm"
                 >
                   <FaExpand />
                   <span>View</span>
@@ -245,80 +212,74 @@ const MyProfile = () => {
               name="photo"
             />
           </div>
-          <p className="mt-4 text-gray-700 font-semibold text-lg">{profileData.name || "Your Name"}</p>
+          <p className="text-gray-800 font-semibold text-lg">{profileData.name || "Your Name"}</p>
           <button
             onClick={() => {
               setIsFormVisible(true);
               localStorage.setItem("isFormVisible", "true");
             }}
-            className="mt-4 px-6 py-2 bg-blue-600 text-white rounded-md hover:bg-blue-700 transition w-full max-w-xs"
+            className="px-6 py-2 bg-[#ff0000d8] text-white rounded-md hover:bg-red-700 transition w-full max-w-xs"
           >
             Edit Profile
           </button>
         </div>
 
-        {/* Right side: Profile details */}
+        {/* Right: Form */}
         <div className="md:w-2/3">
-        
-            <form onSubmit={handleUpdate} className="space-y-6">
-              <div>
-                <label className="block text-gray-700 font-medium mb-1" htmlFor="email">
-                  Email (cannot be changed)
-                </label>
-                <input
-                  type="email"
-                  name="email"
-                  value={user?.email || ""}
-                  readOnly
-                  className="w-full px-4 py-3 border border-gray-300 bg-gray-100 rounded-md cursor-not-allowed"
-                />
-              </div>
+          <form onSubmit={handleUpdate} className="space-y-6">
+            <div>
+              <label className="block text-gray-700 font-medium mb-1">Email (read-only)</label>
+              <input
+                type="email"
+                name="email"
+                value={user?.email || ""}
+                readOnly
+                className="w-full px-4 py-3 border border-gray-300 bg-gray-100 rounded-md cursor-not-allowed"
+              />
+            </div>
 
-              <div>
-                <label className="block text-gray-700 font-medium mb-1" htmlFor="name">
-                  Full Name
-                </label>
-                <input
-                  type="text"
-                  name="name"
-                  value={profileData.name}
-                  onChange={handleInputChange}
-                  placeholder="Your Full Name"
-                  required
-                  minLength={3}
-                  className="w-full px-4 py-3 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
-                />
-              </div>
+            <div>
+              <label className="block text-gray-700 font-medium mb-1">Full Name</label>
+              <input
+                type="text"
+                name="name"
+                value={profileData.name}
+                onChange={handleInputChange}
+                required
+                minLength={3}
+                className="w-full px-4 py-3 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-[#ff0000d8]"
+              />
+            </div>
 
-              
-              <div className="flex space-x-4">
-                <button
-                  type="submit"
-                  disabled={isUpdating}
-                  className={`flex-1 py-3 bg-blue-600 text-white font-semibold rounded-md shadow-lg transition duration-300 ${
-                    isUpdating ? "opacity-70 cursor-not-allowed" : "hover:bg-blue-700"
-                  }`}
-                >
-                  {isUpdating ? "Saving..." : "Save Changes"}
-                </button>
+            {/* Add more fields if needed */}
 
-                <button
-                  type="button"
-                  onClick={() => {
-                    setIsFormVisible(false);
-                    localStorage.setItem("isFormVisible", "false");
-                  }}
-                  className="flex-1 py-3 bg-gray-300 text-gray-700 rounded-md shadow hover:bg-gray-400 transition"
-                  disabled={isUpdating}
-                >
-                  Cancel
-                </button>
-              </div>
-            </form>
-        
+            <div className="flex space-x-4">
+              <button
+                type="submit"
+                disabled={isUpdating}
+                className={`flex-1 py-3 bg-[#ff0000d8] text-white font-semibold rounded-md shadow transition duration-300 ${
+                  isUpdating ? "opacity-70 cursor-not-allowed" : "hover:bg-red-700"
+                }`}
+              >
+                {isUpdating ? "Saving..." : "Save Changes"}
+              </button>
+              <button
+                type="button"
+                onClick={() => {
+                  setIsFormVisible(false);
+                  localStorage.setItem("isFormVisible", "false");
+                }}
+                className="flex-1 py-3 bg-gray-200 text-gray-700 rounded-md shadow hover:bg-gray-300 transition"
+                disabled={isUpdating}
+              >
+                Cancel
+              </button>
+            </div>
+          </form>
         </div>
       </div>
 
+      {/* Image Modal */}
       {showImageModal && (
         <div
           className="fixed inset-0 bg-black bg-opacity-80 z-50 flex items-center justify-center p-4"

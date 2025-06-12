@@ -9,10 +9,13 @@ import { FcGoogle } from "react-icons/fc";
 import useAuth from "../../Hooks/useAuth";
 import { Link, useLocation, useNavigate } from "react-router-dom";
 import toast from "react-hot-toast";
+import { useState } from "react";
+import { Eye, EyeOff } from "lucide-react";
 const Login = () => {
     const { login, googleAuth } = useAuth();
     const location = useLocation();
     const navigate = useNavigate();
+    const [showPassword, setShowPassword] = useState(false);
     const from = location.state?.from?.pathname || "/"
     const { register, handleSubmit, watch, formState: { errors }, } = useForm()
     const onSubmit = data => {
@@ -38,7 +41,7 @@ const Login = () => {
     }
     return (
         <div className="">
-            <div className="hero  min-h-screen  max-w-7xl mx-auto md:px-5">
+            <div className="hero  min-h-screen  max-w-7xl mx-auto px-6 md:px-5">
                 <div data-aos="zoom-in" className=" grid md:grid-cols-2 rounded-r-2xl shadow-2xl">
 
                     <div className="  lg:w-full bg-white shrink-0 rounded-r-2xl shadow-2xl">
@@ -61,16 +64,21 @@ const Login = () => {
                                             {...register("email", { required: true })}
                                         />
                                         {errors.email && <span className="text-[#ff1818] text-sm font-bold">This field is required</span>}
-
+                                        <div className="relative">
                                         <Input
-                                            type="password"
-                                            name="password"
-                                            size="lg"
+                                            type={showPassword ? "text" : "password"} label="Password"
+                                            className="border border-gray-300 rounded-lg p-2 pr-10 w-full"
                                             placeholder="********"
-                                            className=""
-                                            label="Password"
                                             {...register("password", { required: true, minLength: 6, maxLength: 8 })}
                                         />
+                                        <button
+                                            type="button"
+                                            className="absolute inset-y-0 right-3 flex items-center"
+                                            onClick={() => setShowPassword(!showPassword)}
+                                        >
+                                            {showPassword ? <EyeOff className="w-5 h-5 text-[#ff1818]" /> : <Eye className="w-5 h-5 text-[#ff1818]" />}
+                                        </button>
+                                    </div>
                                         {errors.password?.type && <span className="text-[#ff1818] ">This field is reqiure</span>}
                                         {errors.password?.type === 'minLength' && <span className="text-[#ff1818] ">This pass must 6 Characters</span>}
                                         {errors.password?.type === 'maxLength' && <span className="text-[#ff1818] ">This pass only 8 Characters</span>}
@@ -110,7 +118,7 @@ const Login = () => {
                                 <div className=" mx-auto "> <button onClick={hnadleGoogle} className="flex bg-white text-[14px] items-center font-bold btn rounded-full"><FcGoogle /> Continue With Google</button></div>
                                 <Typography color="gray" className="mt-4 text-center font-normal">
                                     Create a new account?{" "}
-                                    <a href="/register" className="font-medium text-gray-900">
+                                    <a href="/register" className="font-medium text-[#ff1818]">
                                         Sign in
                                     </a>
                                 </Typography>

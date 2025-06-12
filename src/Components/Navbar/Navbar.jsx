@@ -275,7 +275,7 @@ const Navbar = () => {
                         </svg>
 
                         <Typography variant="small" className="font-medium">
-                          Dashboard
+                          Admin Home
                         </Typography>
                       </MenuItem>
                     </Link>
@@ -299,7 +299,7 @@ const Navbar = () => {
                         </svg>
 
                         <Typography variant="small" className="font-medium">
-                          Dashboard
+                        Moderator Home
                         </Typography>
                       </MenuItem>
                     </Link>
@@ -323,7 +323,7 @@ const Navbar = () => {
                         </svg>
 
                         <Typography variant="small" className="font-medium">
-                          Dashboard
+                          Owner Home
                         </Typography>
                       </MenuItem>
                     </Link>
@@ -347,7 +347,7 @@ const Navbar = () => {
                         </svg>
 
                         <Typography variant="small" className="font-medium">
-                          Dashboard
+                           User Home
                         </Typography>
                       </MenuItem>
                     </Link>

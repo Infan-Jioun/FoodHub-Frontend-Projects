@@ -33,7 +33,7 @@ const Register = () => {
                 throw new Error("User creation failed");
             }
 
-            // ✅ FIXED: Use displayName instead of name
+            
             await updateUserProfile({ displayName: data.displayName });
             await res.user.reload();
             console.log("Updated User:", res.user);
@@ -95,11 +95,11 @@ const Register = () => {
     };
 
     return (
-        <div className="hero min-h-screen max-w-7xl mx-auto md:px-5">
+        <div className="hero min-h-screen max-w-7xl mx-auto px-6 md:px-5">
             <div data-aos="zoom-in" className="grid md:grid-cols-2 rounded-r-2xl shadow-2xl">
                 <div className="text-center hidden sm:block">
                     <img className="md:w-[650px] md:h-[600px] lg:w-[685px] lg:h-[670px] rounded-l-2xl"
-                        src="https://i.ibb.co/q32tCr5P/Register-Image.png" alt="Register"
+                        src="https://i.ibb.co/27rbkWLC/Register.png" alt="Register"
                     />
                 </div>
                 <div className="lg:w-full bg-white shrink-0 rounded-r-2xl shadow-2xl">
@@ -128,7 +128,7 @@ const Register = () => {
                                             className="absolute inset-y-0 right-3 flex items-center"
                                             onClick={() => setShowPassword(!showPassword)}
                                         >
-                                            {showPassword ? <EyeOff className="w-5 h-5 text-[#1ad46d]" /> : <Eye className="w-5 h-5 text-[#1ad46d]" />}
+                                            {showPassword ? <EyeOff className="w-5 h-5 text-[#ff1818]" /> : <Eye className="w-5 h-5 text-[#ff1818]" />}
                                         </button>
                                     </div>
                                     {errors.password?.type && <span className="text-[#ff1818]">This field is required</span>}
@@ -151,7 +151,7 @@ const Register = () => {
                                     Food Seller? <a href="/restaurantRegister" className="font-medium text-gray-900">Sign up</a>
                                 </Typography> */}
 
-                                <button type="submit" className="w-full uppercase bg-[#339179] text-white mt-2 btn rounded-badge">
+                                <button type="submit" className="w-full uppercase bg-[#ff1818] text-white mt-2 btn rounded-badge">
                                     Sign In
                                 </button>
                             </form>
@@ -164,7 +164,7 @@ const Register = () => {
 
                             <Typography color="gray" className="mt-6 text-center text-sm">
                             Already have an account?{" "}
-                            <a href="/login" className="text-teal-600 font-semibold hover:underline">
+                            <a href="/login" className="text-[#ff1818] font-semibold hover:underline">
                                 Sign in
                             </a>
                         </Typography>

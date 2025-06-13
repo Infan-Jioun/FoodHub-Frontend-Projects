@@ -30,19 +30,19 @@ const Dashboard = () => {
   const [isModerator] = useModerator();
   const [isOwner] = useRestaurantOwner();
 
-  console.log("isAdmin:", isAdmin);
-  console.log("isModerator:", isModerator);
-  console.log("isOwner:", isOwner);
+  // console.log("isAdmin:", isAdmin);
+  // console.log("isModerator:", isModerator);
+  // console.log("isOwner:", isOwner);
 const handleLogout = () => {
   logout()
   .then(() => {})
 }
 const location = useLocation();
-const noNavbarFooter = ["/dashboard/paymentHistory"].includes(location.pathname);
+// const noNavbarFooter = ["/dashboard/paymentHistory"].includes(location.pathname);
   return (
     <div className="min-h-screen">
       {/* Navbar */}
-     {noNavbarFooter || <div className="navbar bg-red-50  shadow-2xl px-4 lg:px-38">
+     { <div className="navbar bg-red-50  shadow-2xl px-4 lg:px-38">
     
         <div className="flex-1  text-red-500 font-extrabold text-3xl mt-3">
         {

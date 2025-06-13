@@ -2,125 +2,108 @@ import { IoSearch } from "react-icons/io5";
 import React, { useState, useEffect } from "react";
 import { Link } from "react-router-dom";
 import useRestaurantData from "../../Hooks/useRestaurantData";
-import { Circles } from "react-loader-spinner";
 
 const Search = () => {
   const [searchQuery, setSearchQuery] = useState("");
-  const [filteredRestaurants, setFilteredRestaurants] = useState([]);
+  const [filteredResults, setFilteredResults] = useState([]);
   const [loading, setLoading] = useState(false);
-  
+
   const [restaurantData] = useRestaurantData();
 
   useEffect(() => {
     if (!searchQuery) {
-      setFilteredRestaurants([]);
+      setFilteredResults([]);
       return;
     }
 
     setLoading(true);
     setTimeout(() => {
-      const results = restaurantData.filter((restaurant) =>
-        Object.values({
-          restaurantName: restaurant.restaurantName,
-          districtName: restaurant.districtName,
-          resataurantCategory: restaurant.resataurantCategory,
-          category: restaurant.category,
-          foods: restaurant.foods?.map((food) => food.foodName).join(", ") || "",
-        })
-          .join(" ")
-          .toLowerCase()
-          .includes(searchQuery.toLowerCase())
-      );
+      // Flatten all restaurant-food pairs that match the search query
+      const results = [];
 
-      setFilteredRestaurants(results);
+      restaurantData.forEach((restaurant) => {
+        restaurant.foods?.forEach((food) => {
+          const combinedString = [
+            restaurant.restaurantName,
+            restaurant.category,
+            // food.foodName,
+            // food.category,
+            // restaurant.districtName,
+          ]
+            .join(" ")
+            .toLowerCase();
+
+          if (combinedString.includes(searchQuery.toLowerCase())) {
+            results.push({
+              restaurantId: restaurant._id,
+              restaurantName: restaurant.restaurantName,
+              restaurantCategory: restaurant.category,
+              foodName: food.foodName,
+              foodCategory: food.category,
+            });
+          }
+        });
+      });
+
+      setFilteredResults(results);
       setLoading(false);
     }, 500);
   }, [searchQuery, restaurantData]);
 
   return (
-    <div className="min-h-screen max-w-7xl mx-auto px-3 text-xl font-Caveat">
-      {/* Search Input */}
-      <div className="flex mt-16 shadow-2xl rounded-lg relative">
-        <div className="absolute left-4 top-1/2 transform -translate-y-1/2 text-xl font-bold">
+    <div className="min-h-screen max-w-7xl mx-auto px-4 py-16 bg-white">
+      {/* Search Box */}
+      <div className="flex shadow-lg rounded-full relative">
+        <div className="absolute left-5 top-1/2 transform -translate-y-1/2 text-2xl text-red-500">
           <IoSearch />
         </div>
         <input
           type="text"
-          placeholder="Search for a restaurant ..."
-          className="w-full p-2 pl-14 font-bold rounded-full border-2 font-Caveat border-red-500 focus:outline-none"
+          placeholder="Search for foods, restaurants or categories..."
+          className="w-full p-3 pl-16 text-[13px] rounded-full border-2 bg-white border-red-400 focus:outline-none font-semibold"
           onChange={(e) => setSearchQuery(e.target.value)}
         />
       </div>
 
-      {/* Display Loading or Results */}
+      {/* Results */}
       {searchQuery && (
-        <div className="max-w-7xl mx-auto px-7 mt-5">
+        <div className="mt-10">
           {loading ? (
-            <div className="flex justify-center items-center min-h-[200px]">
-              <Circles height="90" width="90" color="#ff0000d8" ariaLabel="loading" />
+            <div className="flex justify-center items-center min-h-screen">
+              <img
+                src="https://i.ibb.co.com/F57mtch/logo2.png"
+                alt="Loading Logo"
+                className="w-28 h-28 object-contain animate-pulse"
+              />
             </div>
-          ) : filteredRestaurants.length > 0 ? (
-            <div className="overflow-x-auto mt-5">
-              <table className="table w-full border-collapse border border-gray-300">
-                {/* Table Header */}
-               
-
-                {/* Table Body */}
-                <tbody>
-                  {filteredRestaurants.flatMap((restaurant) =>
-                    restaurant.foods?.map((food, index) => (
-                      <tr key={`${restaurant._id}-${index}`} className="border border-gray-300">
-                        {/* Checkbox */}
-                           
-
-                        {/* Food Image & Name */}
-                        <td>
-                          <div className="flex items-center gap-3">
-                            <div className="avatar">
-                              <div className="mask mask-squircle h-12 w-12">
-                                <img src={food.foodImage} alt={food.foodName} />
-                              </div>
-                            </div>
-                            <div>
-                              <div className="font-bold">{food.foodName}</div>
-                              <div className="text-sm opacity-50">{food.category}</div>
-                            </div>
-                          </div>
-                        </td>
-
-                        {/* Restaurant Name & Banner */}
-                        <td>
-                          <div className="flex items-center gap-3">
-                            <div className="avatar">
-                              <div className="mask mask-squircle h-12 w-12">
-                                <img src={restaurant.photo || restaurant.banner} alt={restaurant.restaurantName} />
-                              </div>
-                            </div>
-                            <div>
-                              <div className="font-bold">{restaurant.restaurantName}</div>
-                            </div>
-                          </div>
-                        </td>
-
-                        {/* Category */}
-                      
-
-                       
-
-                        {/* Actions */}
-                        <td>
-                          <Link to={`/restaurantUpload/${restaurant.restaurantName}`}>
-                            <button className="btn btn-ghost btn-xs text-xl">Details</button>
-                          </Link>
-                        </td>
-                      </tr>
-                    ))
-                  )}
-                </tbody>
-              </table>
-            </div>
+          ) : filteredResults.length > 0 ? (
+            <ul className="space-y-4">
+              {filteredResults.map(
+                (
+                  { restaurantId, restaurantName, restaurantCategory, foodName, foodCategory },
+                  index
+                ) => (
+                  <li
+                    key={`${restaurantId}-${index}`}
+                    className="flex justify-between items-center bg-white shadow-md rounded-lg p-4 hover:shadow-lg transition"
+                  >
+                    <div>
+                      <p className="text-lg font-semibold text-red-600">{restaurantName}</p>
+                     
+                    </div>
+                    <Link to={`/restaurantUpload/${restaurantName}`}>
+                      <button className="bg-red-500 text-white px-4 py-1 rounded-full hover:bg-red-600 transition">
+                        View Details
+                      </button>
+                    </Link>
+                  </li>
+                )
+              )}
+            </ul>
           ) : (
-            <p className="text-black font-bold text-center mt-5">No restaurants found.</p>
+            <p className="text-center text-xl text-gray-600 font-semibold mt-6">
+              No restaurants found matching your search.
+            </p>
           )}
         </div>
       )}

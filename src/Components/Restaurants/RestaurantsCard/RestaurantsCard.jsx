@@ -50,12 +50,12 @@ import { motion } from "framer-motion";
       }
     };
     return (
-      <div className="grid md:grid-cols-3 gap-4 px-8 max-w-7xl mx-auto mt-10 min-h-screen">
+      <div className="grid md:grid-cols-3 gap-7 px-8 max-w-7xl mx-auto mt-10 mb-10 min-h-screen">
         {isRestaurantData.map((restaurant) => (
           <Card
           key={restaurant._id}
           shadow={false}
-          className="relative w-full max-w-[400px] h-[400px] border-2 border-red-600 mx-auto rounded-xl overflow-hidden group transition-transform duration-300 hover:scale-105"
+          className="relative w-full max-w-[400px] h-[400px] border-2 bg-red-50 border-red-600 mx-auto rounded-xl overflow-hidden group transition-transform duration-300 hover:scale-105"
       >
           {/* Banner Image */}
           <CardHeader

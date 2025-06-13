@@ -11,6 +11,8 @@ import {
 } from "react-icons/fa";
 import { PiContactlessPaymentLight } from "react-icons/pi";
 import { RiAdminLine } from "react-icons/ri";
+import { GoUpload } from "react-icons/go";
+import { CiSquarePlus } from "react-icons/ci";
 
 const AdminHome = () => {
   const { user } = useAuth();
@@ -24,13 +26,13 @@ const AdminHome = () => {
       link: "/myProfile",
     },
     {
-      icon: <FaRegUser />,
+      icon: <GoUpload />,
       title: "Upload Info",
       link: "/dashboard/uploadInfo",
       desc: "Add restaurant or menu information.",
     },
     {
-      icon: <FaRegUser />,
+      icon: <CiSquarePlus />,
       title: "Add District Collection",
       link: "/dashboard/addDistrictCollection",
       desc: "Upload district-based collections.",

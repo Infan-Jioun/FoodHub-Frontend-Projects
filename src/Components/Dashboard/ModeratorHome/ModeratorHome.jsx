@@ -6,12 +6,14 @@ import {
   FaCheckCircle,
   FaCommentDots,
   FaUserEdit,
-  FaEdit
+  FaEdit,
+  FaUsers
 } from 'react-icons/fa';
 import { PiContactlessPaymentLight } from 'react-icons/pi';
 import { MdOutlineAddModerator } from 'react-icons/md';
 import { FaRegUser } from 'react-icons/fa6';
 import { Link } from 'react-router-dom';
+import { GoUpload } from 'react-icons/go';
 
 const ModeratorHome = () => {
   const { user } = useAuth();
@@ -25,10 +27,16 @@ const ModeratorHome = () => {
       link: "/myProfile",
     },
     {
-      icon: <FaRegUser />,
+      icon: <GoUpload />,
       title: "Upload Info",
       desc: "Submit or edit restaurant or menu info.",
       link: "/dashboard/uploadInfo"
+    },
+    {
+      icon: <FaUsers />,
+      title: "Manage Users",
+      link: "/dashboard/users",
+      desc: "Control user roles, access, and permissions.",
     },
     {
       icon: <PiContactlessPaymentLight />,

@@ -43,6 +43,7 @@ import AddDistrictCollection from "../../Dashboard/AddDistrictCollection/AddDist
 import DistrictRes from "../../Home/DistrictAvailable/DistrictRes/DistrictRes";
 import Serach from "../../Navbar/Search/Serach";
 import AdminRoutes from "../AdminRoutes/AdminRoutes";
+import Revenue from "../../Dashboard/Revenue/Revenue";
 
 
 export const router = createBrowserRouter([
@@ -145,6 +146,11 @@ export const router = createBrowserRouter([
         path: "/dashboard/adminHome",
         element: <AdminRoutes><AdminHome/></AdminRoutes>,
       },
+      {
+        path: "/dashboard/revenue",
+        element: <AdminRoutes><Revenue/></AdminRoutes>,
+      },
+
       {
         path: "/dashboard/moderator",
         element: <PrivateRoutes><ModeratorHome /></PrivateRoutes>,

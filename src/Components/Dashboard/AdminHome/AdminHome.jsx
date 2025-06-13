@@ -1,6 +1,8 @@
 import React from "react";
 import { Link } from "react-router-dom";
 import useAuth from "../../Hooks/useAuth";
+import { BsLayoutTextSidebarReverse } from "react-icons/bs";
+
 import {
   FaUserShield,
   FaUsers,
@@ -30,6 +32,11 @@ const AdminHome = () => {
       title: "Upload Info",
       link: "/dashboard/uploadInfo",
       desc: "Add restaurant or menu information.",
+    }, {
+      icon: <BsLayoutTextSidebarReverse />,
+      title: "Revenue Report",
+      link: "/dashboard/revenue",
+      desc: "Track earnings, profits, and financial trends.",
     },
     {
       icon: <CiSquarePlus />,
@@ -119,20 +126,20 @@ const AdminHome = () => {
 
         {/* Footer */}
         <div className="mt-10 text-center text-sm text-gray-600">
-        <div className="mt-10 mb-5 text-center">
-          <Link to={"/"}
-            className="bg-[#ff0000d8] hover:bg-[#ff0000] text-white font-semibold px-6 py-2 rounded-lg shadow transition duration-300"
-          >
-            Go to Home Page 
-          </Link>
-        
-        </div>
+          <div className="mt-10 mb-5 text-center">
+            <Link to={"/"}
+              className="bg-[#ff0000d8] hover:bg-[#ff0000] text-white font-semibold px-6 py-2 rounded-lg shadow transition duration-300"
+            >
+              Go to Home Page
+            </Link>
+
+          </div>
           <p>
             You're managing{" "}
             <span className="font-semibold" style={{ color: red }}>
               Foodhub
             </span>{" "}
-            — thank you for keeping it awesome! 🚀
+            — thank you for keeping it awesome! 
           </p>
         </div>
       </div>

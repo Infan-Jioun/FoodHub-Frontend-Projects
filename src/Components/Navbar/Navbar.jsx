@@ -105,7 +105,7 @@ const Navbar = () => {
   return (
     <div>
       {/* First Navbar */}
-      <div className="navbar px-6 md:px-6 lg:px-8">
+      <div className="navbar px-4 md:px-6 lg:px-8">
         <div className="navbar-start">
           <a className=" w-10  lg:w-14  rounded-full "><img src="https://i.ibb.co.com/F57mtch/logo2.png" alt="" /></a>
         </div>

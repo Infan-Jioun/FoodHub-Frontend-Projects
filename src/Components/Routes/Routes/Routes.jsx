@@ -44,13 +44,15 @@ import DistrictRes from "../../Home/DistrictAvailable/DistrictRes/DistrictRes";
 import Serach from "../../Navbar/Search/Serach";
 import AdminRoutes from "../AdminRoutes/AdminRoutes";
 import Revenue from "../../Dashboard/Revenue/Revenue";
+import ErrorElement from "../../../ErrorElement/ErrorElement";
+
 
 
 export const router = createBrowserRouter([
   {
     path: "/",
-    // TO DO : ERROR <PrivateRoutes>element
     element: <Main />,
+    errorElement :  <ErrorElement/>,
     children: [
       {
         path: "/",

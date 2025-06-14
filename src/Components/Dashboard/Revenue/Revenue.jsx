@@ -51,7 +51,7 @@ const Revenue = () => {
                     { title: "Total Orders", value: summary?.totalOrders || 0 },
                     { title: "Total Users", value: users?.length || 0 },
                     { title: "Avg Order", value: `$${Number(summary?.averageOrder || 0).toFixed(2)}` },
-                    { title: "Total Owners", value: ownerCount },
+                    { title: "Total Restaurant ", value: ownerCount },
                 ].map((item, idx) => (
                     <div
                         key={idx}

@@ -107,7 +107,7 @@ const Navbar = () => {
       {/* First Navbar */}
       <div className="navbar px-4 md:px-6 lg:px-8">
         <div className="navbar-start">
-          <a className=" w-10  lg:w-14  rounded-full "><img src="https://i.ibb.co.com/F57mtch/logo2.png" alt="" /></a>
+          <a className=" w-10 text-xl   lg:w-14 drop-shadow-md  rounded-full "><img src="https://i.ibb.co.com/F57mtch/logo2.png" alt="" /></a>
         </div>
         <div className="navbar-center " >
          <Link to={"/search"}>
@@ -327,8 +327,8 @@ const Navbar = () => {
                   </MenuItem>
                 </MenuList>
               </Menu>
-            </> : <><Link to={"/login"}>
-              <button className="btn  text-xl rounded-full border-[#ff1818]  bg-white text-[#ff1818] " ><IoMdLogIn /></button>
+            </> : <><Link to={"/login"} className="w-10 lg:w-14 ">
+              <button className="  border-2 p-2  text-xl rounded-full border-[#ff1818]  bg-white text-[#ff1818] " ><IoMdLogIn /></button>
             </Link></>
           }
         </div>

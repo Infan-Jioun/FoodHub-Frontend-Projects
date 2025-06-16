@@ -1,37 +1,51 @@
-
-import React, { useState } from "react";
-import {
-    Card,
-    Input,
-} from "@material-tailwind/react";
+import React, { useState, useEffect } from "react";
 import { useForm } from "react-hook-form";
 import { imageUpload } from '../../Hooks/imageHooks';
 import toast from 'react-hot-toast';
-import { useLocation, useNavigate } from "react-router-dom";
+import { useNavigate } from "react-router-dom";
 import useAuth from "../../Hooks/useAuth";
 import useAxiosSecure from "../../Hooks/useAxiosSecure";
 
 const UploadInfo = () => {
-    const { updateUserProfile } = useAuth();
+    const { updateUserProfile, user } = useAuth();
     const navigate = useNavigate();
-    const location = useLocation();
-    // const from = location.state?.from?.pathname || "/";
     const axiosSecure = useAxiosSecure();
-    const { user } = useAuth()
-    const [isSubmitting, setIsSubmitting] = useState(false); // Track submission
+
+    const [isSubmitting, setIsSubmitting] = useState(false);
+    const [alreadyUploaded, setAlreadyUploaded] = useState(false);
+    const [loading, setLoading] = useState(true);
+
+    useEffect(() => {
+        if (user?.email && user?.displayName) {
+            axiosSecure.get(`/restaurantUpload?email=${user.email}&restaurantName=${user.displayName}`)
+                .then(res => {
+                    if (res.data?.exists) {
+                        toast.error("You already uploaded your restaurant.");
+                        navigate("/restaurants");
+                    } else {
+                        setLoading(false);
+                    }
+                })
+                .catch(() => {
+                    toast.error("Failed to check restaurant existence.");
+                    setLoading(false);
+                });
+        }
+    }, [user, axiosSecure, navigate]);
     const {
-        register, handleSubmit, formState: { errors },
+        register,
+        handleSubmit,
+        formState: { errors },
     } = useForm({
         defaultValues: {
-            restaurantName: user?.displayName  || "Default Restaurant",
-            email : user?.email  || "Default Email"
-            
-
+            restaurantName: user?.displayName || "Default Restaurant",
+            email: user?.email || "default@email.com",
         },
     });
+
     const onSubmit = async (data) => {
-        const logo = data.photo?.[0]; // Photo input for logo
-        const banner = data.banner?.[0]; // Photo input for banner
+        const logo = data.photo?.[0];
+        const banner = data.banner?.[0];
 
         if (!logo || !banner) {
             toast.error("Please upload both logo and banner images.");
@@ -39,7 +53,8 @@ const UploadInfo = () => {
         }
 
         try {
-            setIsSubmitting(true); // Prevent further submissions
+            setIsSubmitting(true);
+
             const validateImage = (file, maxWidth, maxHeight) =>
                 new Promise((resolve, reject) => {
                     const reader = new FileReader();
@@ -47,20 +62,21 @@ const UploadInfo = () => {
                         const img = new Image();
                         img.onload = () => {
                             if (img.width > maxWidth || img.height > maxHeight) {
-                                reject(`Image must not exceed ${maxWidth}x${maxHeight} dimensions.`);
+                                reject(`Image must be within ${maxWidth}x${maxHeight}px.`);
                             } else {
                                 resolve();
                             }
                         };
-                        img.onerror = () => reject("Invalid image file.");
+                        img.onerror = () => reject("Invalid image.");
                         img.src = e.target.result;
                     };
-                    reader.onerror = () => reject("File reading error.");
+                    reader.onerror = () => reject("File read error.");
                     reader.readAsDataURL(file);
                 });
 
             await validateImage(logo, 300, 300);
             await validateImage(banner, 400, 250);
+
             const logoData = await imageUpload(logo);
             const bannerData = await imageUpload(banner);
 
@@ -71,84 +87,94 @@ const UploadInfo = () => {
                 email: data.email,
                 restaurantAddress: data.restaurantAddress,
                 restaurantNumber: parseFloat(data.restaurantNumber),
-                resataurantCategory: data.resataurantCategory,
-                photo: logoData?.data?.display_url || " ",
-                banner: bannerData?.data?.display_url || " ",
-                districtName : data.districtName
+                resataurantCategory: data.restaurantCategory,
+                photo: logoData?.data?.display_url || "",
+                banner: bannerData?.data?.display_url || "",
+                districtName: data.districtName,
             };
 
             await toast.promise(
                 axiosSecure.post("/restaurantUpload", usersInfo),
                 {
                     loading: 'Submitting...',
-                    success: 'Restaurant successfully added!',
-                    error: 'Could not save restaurant.',
+                    success: 'Restaurant added successfully!',
+                    error: (err) => {
+                        if (err.response?.status === 409) {
+                            return "This restaurant is already uploaded.";
+                        }
+                        return "Submission failed.";
+                    }
                 }
             );
-
-            navigate("/restaurants"); // Redirect after successful submission
+            navigate("/restaurants");
         } catch (error) {
             toast.error(typeof error === "string" ? error : "Something went wrong.");
         } finally {
-            setIsSubmitting(false); // Allow submission again in case of an error
+            setIsSubmitting(false);
         }
     };
 
+    if (loading) {
+        return <p className="text-center mt-10 text-red-600 font-semibold">Checking restaurant status...</p>;
+    }
+
     return (
-        <div className="min-h-screen flex items-center justify-center px-4 py-10 bg-gray-100">
-            <div className="w-full max-w-2xl bg-white shadow-lg rounded-lg p-6 md:p-8">
-                <h2 className="text-2xl font-bold text-center text-gray-800 mb-6 font-Caveat">Add Restaurant</h2>
-                <form onSubmit={handleSubmit(onSubmit)} className="space-y-4">
-                    <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+        <section className="min-h-screen flex items-center justify-center bg-gray-50 px-4 py-12">
+            <div className="w-full max-w-3xl bg-white rounded-xl shadow-md p-6 md:p-10">
+                <h2 className="text-3xl font-bold text-center text-red-600 mb-8 font-Caveat">Upload Restaurant Info</h2>
+                <form onSubmit={handleSubmit(onSubmit)} className="space-y-6">
+
+                    <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
                         <div>
-                            <label className="text-[#ff0000d8] font-semibold">Restaurant Name</label>
+                            <label className="block mb-1 text-sm font-medium text-red-600">Restaurant Name</label>
                             <input
                                 type="text"
-                                className="w-full p-2 border rounded-md bg-gray-100 text-[#ff0000d8]"
-                                {...register("restaurantName", { required: true })}
                                 readOnly
+                                {...register("restaurantName", { required: true })}
+                                className="w-full px-4 py-2 border rounded-lg bg-gray-100 text-red-700 focus:outline-none"
                             />
-                            {errors.restaurantName && <span className="text-[#ff0000d8] text-sm">This field is required</span>}
+                            {errors.restaurantName && <p className="text-xs text-red-600 mt-1">Required field</p>}
                         </div>
                         <div>
-                            <label className="text-[#ff0000d8] font-semibold">Restaurant Email</label>
+                            <label className="block mb-1 text-sm font-medium text-red-600">Email</label>
                             <input
                                 type="email"
-                                className="w-full p-2 border rounded-md  text-[#ff0000d8]"
-                                {...register("email", { required: true })}
                                 readOnly
+                                {...register("email", { required: true })}
+                                className="w-full px-4 py-2 border rounded-lg text-red-700 bg-gray-100 focus:outline-none"
                             />
-                            {errors.email && <span className="text-[#ff0000d8] text-sm">This field is required</span>}
+                            {errors.email && <p className="text-xs text-red-600 mt-1">Required field</p>}
                         </div>
                     </div>
 
                     <div>
-                        <label className="text-[#ff0000d8] font-semibold">Restaurant Address</label>
+                        <label className="block mb-1 text-sm font-medium text-red-600">Restaurant Address</label>
                         <input
                             type="text"
-                            className="w-full p-2 border rounded-md text-[#ff0000d8]"
                             {...register("restaurantAddress", { required: true })}
+                            className="w-full px-4 py-2 border rounded-lg focus:outline-none text-red-700"
                         />
-                        {errors.restaurantAddress && <span className="text-[#ff0000d8] text-sm">This field is required</span>}
-                    </div>
-                    
-                    <div>
-                        <label className="text-[#ff0000d8] font-semibold">Restaurant Number</label>
-                        <input
-                            type="number"
-                            className="w-full p-2 border rounded-md text-[#ff0000d8]"
-                            {...register("restaurantNumber", { required: true })}
-                        />
-                        {errors.restaurantNumber && <span className="text-[#ff0000d8] text-sm">This field is required</span>}
+                        {errors.restaurantAddress && <p className="text-xs text-red-600 mt-1">Required field</p>}
                     </div>
 
                     <div>
-                        <label className="text-[#ff0000d8] font-semibold">Restaurant Category</label>
+                        <label className="block mb-1 text-sm font-medium text-red-600">Phone Number</label>
+                        <input
+                            type="number"
+                            {...register("restaurantNumber", { required: true })}
+                            className="w-full px-4 py-2 border rounded-lg focus:outline-none text-red-700"
+                        />
+                        {errors.restaurantNumber && <p className="text-xs text-red-600 mt-1">Required field</p>}
+                    </div>
+
+                    <div>
+                        <label className="block mb-1 text-sm font-medium text-red-600">Category</label>
                         <select
-                            className="w-full p-2 border rounded-md text-[#ff0000d8]"
                             {...register("restaurantCategory", { required: true })}
+                            defaultValue=""
+                            className="w-full px-4 py-2 border rounded-lg focus:outline-none text-red-700"
                         >
-                            <option value="" disabled selected>Choose your Restaurant Category</option>
+                            <option value="" disabled>Choose a category</option>
                             <option>Biryani</option>
                             <option>Pizza</option>
                             <option>Burger</option>
@@ -158,129 +184,68 @@ const UploadInfo = () => {
                             <option>Beef</option>
                             <option>Chinese</option>
                         </select>
-                        {errors.restaurantCategory && <span className="text-[#ff0000d8] text-sm">This field is required</span>}
+                        {errors.restaurantCategory && <p className="text-xs text-red-600 mt-1">Required field</p>}
                     </div>
-                    <select
-                    {...register("districtName", { required: "District selection is required" })} required
-                    className="w-full px-3 py-2 border text-[#ff0000d8] border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500"
-                    // onChange={(e) => setValue("districtName", e.target.value)}
-                    defaultValue=""
-                >
-                    <option value="" disabled> Select a district </option>
-                    <option value="Dhaka">Dhaka</option>
-                    <option value="Faridpur">Faridpur</option>
-                    <option value="Gazipur">Gazipur</option>
-                    <option value="Gopalganj">Gopalganj</option>
-                    <option value="Kishoreganj">Kishoreganj</option>
-                    <option value="Madaripur">Madaripur</option>
-                    <option value="Manikganj">Manikganj</option>
-                    <option value="Munshiganj">Munshiganj</option>
-                    <option value="Mymensingh">Mymensingh</option>
-                    <option value="Narsingdi">Narsingdi</option>
-                    <option value="Narayanganj">Narayanganj</option>
-                    <option value="Tangail">Tangail</option>
-                    <option value="Shariatpur">Shariatpur</option>
-                    <option value="Netrokona">Netrokona</option>
 
+                    <div>
+                        <label className="block mb-1 text-sm font-medium text-red-600">District</label>
+                        <select
+                            {...register("districtName", { required: "District is required" })}
+                            defaultValue=""
+                            className="w-full px-4 py-2 border rounded-lg focus:outline-none text-red-700"
+                        >
+                            <option value="" disabled>Select a district</option>
+                            {[
+                                "Dhaka", "Faridpur", "Gazipur", "Gopalganj", "Kishoreganj", "Madaripur", "Manikganj",
+                                "Munshiganj", "Mymensingh", "Narsingdi", "Narayanganj", "Tangail", "Shariatpur", "Netrokona",
+                                "Chittagong", "Bandarban", "Brahmanbaria", "Chandpur", "Feni", "Khagrachari", "Lakshmipur",
+                                "Noakhali", "Rangamati", "Cox'sbazar", "Khulna", "Bagerhat", "Chuadanga", "Jessore", "Jhenaidah",
+                                "Kushtia", "Meherpur", "Mongla", "Satkhira", "Barishal", "Barguna", "Bhola", "Jhalokathi",
+                                "Patuakhali", "Pirojpur", "Sylhet", "Habiganj", "Moulvibazar", "Sunamganj", "Rangpur", "Dinajpur",
+                                "Gaibandha", "Kurigram", "Lalmonirhat", "Nilphamari", "Panchagarh", "Thakurgaon", "Rajshahi",
+                                "Bogra", "Chapai Nawabganj", "Naogaon", "Natore", "Pabna", "Shibganj"
+                            ].map(district => (
+                                <option key={district} value={district}>{district}</option>
+                            ))}
+                        </select>
+                        {errors.districtName && <p className="text-xs text-red-600 mt-1">{errors.districtName.message}</p>}
+                    </div>
 
-
-                    <option value="Chittagong">Chittagong</option>
-                    <option value="Bandarban">Bandarban</option>
-                    <option value="Brahmanbaria">Brahmanbaria</option>
-                    <option value="Chandpur">Chandpur</option>
-                    <option value="Feni">Feni</option>
-                    <option value="Khagrachari">Khagrachari</option>
-                    <option value="Lakshmipur">Lakshmipur</option>
-                    <option value="Noakhali">Noakhali</option>
-                    <option value="Rangamati">Rangamati</option>
-                    <option value="Cox'sbazar">Cox'sbazar</option>
-
-
-                    <option value="Khulna">Khulna</option>
-                    <option value="Bagerhat">Bagerhat</option>
-                    <option value="Chuadanga">Chuadanga</option>
-                    <option value="Jessore">Jessore</option>
-                    <option value="Jhenaidah">Jhenaidah</option>
-                    <option value="Kushtia">Kushtia</option>
-                    <option value="Meherpur">Meherpur</option>
-                    <option value="Mongla">Mongla</option>
-                    <option value="Satkhira">Satkhira</option>
-
-
-                    <option value="Barishal">Barishal</option>
-                    <option value="Barguna">Barguna</option>
-                    <option value="Bhola">Bhola</option>
-                    <option value="Jhalokathi">Jhalokathi</option>
-                    <option value="Patuakhali">Patuakhali</option>
-                    <option value="Pirojpur">Pirojpur</option>
-
-
-                    <option value="Sylhet">Sylhet</option>
-                    <option value="Habiganj">Habiganj</option>
-                    <option value="Moulvibazar">Moulvibazar</option>
-                    <option value="Sunamganj">Sunamganj</option>
-                    <option value="Mymensingh">Mymensingh</option>
-
-
-
-                    <option value="Rangpur">Rangpur</option>
-                    <option value="Dinajpur">Dinajpur</option>
-                    <option value="Gaibandha">Gaibandha</option>
-                    <option value="Kurigram">Kurigram</option>
-                    <option value="Lalmonirhat">Lalmonirhat</option>
-                    <option value="Nilphamari">Nilphamari</option>
-                    <option value="Panchagarh">Panchagarh</option>
-                    <option value="Thakurgaon">Thakurgaon</option>
-
-
-
-                    <option value="Rajshahi">Rajshahi</option>
-                    <option value="Bogra">Bogra</option>
-                    <option value="Chapai Nawabganj">Chapai Nawabganj</option>
-                    <option value="Naogaon">Naogaon</option>
-                    <option value="Natore">Natore</option>
-                    <option value="Pabna">Pabna</option>
-                    <option value="Rajshahi">Rajshahi</option>
-                    <option value="Rangpur">Rangpur</option>
-                    <option value="Shibganj">Shibganj</option>
-                </select>
-
-                {errors.districtName && <p className="text-[#ff0000d8] mt-1">{errors.districtName.message}</p>}
-
-
-                    <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+                    <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
                         <div>
-                            <label className="text-[#ff0000d8] font-semibold">Upload Logo (300×300)</label>
+                            <label className="block mb-1 text-sm font-medium text-red-600">Logo (300x300)</label>
                             <input
                                 type="file"
                                 accept="image/*"
                                 {...register("photo", { required: true })}
-                                className="w-full p-2 border rounded-md"
+                                className="w-full px-3 py-2 border rounded-lg focus:outline-none"
                             />
-                            {errors.photo && <span className="text-[#ff0000d8] text-sm">Logo is required</span>}
+                            {errors.photo && <p className="text-xs text-red-600 mt-1">Logo is required</p>}
                         </div>
                         <div>
-                            <label className="text-[#ff0000d8] font-semibold">Upload Banner (400×250)</label>
+                            <label className="block mb-1 text-sm font-medium text-red-600">Banner (400x250)</label>
                             <input
                                 type="file"
                                 accept="image/*"
                                 {...register("banner", { required: true })}
-                                className="w-full p-2 border rounded-md"
+                                className="w-full px-3 py-2 border rounded-lg focus:outline-none"
                             />
-                            {errors.banner && <span className="text-[#ff0000d8] text-sm">Banner is required</span>}
+                            {errors.banner && <p className="text-xs text-red-600 mt-1">Banner is required</p>}
                         </div>
                     </div>
-                    
+
                     <button
-                        className={`w-full py-2 mt-4 text-white bg-red-600 hover:bg-red-700 rounded-md ${isSubmitting ? "opacity-50" : ""}`}
                         type="submit"
                         disabled={isSubmitting}
+                        className={`w-full mt-6 py-3 text-white font-semibold rounded-lg transition-all duration-300 ${
+                            isSubmitting ? "bg-red-400 cursor-not-allowed" : "bg-red-600 hover:bg-red-700"
+                        }`}
                     >
                         {isSubmitting ? "Submitting..." : "Add Restaurant"}
                     </button>
                 </form>
             </div>
-        </div>
+        </section>
     );
 };
 

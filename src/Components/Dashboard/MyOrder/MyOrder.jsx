@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import useAddFood from "../../Hooks/useAddFood";
 import { Link } from "react-router-dom";
 import { MdDeleteOutline } from "react-icons/md";
@@ -11,172 +11,163 @@ const MyOrder = () => {
   const [cartFood, refetch] = useAddFood();
   const [quantities, setQuantities] = useState({});
   const axiosSecure = useAxiosSecure();
-  const { register, handleSubmit, setValue, formState: { errors } } = useForm();
+  const { register, handleSubmit, formState: { errors } } = useForm();
   const { user } = useAuth();
-  // Function to increment quantity
-  const handleIncrement = (id) => {
-    setQuantities((prev) => ({
-      ...prev,
-      [id]: (prev[id] || 1) < 100 ? (prev[id] || 1) + 1 : 100,
-    }));
+  const [isUpdating, setIsUpdating] = useState(false);
+
+  // Initialize quantities from cart items
+  useEffect(() => {
+    const initialQuantities = {};
+    cartFood.forEach(item => {
+      initialQuantities[item._id] = item.quantity || 1;
+    });
+    setQuantities(initialQuantities);
+  }, [cartFood]);
+
+  const handleIncrement = async (id) => {
+    const newQuantity = Math.min(100, (quantities[id] || 1) + 1);
+    await updateQuantity(id, newQuantity);
   };
 
-  // Function to decrement quantity
-  const handleDecrement = (id) => {
-    setQuantities((prev) => ({
-      ...prev,
-      [id]: (prev[id] || 1) > 1 ? (prev[id] || 1) - 1 : 1,
-    }));
+  const handleDecrement = async (id) => {
+    const newQuantity = Math.max(1, (quantities[id] || 1) - 1);
+    await updateQuantity(id, newQuantity);
   };
 
-  // Function to handle quantity input change
-  const handleQuantityChange = (id, value) => {
+  const handleQuantityChange = async (id, value) => {
     const newValue = Math.max(1, Math.min(100, Number(value)));
-    setQuantities((prev) => ({
-      ...prev,
-      [id]: newValue,
-    }));
+    await updateQuantity(id, newValue);
+  };
+
+  const updateQuantity = async (id, newQuantity) => {
+    if (isUpdating) return;
+    
+    setIsUpdating(true);
+    try {
+      setQuantities(prev => ({ ...prev, [id]: newQuantity }));
+      
+      const res = await axiosSecure.patch(`/addFood/${id}`, { 
+        quantity: newQuantity 
+      });
+      
+      if (res.data.modifiedCount > 0) {
+        refetch();
+      } else {
+        // Revert if update failed
+        setQuantities(prev => ({ ...prev, [id]: prev[id] }));
+      }
+    } catch (error) {
+      console.error("Error updating quantity:", error);
+      Swal.fire("Error!", "Failed to update quantity.", "error");
+      // Revert on error
+      setQuantities(prev => ({ ...prev, [id]: prev[id] }));
+    } finally {
+      setIsUpdating(false);
+    }
   };
 
   const handleRemove = (id) => {
-
     if (user && user.email) {
       Swal.fire({
         title: "Are you sure?",
         text: "You won't be able to revert this!",
         icon: "warning",
         showCancelButton: true,
-        confirmButtonColor: "#3085d6",
+        confirmButtonColor: "#ff0000d8",
         cancelButtonColor: "#d33",
-        confirmButtonText: "Yes, delete it!"
+        confirmButtonText: "Yes, delete it!",
       }).then((result) => {
         if (result.isConfirmed) {
           axiosSecure.delete(`/addFood/${id}`)
-            .then(res => {
-              // console.log(res.data);
-              refetch()
+            .then((res) => {
+              refetch();
               if (res.data.deletedCount > 0) {
                 Swal.fire({
                   title: "Deleted!",
-                  text: "Your file has been deleted.",
+                  text: "Your item has been removed.",
                   icon: "success",
-                  color: "red"
+                  confirmButtonColor: "#ff0000d8",
                 });
               }
-            })
+            });
         }
       });
     }
   };
 
-  // Calculate Subtotal
   const subtotal = cartFood.reduce((acc, item) => {
-    const quantity = quantities[item._id] || 1;
-    return acc + item.foodPrice * quantity;
+    return acc + item.foodPrice * (quantities[item._id] || 1);
   }, 0);
 
-  const discount = subtotal * 0.15; // 15% discount
+  const discount = subtotal * 0.15;
   const total = subtotal - discount;
-  const onSubmit = (data, id) => {
-    if (!id) {
-      console.error("Invalid ID:", id);
-      Swal.fire("Error!", "Invalid food item ID.", "error");
-      return;
-    }
-
-    const updatedQuantity = quantities[id] || 1;
-
-    axiosSecure
-      .patch(`/addFood/${id}`, { quantity: updatedQuantity })
-      .then((res) => {
-        if (res.data.modifiedCount > 0) {
-          refetch();
-          Swal.fire("Success!", "Quantity updated successfully.", "success");
-        }
-      })
-      .catch((err) => {
-        console.error("Error updating quantity:", err);
-        Swal.fire("Error!", "Failed to update quantity.", "error");
-      });
-  };
 
   return (
-    <div className=" min-h-screen mt-10 px-2 lg:px-5 border-2 ">
+    <div className="min-h-screen mt-10 px-4 lg:px-20 border border-gray-200 rounded-lg shadow-md bg-white">
       {cartFood.length > 0 ? (
-        <div className="mb-11">
-          <table className="table ">
-            <thead className="bg-[#ff0000d8] rounded-xl text-white">
-              <tr>
-                <th>Product</th>
-                <th>Quantity</th>
-                <th>Subtotal</th>
+        <>
+          <table className="w-full table-auto border-collapse text-sm md:text-base">
+            <thead>
+              <tr className="bg-[#ff0000d8] text-white rounded-t-lg">
+                <th className="py-3 px-4 text-left rounded-tl-lg">Product</th>
+                <th className="py-3 px-4 text-center">Quantity</th>
+                <th className="py-3 px-4 text-right rounded-tr-lg">Subtotal</th>
               </tr>
             </thead>
             <tbody>
               {cartFood.map((item) => (
-                <tr key={item._id}>
-                  <td className="p-4">
-                    <div className="flex  items-center gap-2">
-                      <div className="avatar">
-                        <div className=" h-10 lg:h-16 w-10 lg:w-16  md:mr-0 rounded-md overflow-hidden">
-                          <img
-                            src={item.foodImage}
-                            alt={item.foodName}
-                            className="object-cover"
-                          />
-                        </div>
-                      </div>
-                      <div className=" grid md:grid-cols-2  ">
-
-                        <p className=" lg:font-bold text-[10px] lg:text-lg text-[#ff1818]">{item.foodName}</p>
-                      </div>
-
+                <tr key={item._id} className="border-b border-gray-200 hover:bg-red-50 transition">
+                  <td className="flex items-center gap-4 py-4 px-4">
+                    <div className="h-14 w-14 rounded-md overflow-hidden shadow-md flex-shrink-0">
+                      <img
+                        src={item.foodImage}
+                        alt={item.foodName}
+                        className="object-cover h-full w-full"
+                      />
                     </div>
-
-                    <p className="text-sm font-semibold ">Price: ${item.foodPrice}</p>
-                    <button
-                      onClick={() => handleRemove(item._id)}
-                      className="text-[#ff1818] text-sm font-semibold mt-1 hover:underline"
-                    >
-                      <MdDeleteOutline />
-                    </button>
+                    <div>
+                      <p className="font-semibold text-[#ff0000d8] text-lg">{item.foodName}</p>
+                      <p className="text-gray-600 mt-1">Price: ${item.foodPrice.toFixed(2)}</p>
+                      <button
+                        onClick={() => handleRemove(item._id)}
+                        className="flex items-center text-[#ff0000d8] mt-2 hover:underline text-sm font-medium"
+                      >
+                        <MdDeleteOutline size={20} />
+                        <span className="ml-1">Remove</span>
+                      </button>
+                    </div>
                   </td>
-
-                  <td className="">
-                    <form onSubmit={handleSubmit((data) => onSubmit(data, item._id))}>
-                      <div className=" w-[84px]">
-                        <div className="mx-auto">
-                          <button
-                            className="px-3 py-1  rounded hover:bg-gray-300"
-                            onClick={() => handleDecrement(item._id)}
-                          >
-                            -
-                          </button>
-                          <input
-                            type="text"
-                            className="w-4 bg-white text-[#ff0000d8] text-center font-bold"
-                            name="quantities"
-                            value={quantities[item._id] || "" || 1}
-                            onChange={(e) => handleQuantityChange(item._id, e.target.value)}
-                            required
-                          />
-
-                          <button
-                            onClick={() => handleIncrement(item._id)}
-                            className="px-3 py-1  rounded hover:bg-gray-300"
-                            disabled={(quantities[item._id] || 1) >= 100}
-                          >
-                            +
-                          </button>
-                        </div>
-                      </div>
-                    </form>
+                  <td className="text-center py-4 px-4">
+                    <div className="inline-flex items-center border rounded-md overflow-hidden">
+                      <button
+                        type="button"
+                        onClick={() => handleDecrement(item._id)}
+                        disabled={isUpdating}
+                        className={`px-3 py-1 text-xl font-bold text-[#ff0000d8] hover:bg-[#ff0000d8] hover:text-white transition ${isUpdating ? 'opacity-50 cursor-not-allowed' : ''}`}
+                      >
+                        -
+                      </button>
+                      <input
+                        type="number"
+                        min="1"
+                        max="100"
+                        value={quantities[item._id] || 1}
+                        onChange={(e) => handleQuantityChange(item._id, e.target.value)}
+                        className="w-12 text-center font-semibold text-[#ff0000d8] focus:outline-none"
+                        disabled={isUpdating}
+                      />
+                      <button
+                        type="button"
+                        onClick={() => handleIncrement(item._id)}
+                        disabled={isUpdating}
+                        className={`px-3 py-1 text-xl font-bold text-[#ff0000d8] hover:bg-[#ff0000d8] hover:text-white transition ${isUpdating ? 'opacity-50 cursor-not-allowed' : ''}`}
+                      >
+                        +
+                      </button>
+                    </div>
                   </td>
-
-                  <td>
-                    <p className="font-semibold text-[#ff1818]">
-                      ${item.foodPrice * (quantities[item._id] || 1)}
-                    </p>
+                  <td className="text-right font-semibold text-[#ff0000d8] py-4 px-4">
+                    ${(item.foodPrice * (quantities[item._id] || 1)).toFixed(2)}
                   </td>
                 </tr>
               ))}
@@ -184,45 +175,45 @@ const MyOrder = () => {
           </table>
 
           {/* Order Summary */}
-          <div className="mt-6 md:px-20">
-            <div className="divider ml-4 divider-error mx-auto"></div>
-
-            <div className="flex justify-evenly md:justify-end gap-12">
-              <p className="text-center">Subtotal</p>
-              <p className="text-center">${subtotal.toFixed(2)}</p>
+          <div className="max-w-md mx-auto mt-10 p-6 bg-[#fff0f0] rounded-lg shadow-md text-gray-800">
+            <h3 className="text-xl font-semibold mb-4 text-[#ff0000d8]">Order Summary</h3>
+            <div className="flex justify-between mb-2">
+              <span>Subtotal</span>
+              <span>${subtotal.toFixed(2)}</span>
             </div>
-
-            <div className="flex justify-evenly md:justify-end gap-12">
-              <p className="text-center">Discount (15%)</p>
-              <p className="text-center">${discount.toFixed(2)}</p>
+            <div className="flex justify-between mb-2 text-red-600">
+              <span>Discount (15%)</span>
+              <span>- ${discount.toFixed(2)}</span>
             </div>
-
-            <div className="flex justify-evenly md:justify-end gap-12">
-              <p className="text-center mr-4">Total</p>
-              <p className="text-center ml-3 font-bold text-[#ff1818]">${total.toFixed(2)} </p>
+            <hr className="border-red-300 mb-3" />
+            <div className="flex justify-between font-bold text-[#ff0000d8] text-lg">
+              <span>Total</span>
+              <span>${total.toFixed(2)}</span>
             </div>
           </div>
 
           {/* Checkout Button */}
-          <div className="px-3 md:px-1">
+          <div className="max-w-md mx-auto mt-6">
             <Link to={"/dashboard/checkOutForm"}>
-              <button className="btn w-full mt-4 font-Kanit btn-outline bg-[#ff0000d8] hover:bg-[#ff0000d8] text-white hover:text-white ">
+              <button className="w-full bg-[#ff0000d8] hover:bg-[#e60000] text-white font-semibold py-3 rounded-lg transition">
                 Confirm Order
               </button>
             </Link>
           </div>
-        </div>
+        </>
       ) : (
-        <div className="min-h-screen justify-center pt-28 items-center">
+        <div className="flex flex-col items-center justify-center min-h-[60vh] text-center text-gray-600">
           <img
-            className="w-16 mx-auto rounded-2xl"
-            src={"https://i.ibb.co.com/88JDM0z/remove-from-cart-12316609.png"}
-            alt=""
+            className="w-20 mb-6"
+            src="https://i.ibb.co/88JDM0z/remove-from-cart-12316609.png"
+            alt="Empty cart"
           />
-          <p className="text-center font-bold text-red-600">Your cart is empty</p>
-          <p className="text-center">Continue shopping</p>
-          <Link className="" to={"/"}>
-            <p className="text-center border-2 p-2 w-24 mx-auto mt-2">EXPLORE</p>
+          <p className="text-xl font-bold text-[#ff0000d8] mb-2">Your cart is empty</p>
+          <p className="mb-4">Continue shopping to add delicious foods!</p>
+          <Link to={"/"}>
+            <button className="border-2 border-[#ff0000d8] text-[#ff0000d8] px-6 py-2 rounded-lg hover:bg-[#ff0000d8] hover:text-white transition">
+              EXPLORE
+            </button>
           </Link>
         </div>
       )}

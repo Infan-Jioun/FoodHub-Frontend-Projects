@@ -162,8 +162,10 @@ import {
   
                 {/* Terms */}
                 <Checkbox
+                 color="red"
+               
                   label={
-                    <Typography variant="small" className="flex items-center font-normal">
+                    <Typography variant="small"  className="flex items-center text-[12px] font-normal">
                       I agree to the
                       <a href="#" className="ml-1 text-[#ff1818] font-semibold hover:underline">
                         Terms and Conditions
@@ -191,7 +193,7 @@ import {
               {/* Google Button */}
               <button
                 onClick={handleGoogle}
-                className="w-full flex items-center justify-center gap-2 py-2 border border-gray-300 rounded-lg hover:bg-gray-100 transition duration-300"
+                className="w-full flex items-center justify-center gap-2 py-2 border border-gray-300 rounded-full hover:bg-gray-100 transition duration-300"
               >
                 <FcGoogle className="w-5 h-5" />
                 Continue with Google
@@ -199,7 +201,7 @@ import {
   
               {/* Login Link */}
               <div className="mt-6 text-center">
-                <Typography color="gray" className="text-sm">
+                <Typography color="gray " className="text-sm">
                   Already have an account?{" "}
                   <a href="/login" className="text-[#ff1818] font-semibold hover:underline">
                     Sign In

@@ -201,7 +201,7 @@ const CheckoutForm = () => {
 
     return (
         <div className="min-h-screen  mx-auto  bg-white">
-            <Helmet><title>Checkout | Food Delivery</title></Helmet>
+            <Helmet><title>Checkout | FOODHUB</title></Helmet>
             <motion.div initial={{ opacity: 0 }} animate={{ opacity: 1 }} transition={{ duration: 0.5 }} className="container mx-auto py-8 px-4 bg-red-50">
                 <form className="grid grid-cols-1 lg:grid-cols-2 gap-8 drop-shadow-2xl ">
 

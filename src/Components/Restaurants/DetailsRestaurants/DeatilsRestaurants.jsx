@@ -25,7 +25,7 @@ import {
   CardBody,
   IconButton
 } from "@material-tailwind/react";
-import { UpdateFoodModal } from "./UpdateFoodModal/UpdateFoodModal";
+
 
 const FoodModal = ({ food, open, handleOpen, handleAddFood }) => {
   // Return null if food is not provided
@@ -99,22 +99,7 @@ const FoodModal = ({ food, open, handleOpen, handleAddFood }) => {
             <Radio
               id="size8"
               name="size"
-              label={
-                <div>
-                  <Typography color="blue-gray" className="font-medium">
-                    8 Inch
-                  </Typography>
-                  <Typography color="blue-gray" className="text-sm">
-                    <span className="text-red-500 font-bold">Tk {food.price}</span>
-                    <span className="ml-2 text-gray-500 line-through">
-                      Tk {Math.round(food.price * 1.15)}
-                    </span>
-                    <span className="ml-2 bg-green-100 text-green-800 px-2 py-1 rounded text-xs">
-                      15% off
-                    </span>
-                  </Typography>
-                </div>
-              }
+
               value="8"
               checked={selectedOption === "8"}
               onChange={() => setSelectedOption("8")}
@@ -262,34 +247,7 @@ const DetailsRestaurants = () => {
     }
   };
 
-  const handleDeleted = (restaurantName, foodName) => {
-    if (!(isAdmin || isModerator || isOwner)) {
-      return Swal.fire("Unauthorized", "You are not authorized to delete", "error");
-    }
 
-    Swal.fire({
-      title: "Are you sure?",
-      text: "You won't be able to revert this!",
-      icon: "warning",
-      showCancelButton: true,
-      confirmButtonColor: "#3085d6",
-      cancelButtonColor: "#d33",
-      confirmButtonText: "Yes, delete it!",
-    }).then((result) => {
-      if (result.isConfirmed) {
-        axiosSecure.delete(`/restaurantUpload/${restaurantName}/${foodName}`)
-          .then((res) => {
-            if (res.data.success) {
-              Swal.fire("Deleted!", "Food item deleted successfully.", "success");
-              setFoodItems(prev => prev.filter(food => food.foodName !== foodName));
-            }
-          })
-          .catch(() => {
-            Swal.fire("Error", "Failed to delete", "error");
-          });
-      }
-    });
-  };
 
   const handleAddFood = async (food) => {
     if (!user?.email) {
@@ -452,25 +410,7 @@ const DetailsRestaurants = () => {
                     {food.description || `Delicious ${food.foodName} from ${restaurantName}`}
                   </p>
                   <div className="flex justify-between items-center">
-                    {(isAdmin || isModerator || isOwner) && (
-                      <div className="flex space-x-2">
-                        <UpdateFoodModal
-                          restaurantName={restaurantName}
-                          food={food}
-                          refetch={refetch}
-                      
-                        />
-                        <motion.button
-                          onClick={() => handleDeleted(restaurantName, food.foodName)}
-                          className="text-xl font-bold bg-[#ff0000d8] text-white rounded-full shadow-lg p-2 hover:bg-red-700"
-                          whileHover={{ scale: 1.1 }}
-                          whileTap={{ scale: 0.9 }}
-                          aria-label={`Delete ${food.foodName}`}
-                        >
-                          <AiOutlineDelete />
-                        </motion.button>
-                      </div>
-                    )}
+
                     {existingItem[food.foodName] ? (
                       <button
                         onClick={() => navigate("/dashboard/myOrder")}

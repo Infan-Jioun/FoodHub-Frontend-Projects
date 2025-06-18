@@ -1,6 +1,5 @@
 import React from 'react';
-import { Link } from 'react-router-dom';
-import useAuth from '../../Hooks/useAuth';
+import { Link, useLocation } from 'react-router-dom';
 import {
   FaUtensils,
   FaUserCircle,
@@ -11,10 +10,29 @@ import {
   FaEdit
 } from 'react-icons/fa';
 import { PiContactlessPaymentLight } from 'react-icons/pi';
+import useAuth from '../../Hooks/useAuth';
+import useAxiosSecure from '../../Hooks/useAxiosSecure';
+import { useQuery } from '@tanstack/react-query';
 
 const OwnerHome = () => {
   const { user } = useAuth();
+  const axiosSecure = useAxiosSecure();
+  const location = useLocation();
   const red = '#ff0000d8';
+
+  const isOwnerHome = location.pathname === '/dashboard/ownerHome';
+
+  // Directly using useQuery without custom hook
+  const { data: restaurantData = {} } = useQuery({
+    enabled: !!user?.email && isOwnerHome,
+    queryKey: ['restaurantData', user?.email],
+    queryFn: async () => {
+      const res = await axiosSecure.get(`/restaurantManage/${user?.email}`);
+      return res.data;
+    }
+  });
+
+  const restaurantName = restaurantData?.restaurantName || 'Your Restaurant';
 
   const actions = [
     {
@@ -38,7 +56,8 @@ const OwnerHome = () => {
     {
       icon: <FaUtensils />,
       title: "Manage Menu",
-      desc: "Add, edit or remove food items from your restaurant’s offerings.",
+      desc: `Manage ${restaurantName}'s food items.`,
+      link: "/dashboard/manageMenu"
     },
     {
       icon: <FaChartBar />,
@@ -60,6 +79,7 @@ const OwnerHome = () => {
   return (
     <div className="min-h-screen bg-gradient-to-br from-red-50 to-white p-6 md:p-10">
       <div className="max-w-5xl mx-auto bg-white shadow-2xl rounded-2xl p-8 border border-red-200">
+
         {/* Header */}
         <div className="flex flex-col sm:flex-row items-center sm:items-start space-y-4 sm:space-y-0 sm:space-x-6 mb-10">
           {user?.photoURL ? (
@@ -110,16 +130,12 @@ const OwnerHome = () => {
 
         {/* CTA */}
         <div className="mt-10 text-center">
-        <div className="mt-10 text-center">
-          <Link to={"/"}
+          <Link
+            to="/"
             className="bg-[#ff0000d8] hover:bg-[#ff0000] text-white font-semibold px-6 py-2 rounded-lg shadow transition duration-300"
           >
-            Go to Home Page 
+            Go to Home Page
           </Link>
-          <p className="text-sm text-gray-500 mt-3">
-            You're moderating on <span className="font-semibold" style={{ color: red }}>Foodhub</span> — helping maintain quality and trust.
-          </p>
-        </div>
           <p className="text-sm text-gray-500 mt-3">
             You’re logged in as a verified restaurant owner on{' '}
             <span className="font-semibold" style={{ color: red }}>

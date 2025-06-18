@@ -45,6 +45,7 @@ import Serach from "../../Navbar/Search/Serach";
 import AdminRoutes from "../AdminRoutes/AdminRoutes";
 import Revenue from "../../Dashboard/Revenue/Revenue";
 import ErrorElement from "../../../ErrorElement/ErrorElement";
+import ManageMenu from "../../Dashboard/ManageMenu/ManageMenu";
 
 
 
@@ -160,6 +161,10 @@ export const router = createBrowserRouter([
       {
         path: "/dashboard/ownerHome",
         element: <PrivateRoutes><OwnerHome /></PrivateRoutes>,
+      },
+      {
+        path: "/dashboard/manageMenu",
+        element: <PrivateRoutes><ManageMenu/></PrivateRoutes>,
       },
       {
         path: "/dashboard/uploadInfo",

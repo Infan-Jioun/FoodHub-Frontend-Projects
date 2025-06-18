@@ -117,7 +117,7 @@ const Login = () => {
               {/* Terms */}
               <Checkbox
                 color="red"
-                defaultChecked
+           
                 label={
                   <Typography variant="small" className="flex items-center text-[12px]  font-semibold">
                     I agree to the

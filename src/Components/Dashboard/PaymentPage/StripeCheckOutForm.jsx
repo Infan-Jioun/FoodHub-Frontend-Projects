@@ -96,7 +96,7 @@ const elements = useElements();
                 date: new Date(),
                 transactionId: paymentIntent.id,
                 status: "success",
-                cartFoodId: cartFood.map(item => item._id), // Include IDs for deletion
+                cartFoodId: cartFood.map(item => item._id), 
             };
     
             const res = await axiosSecure.post("/payments", payment);

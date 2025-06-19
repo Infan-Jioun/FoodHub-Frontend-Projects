@@ -46,6 +46,7 @@ import AdminRoutes from "../AdminRoutes/AdminRoutes";
 import Revenue from "../../Dashboard/Revenue/Revenue";
 import ErrorElement from "../../../ErrorElement/ErrorElement";
 import ManageMenu from "../../Dashboard/ManageMenu/ManageMenu";
+import RevenueDetails from "../../Dashboard/RevenueDetails/RevenueDetails";
 
 
 
@@ -161,6 +162,10 @@ export const router = createBrowserRouter([
       {
         path: "/dashboard/ownerHome",
         element: <PrivateRoutes><OwnerHome /></PrivateRoutes>,
+      },
+      {
+        path: "/dashboard/revenueDetails",
+        element: <PrivateRoutes><RevenueDetails/></PrivateRoutes>,
       },
       {
         path: "/dashboard/manageMenu",

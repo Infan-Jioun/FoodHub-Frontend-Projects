@@ -22,12 +22,22 @@ const OwnerHome = () => {
 
   const isOwnerHome = location.pathname === '/dashboard/ownerHome';
 
-  // Directly using useQuery without custom hook
+  // Fetch restaurant data
   const { data: restaurantData = {} } = useQuery({
     enabled: !!user?.email && isOwnerHome,
     queryKey: ['restaurantData', user?.email],
     queryFn: async () => {
       const res = await axiosSecure.get(`/restaurantManage/${user?.email}`);
+      return res.data;
+    }
+  });
+
+  // Fetch revenue data specifically for the restaurant
+  const { data: revenueData = {}, isLoading: revenueLoading } = useQuery({
+    enabled: !!user?.email && isOwnerHome,
+    queryKey: ['revenueData', user?.email],
+    queryFn: async () => {
+      const res = await axiosSecure.get(`/restaurantRevenue/${user?.email}`);
       return res.data;
     }
   });
@@ -63,16 +73,45 @@ const OwnerHome = () => {
       icon: <FaChartBar />,
       title: "Track Orders",
       desc: "Monitor orders, update delivery status, and manage workflow.",
+      link: "/dashboard/orders"
     },
     {
       icon: <FaDollarSign />,
       title: "Revenue Overview",
-      desc: "View earnings, payout status, and performance metrics.",
+      desc: (
+        <div className="mt-2">
+          {revenueLoading ? (
+            <div className="text-center py-2">Loading revenue data...</div>
+          ) : (
+            <>
+              <div className="flex justify-between text-sm">
+                <span>Today's Earnings:</span>
+                <span className="font-semibold">${revenueData?.todayEarnings?.toFixed(2) || '0.00'}</span>
+              </div>
+              <div className="flex justify-between text-sm mt-1">
+                <span>This Month:</span>
+                <span className="font-semibold">${revenueData?.monthlyEarnings?.toFixed(2) || '0.00'}</span>
+              </div>
+              <div className="flex justify-between text-sm mt-1">
+                <span>Total Balance:</span>
+                <span className="font-semibold">${revenueData?.totalBalance?.toFixed(2) || '0.00'}</span>
+              </div>
+              <div className="text-xs mt-2 text-center text-gray-600">
+                {revenueData?.lastPayoutDate 
+                  ? `Last payout: ${new Date(revenueData.lastPayoutDate).toLocaleDateString()}`
+                  : 'No payouts yet'}
+              </div>
+            </>
+          )}
+        </div>
+      ),
+      link: "/dashboard/revenueDetails"
     },
     {
       icon: <FaStarHalfAlt />,
       title: "Customer Feedback",
       desc: "See customer reviews and respond to feedback.",
+      link: "/dashboard/reviews"
     }
   ];
 
@@ -100,6 +139,9 @@ const OwnerHome = () => {
             <p className="text-sm mt-1 font-medium" style={{ color: red }}>
               Role: Food Seller
             </p>
+            <p className="text-sm mt-1 font-medium text-gray-600">
+              Restaurant: {restaurantName}
+            </p>
           </div>
         </div>
 
@@ -109,12 +151,22 @@ const OwnerHome = () => {
         <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
           {actions.map(({ icon, title, desc, link }, index) => {
             const card = (
-              <div className="bg-red-100 hover:bg-red-200 transition p-5 rounded-xl border shadow-sm border-red-300 h-full">
+              <div 
+                className="bg-red-100 hover:bg-red-200 transition p-5 rounded-xl border shadow-sm border-red-300 h-full flex flex-col"
+                key={index}
+              >
                 <div className="text-3xl mb-2" style={{ color: red }}>
                   {icon}
                 </div>
                 <h3 className="text-lg font-bold text-gray-800">{title}</h3>
-                <p className="text-sm text-gray-700">{desc}</p>
+                <div className="text-sm text-gray-700 mt-1 flex-grow">
+                  {typeof desc === 'string' ? desc : desc}
+                </div>
+                {link && (
+                  <div className="mt-3 text-right">
+                    <span className="text-xs font-semibold" style={{ color: red }}>View details →</span>
+                  </div>
+                )}
               </div>
             );
 
@@ -123,7 +175,7 @@ const OwnerHome = () => {
                 {card}
               </Link>
             ) : (
-              <div key={index}>{card}</div>
+              card
             );
           })}
         </div>
@@ -137,7 +189,7 @@ const OwnerHome = () => {
             Go to Home Page
           </Link>
           <p className="text-sm text-gray-500 mt-3">
-            You’re logged in as a verified restaurant owner on{' '}
+            You're logged in as a verified restaurant owner on{' '}
             <span className="font-semibold" style={{ color: red }}>
               Foodhub
             </span>.

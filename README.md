@@ -11,10 +11,9 @@ A complete food delivery platform where users can search for food and restaurant
 ---
 
 ## 📸 Screenshots
+ Home Page 
 
-| Home Page | Restaurant Page | Admin Dashboard |
-|-----------|-----------------|----------|
-| ![Home](https://i.ibb.co/j9QzmPGW/image.png) | ![Restaurant](https://i.ibb.co/cXrRBmpT/image.png) | ![Admin Dashboard](https://i.ibb.co/BVzRg1Zc/image.png) |
+ ![Home](https://i.ibb.co/JRSSWMgz/image.png) 
 
 ---
 

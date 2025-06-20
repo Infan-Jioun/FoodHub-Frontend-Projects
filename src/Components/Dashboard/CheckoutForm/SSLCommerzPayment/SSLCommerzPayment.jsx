@@ -37,7 +37,7 @@ const SSLCommerzPayment = ({ onClose, total, cartFood, user, formData , restaura
                 cartFoodId: cartFood.map(item => item._id), 
                 items: cartFood.map(item => ({
                     foodId: item._id,
-                    restaurantName: item.restaurantName, // Include restaurant name
+                    restaurantName: item.restaurantName, 
                     foodName: item.foodName,
                     quantity: item.quantity || 1,
                     price: item.foodPrice,

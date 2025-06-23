@@ -115,7 +115,7 @@ export const router = createBrowserRouter([
       },
       {
         path: "/myProfile",
-        element:  <MyProfile/>
+        element:  <PrivateRoutes><MyProfile/></PrivateRoutes>
       },
       {
         path: "/resetPassword",

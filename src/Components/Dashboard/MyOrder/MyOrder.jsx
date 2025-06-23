@@ -159,7 +159,7 @@ const MyOrder = () => {
                           onChange={(e) =>
                             handleQuantityChange(item._id, e.target.value)
                           }
-                          className="w-12 text-center font-semibold text-[#ff0000d8] focus:outline-none"
+                          className="w-10  text-center font-semibold bg-white text-[#ff0000d8] focus:outline-none"
                           disabled={isUpdating}
                         />
                         <button

@@ -119,7 +119,7 @@ const UploadInfo = () => {
     }
 
     return (
-        <section className="min-h-screen flex items-center justify-center bg-gray-50 px-4 py-12">
+        <section className="min-h-screen flex items-center justify-center bg-red-50 px-4 py-12">
             <div className="w-full max-w-3xl bg-white rounded-xl shadow-md p-6 md:p-10">
                 <h2 className="text-3xl font-bold text-center text-red-600 mb-8 font-Caveat">Upload Restaurant Info</h2>
                 <form onSubmit={handleSubmit(onSubmit)} className="space-y-6">
@@ -131,7 +131,7 @@ const UploadInfo = () => {
                                 type="text"
                                 readOnly
                                 {...register("restaurantName", { required: true })}
-                                className="w-full px-4 py-2 border rounded-lg bg-gray-100 text-red-700 focus:outline-none"
+                                className="w-full px-4 py-2 border rounded-lg bg-white text-red-700 focus:outline-none"
                             />
                             {errors.restaurantName && <p className="text-xs text-red-600 mt-1">Required field</p>}
                         </div>
@@ -141,7 +141,7 @@ const UploadInfo = () => {
                                 type="email"
                                 readOnly
                                 {...register("email", { required: true })}
-                                className="w-full px-4 py-2 border rounded-lg text-red-700 bg-gray-100 focus:outline-none"
+                                className="w-full px-4 py-2 border rounded-lg text-red-700 bg-white focus:outline-none"
                             />
                             {errors.email && <p className="text-xs text-red-600 mt-1">Required field</p>}
                         </div>
@@ -152,7 +152,7 @@ const UploadInfo = () => {
                         <input
                             type="text"
                             {...register("restaurantAddress", { required: true })}
-                            className="w-full px-4 py-2 border rounded-lg focus:outline-none text-red-700"
+                            className="w-full px-4 py-2 border bg-white rounded-lg focus:outline-none text-red-700"
                         />
                         {errors.restaurantAddress && <p className="text-xs text-red-600 mt-1">Required field</p>}
                     </div>
@@ -162,7 +162,7 @@ const UploadInfo = () => {
                         <input
                             type="number"
                             {...register("restaurantNumber", { required: true })}
-                            className="w-full px-4 py-2 border rounded-lg focus:outline-none text-red-700"
+                            className="w-full px-4 py-2 border bg-white rounded-lg focus:outline-none text-red-700"
                         />
                         {errors.restaurantNumber && <p className="text-xs text-red-600 mt-1">Required field</p>}
                     </div>
@@ -172,7 +172,7 @@ const UploadInfo = () => {
                         <select
                             {...register("restaurantCategory", { required: true })}
                             defaultValue=""
-                            className="w-full px-4 py-2 border rounded-lg focus:outline-none text-red-700"
+                            className="w-full px-4 py-2 border bg-white rounded-lg focus:outline-none text-red-700"
                         >
                             <option value="" disabled>Choose a category</option>
                             <option>Biryani</option>
@@ -192,7 +192,7 @@ const UploadInfo = () => {
                         <select
                             {...register("districtName", { required: "District is required" })}
                             defaultValue=""
-                            className="w-full px-4 py-2 border rounded-lg focus:outline-none text-red-700"
+                            className="w-full px-4 py-2 border bg-white rounded-lg focus:outline-none text-red-700"
                         >
                             <option value="" disabled>Select a district</option>
                             {[

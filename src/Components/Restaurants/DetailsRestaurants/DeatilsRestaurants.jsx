@@ -400,7 +400,7 @@ const DetailsRestaurants = () => {
               transition={{ duration: 0.3 }}
               className="flex justify-center"
             >
-              <div className="relative flex flex-col bg-white shadow-md border border-gray-200 rounded-lg w-full max-w-[400px] h-[450px] mx-auto overflow-hidden hover:shadow-lg transition-shadow">
+              <div className="relative flex flex-col bg-white shadow-md border border-gray-200 rounded-lg w-full max-w-[400px] h-[420px] mx-auto overflow-hidden hover:shadow-lg transition-shadow">
                 <div className="relative h-64 overflow-hidden">
                   <motion.img
                     src={food.foodImage}

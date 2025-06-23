@@ -387,17 +387,18 @@ const CheckoutForm = () => {
                                         <span>
                                             <Button
                                                 variant="contained"
-                                                color="primary"
+                                                color="red"
                                                 onClick={handleOpenModal}
                                                 sx={{ px: 4, py: 1.5, fontSize: '16px' }}
                                                 disabled={!isValid || cartFood.length === 0}
                                             >
                                                 Proceed to Payment
                                             </Button>
+                                            
                                         </span>
                                     </Tooltip>
 
-                                    <Dialog open={openModal} onClose={handleCloseModal} fullWidth maxWidth="sm">
+                                    <Dialog open={openModal} onClose={handleCloseModal} className='rounded-lg' fullWidth maxWidth="sm">
                                         <DialogTitle>
                                             <Typography variant="h6" align="center">
                                                 Select Payment Method

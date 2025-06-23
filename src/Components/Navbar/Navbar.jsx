@@ -159,7 +159,7 @@ const Navbar = () => {
               variant="circular"
               alt="User profile"
               className="cursor-pointer border-2 border-[#ff0000d8] w-10 h-10 hover:scale-105 transition-transform"
-              src={user?.photoURL || "/default-avatar.jpg"}
+              src={user?.photoURL || "https://i.ibb.co/PGwHS087/profile-Imagw.jpg"}
             />
           </MenuHandler>
           
@@ -328,7 +328,7 @@ const Navbar = () => {
                   <div tabIndex={0} role="button" className="btn btn-ghost btn-circle">
                     <div className="indicator">
                       <div className="text-2xl text-white">  <GiHamburger /></div>
-                      <span className="badge text-[10px] indicator-item text-[#ff0000d8]">{cartFood.length}</span>
+                      <span className="badge bg-white text-[10px] indicator-item text-[#ff0000d8]">{cartFood.length}</span>
                     </div>
                   </div>
 

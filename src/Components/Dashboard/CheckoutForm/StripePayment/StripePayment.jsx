@@ -126,65 +126,7 @@ const StripePayment = ({ formData }) => {
     }
   };
 
-  const handleSubmitReview = async () => {
-    try {
-      if (!selectedRestaurant?.id) throw new Error("Restaurant info missing");
-
-      const reviewData = {
-        restaurantId: selectedRestaurant.id,
-        restaurantName: selectedRestaurant.name,
-        customerId: user?.uid,
-        customerName: user?.displayName || formData?.customerName || "Anonymous",
-        rating,
-        review: reviewText,
-        date: new Date(),
-        paymentId
-      };
-
-      const reviewResponse = await axiosSecure.post("/reviews", reviewData);
-      if (!reviewResponse.data?.insertedId) throw new Error("Failed to save review");
-
-      const restaurantUpdateResponse = await axiosSecure.put(
-        `/restaurants/${selectedRestaurant.id}/reviews`,
-        {
-          rating,
-          comment: reviewText,
-          userName: user?.displayName || "Anonymous",
-          userId: user?.uid
-        }
-      );
-      if (!restaurantUpdateResponse.data?.success) throw new Error("Failed to update restaurant reviews");
-
-      // ✅ PATCH to each food item
-      const foodReviewPromises = cartFood?.map(async (item) => {
-        if (!item?.restaurantName || !item?.foodName) return;
-
-        const foodReview = {
-          rating,
-          review: reviewText,
-          customerId: user?.uid,
-          customerName: user?.displayName || formData?.customerName || "Anonymous",
-          date: new Date(),
-          paymentId
-        };
-
-        return await axiosSecure.patch(
-          `/restaurantUpload/${encodeURIComponent(item.restaurantName)}/${encodeURIComponent(item.foodName)}`,
-          { reviewData: foodReview }
-        );
-      });
-
-      await Promise.all(foodReviewPromises);
-
-      toast.success("Thank you for your review!");
-      navigate("/dashboard/paymentHistory");
-    } catch (error) {
-      console.error("Review submission error:", error);
-      toast.error(error.message || "Failed to submit review.");
-    } finally {
-      setShowReviewDialog(false);
-    }
-  };
+  
 
   return (
     <div>
@@ -251,51 +193,7 @@ const StripePayment = ({ formData }) => {
         </form>
       </Dialog>
 
-      {/* Review Dialog */}
-      <Dialog open={showReviewDialog} handler={() => setShowReviewDialog(false)}>
-        <DialogHeader>Rate Your Experience</DialogHeader>
-        <DialogBody>
-          <Typography variant="h6" className="mb-4">
-            How was your experience with {selectedRestaurant?.name}?
-          </Typography>
-          <div className="flex justify-center mb-6">
-            <Rating 
-              value={rating} 
-              onChange={(value) => setRating(value)} 
-              ratedColor="amber" 
-              className="text-3xl" 
-            />
-          </div>
-          <Textarea
-            label="Your review (optional)"
-            value={reviewText}
-            onChange={(e) => setReviewText(e.target.value)}
-            className="mb-4"
-            rows={4}
-          />
-        </DialogBody>
-        <DialogFooter>
-          <Button
-            variant="text"
-            color="red"
-            onClick={() => {
-              setShowReviewDialog(false);
-              navigate("/dashboard/paymentHistory");
-            }}
-            className="mr-1"
-          >
-            Skip
-          </Button>
-          <Button
-            variant="gradient"
-            color="green"
-            onClick={handleSubmitReview}
-            disabled={!rating}
-          >
-            Submit Review
-          </Button>
-        </DialogFooter>
-      </Dialog>
+    
     </div>
   );
 };

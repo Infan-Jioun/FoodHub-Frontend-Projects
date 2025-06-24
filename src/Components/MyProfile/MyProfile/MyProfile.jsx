@@ -306,7 +306,7 @@ const MyProfile = () => {
           </motion.div>
         </div>
 
-        {/* Right: Form */}
+ 
         <AnimatePresence>
           {isFormVisible && (
             <motion.div
@@ -451,7 +451,7 @@ const MyProfile = () => {
           )}
         </AnimatePresence>
 
-        {/* View Mode (when form is not visible) */}
+
         <AnimatePresence>
           {!isFormVisible && (
             <motion.div

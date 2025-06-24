@@ -56,24 +56,8 @@ const ModeratorHome = () => {
       desc: "Resolve content or user abuse reports.",
       link: "#" // Replace with actual route if needed
     },
-    {
-      icon: <FaCommentDots />,
-      title: "Moderate Reviews",
-      desc: "Monitor user feedback and reviews.",
-      link: "#" // Replace with actual route if needed
-    },
-    {
-      icon: <FaUserEdit />,
-      title: "Edit Listings",
-      desc: "Update and correct restaurant info.",
-      link: "#" // Replace with actual route if needed
-    },
-    {
-      icon: <FaUserShield />,
-      title: "Moderation Logs",
-      desc: "Track your moderation activity.",
-      link: "#" // Replace with actual route if needed
-    }
+    
+  
   ];
 
   return (

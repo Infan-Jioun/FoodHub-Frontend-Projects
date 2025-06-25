@@ -107,7 +107,7 @@ const FoodModal = ({ food, open, handleOpen, handleAddFood }) => {
                     8 Inch
                   </Typography>
                   <Typography color="blue-gray" className="text-sm">
-                    <span className="text-red-500 font-bold">Tk {(food.price * 1).toFixed(0)}</span>
+                    <span className="text-red-500 font-bold">$ {(food.price * 1).toFixed(0)}</span>
                   </Typography>
                 </div>
               }
@@ -125,7 +125,7 @@ const FoodModal = ({ food, open, handleOpen, handleAddFood }) => {
                     12 Inch
                   </Typography>
                   <Typography color="blue-gray" className="text-sm">
-                    <span className="text-red-500 font-bold">Tk {(food.price * 1.5).toFixed(0)}</span>
+                    <span className="text-red-500 font-bold">$ {(food.price * 1.5).toFixed(0)}</span>
                   </Typography>
                 </div>
               }
@@ -149,7 +149,7 @@ const FoodModal = ({ food, open, handleOpen, handleAddFood }) => {
                     Full Portion
                   </Typography>
                   <Typography color="blue-gray" className="text-sm">
-                    <span className="text-red-500 font-bold">Tk {food.price}</span>
+                    <span className="text-red-500 font-bold">$ {food.price}</span>
                   </Typography>
                 </div>
               }
@@ -167,7 +167,7 @@ const FoodModal = ({ food, open, handleOpen, handleAddFood }) => {
                     Half Portion
                   </Typography>
                   <Typography color="blue-gray" className="text-sm">
-                    <span className="text-red-500 font-bold">Tk {(food.price * 0.6).toFixed(0)}</span>
+                    <span className="text-red-500 font-bold">$ {(food.price * 0.6).toFixed(0)}</span>
                   </Typography>
                 </div>
               }
@@ -393,7 +393,7 @@ const Burger = () => {
                 <div className="p-4 flex flex-col flex-grow">
                   <div className="flex justify-between items-start mb-2">
                     <h3 className="text-lg font-semibold text-gray-800">{food.foodName}</h3>
-                    <span className="text-lg font-bold text-red-600">Tk {food.price}</span>
+                    <span className="text-lg font-bold text-red-600">$ {food.price}</span>
                   </div>
                    <p className="text-red-500 text-sm">
                       Delicious {food.foodName} from{" "}

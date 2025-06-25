@@ -110,20 +110,28 @@ const Users = () => {
 
   const updateRole = (userId, role) => {
     const allowedByModerator = role === "user" || role === "owner";
-
+  
     if (currentRole === "admin" || (currentRole === "moderator" && allowedByModerator)) {
       const roleRoute = role === "owner" ? "restaurantOwner" : role;
-      axiosSecure.patch(`/users/${roleRoute}/${userId}`).then((res) => {
-        if (res.data.modifiedCount > 0) {
-          refetch();
-          toast.success(`Role updated to ${role}`);
-        }
-      });
+  
+      axiosSecure.patch(`/users/${roleRoute}/${userId}`)
+        .then((res) => {
+          console.log("Patch response:", res.data);
+          if (res.data.modifiedCount > 0) {
+            refetch();
+            toast.success(`Role updated to ${role}`);
+          } else {
+            toast.error("Role update failed.");
+          }
+        })
+        .catch((err) => {
+          console.error("Error updating role:", err);
+          toast.error("Something went wrong.");
+        });
     } else {
       Swal.fire("Access Denied", "You are not allowed to assign this role.", "error");
     }
   };
-
   const openRoleModal = (user) => {
     if (currentRole === "moderator" && (user.role === "admin" || user.role === "moderator")) {
       return Swal.fire("Access Denied", "You cannot change this user's role.", "error");
@@ -229,7 +237,7 @@ const Users = () => {
                     <AiOutlineUserDelete size={18} />
                   </button>
                   <button
-                    className="btn btn-sm bg-gray-100 text-[#ff0000d8] hover:bg-[#ffecec]"
+                    className="btn btn-sm bg-gray-100 text-[#ff0000d8] hover:bg-[#ffecec] "
                     onClick={() => openRoleModal(user)}
                   >
                     {user.role ? user.role.charAt(0).toUpperCase() + user.role.slice(1) : "User"}
@@ -266,7 +274,7 @@ const Users = () => {
 
       {/* Role Modal */}
       <dialog id="role_modal" className="modal">
-        <div className="modal-box rounded-xl shadow-lg bg-white">
+        <div className="modal-box rounded-xl shadow-lg bg-white text-[#ff0000d8]">
           <form method="dialog">
             <button className="btn btn-sm btn-circle btn-ghost absolute right-2 top-2">✕</button>
           </form>
@@ -287,8 +295,8 @@ const Users = () => {
                   }}
                   className={`btn capitalize ${
                     selectedUserRole === roleOption
-                      ? "bg-[#ff0000d8] text-white"
-                      : "btn-outline"
+                      ? "bg-[#ff0000d8] text-[#ff0000d8] "
+                      : "text-[#ff0000d8] btn-outline"
                   }`}
                 >
                   {selectedUserRole === roleOption ? "✓ " : ""} Make{" "}

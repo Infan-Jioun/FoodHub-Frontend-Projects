@@ -275,7 +275,7 @@ const PaymentHistory = () => {
             <div className="mb-6">
               <label className="text-sm font-medium text-gray-700 mb-1 block">Your Review</label>
               <textarea
-                className="w-full border border-gray-300 rounded-md p-2 text-sm focus:ring-[#ff0000d8] focus:border-[#ff0000d8]"
+                className="w-full bg-white border border-gray-300 rounded-md p-2 text-sm focus:ring-[#ff0000d8] focus:border-[#ff0000d8]"
                 rows="4"
                 value={comment}
                 onChange={(e) => setComment(e.target.value)}

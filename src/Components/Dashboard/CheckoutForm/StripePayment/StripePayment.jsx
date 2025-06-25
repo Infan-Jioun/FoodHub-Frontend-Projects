@@ -103,7 +103,7 @@ const StripePayment = ({ formData }) => {
 
       setPaymentId(res.data.paymentResult.insertedId);
       toast.success("Payment successful!");
-
+      navigate("/dashboard/paymentHistory");
       const restaurants = cartFood?.length
         ? [...new Map(cartFood.map(item => [
             item?.restaurantId,
@@ -115,7 +115,7 @@ const StripePayment = ({ formData }) => {
         setSelectedRestaurant(restaurants[0]);
         setShowReviewDialog(true);
       } else {
-        navigate("/dashboard/paymentHistory");
+      
       }
     } catch (error) {
       console.error("Payment error:", error);

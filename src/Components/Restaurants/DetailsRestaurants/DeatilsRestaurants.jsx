@@ -105,7 +105,7 @@ const FoodModal = ({ food, open, handleOpen, handleAddFood }) => {
                     8 Inch
                   </Typography>
                   <Typography color="blue-gray" className="text-sm">
-                    <span className="text-red-500 font-bold">Tk {(food.price * 1).toFixed(0)}</span>
+                    <span className="text-red-500 font-bold">$ {(food.price * 1).toFixed(0)}</span>
                   </Typography>
                 </div>
               }
@@ -123,7 +123,7 @@ const FoodModal = ({ food, open, handleOpen, handleAddFood }) => {
                     12 Inch
                   </Typography>
                   <Typography color="blue-gray" className="text-sm">
-                    <span className="text-red-500 font-bold">Tk {(food.price * 1.5).toFixed(0)}</span>
+                    <span className="text-red-500 font-bold">$ {(food.price * 1.5).toFixed(0)}</span>
                   </Typography>
                 </div>
               }
@@ -147,7 +147,7 @@ const FoodModal = ({ food, open, handleOpen, handleAddFood }) => {
                     Full Portion
                   </Typography>
                   <Typography color="blue-gray" className="text-sm">
-                    <span className="text-red-500 font-bold">Tk {food.price}</span>
+                    <span className="text-red-500 font-bold">$ {food.price}</span>
                   </Typography>
                 </div>
               }
@@ -165,7 +165,7 @@ const FoodModal = ({ food, open, handleOpen, handleAddFood }) => {
                     Half Portion
                   </Typography>
                   <Typography color="blue-gray" className="text-sm">
-                    <span className="text-red-500 font-bold">Tk {(food.price * 0.6).toFixed(0)}</span>
+                    <span className="text-red-500 font-bold">$ {(food.price * 0.6).toFixed(0)}</span>
                   </Typography>
                 </div>
               }
@@ -369,7 +369,12 @@ const DetailsRestaurants = () => {
     setSelectedFood(food);
     setModalOpen(true);
   };
-
+  const calculateAverageRating = (reviews) => {
+    if (!reviews || reviews.length === 0) return 0;
+    const sum = reviews.reduce((total, review) => total + (review.rating?.$numberInt ? parseInt(review.rating.$numberInt) : 0), 0);
+    return (sum / reviews.length).toFixed(1);
+  };
+  
   return (
     <div className="max-w-7xl mx-auto min-h-screen mb-5">
       <br />
@@ -409,17 +414,37 @@ const DetailsRestaurants = () => {
                     whileHover={{ scale: 1.05 }}
                     transition={{ duration: 0.3 }}
                   />
+                  {/* Rating badge overlay */}
+                  {food.reviews && food.reviews.length > 0 && (
+                    <div className="absolute top-2 left-2 bg-[#ff0000d8] bg-opacity-90 px-2 py-1 rounded-full flex items-center shadow-sm">
+                      <svg
+                        xmlns="http://www.w3.org/2000/svg"
+                        className="h-4 w-4 text-white"
+                        viewBox="0 0 20 20"
+                        fill="currentColor"
+                      >
+                        <path
+                          d="M9.049 2.927c.3-.921 1.603-.921 1.902 0l1.07 3.292a1 1 0 00.95.69h3.462c.969 0 1.371 1.24.588 1.81l-2.8 2.034a1 1 0 00-.364 1.118l1.07 3.292c.3.921-.755 1.688-1.54 1.118l-2.8-2.034a1 1 0 00-1.175 0l-2.8 2.034c-.784.57-1.838-.197-1.539-1.118l1.07-3.292a1 1 0 00-.364-1.118L2.98 8.72c-.783-.57-.38-1.81.588-1.81h3.461a1 1 0 00.951-.69l1.07-3.292z"
+                        />
+                      </svg>
+                      <span className="ml-1 text-sm font-medium text-white">
+                        {calculateAverageRating(food.reviews)}
+                      </span>
+                      <span className="text-xs text-white ml-1">
+                        ({food.reviews.length})
+                      </span>
+                    </div>
+                  )}
                 </div>
                 <div className="p-4 flex flex-col flex-grow">
                   <div className="flex justify-between items-start mb-2">
                     <h3 className="text-lg font-semibold text-gray-800">{food.foodName}</h3>
-                    <span className="text-lg font-bold text-red-600">Tk {food.price}</span>
+                    <span className="text-lg font-bold text-red-600">$ {food.price}</span>
                   </div>
                   <p className="text-gray-600 text-sm mb-4 flex-grow">
                     {food.description || `Delicious ${food.foodName} from ${restaurantName}`}
                   </p>
                   <div className="flex justify-between items-center">
-
                     {existingItem[food.foodName] ? (
                       <button
                         onClick={() => navigate("/dashboard/myOrder")}

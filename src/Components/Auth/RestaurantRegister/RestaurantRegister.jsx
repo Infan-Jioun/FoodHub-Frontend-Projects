@@ -48,6 +48,7 @@ import {
           email: data.email,
           restaurantAddress: data.restaurantAddress,
           restaurantNumber: parseFloat(data.phoneNumber),
+          date: new Date(),
         };
   
         await axiosSecure.put("/users", usersInfo);

@@ -1,11 +1,12 @@
 import React, { useEffect, useState } from 'react';
 import useAuth from '../../Hooks/useAuth';
 import useAxiosSecure from '../../Hooks/useAxiosSecure';
-import { FaStripe, FaMoneyBillWave, FaReceipt, FaStar, FaTrash } from 'react-icons/fa';
+import { FaStripe, FaMoneyBillWave, FaReceipt, FaStar, FaTrash, FaRegStar, FaUser, FaReply } from 'react-icons/fa';
 import { FiClock, FiCheckCircle, FiXCircle } from 'react-icons/fi';
 import { Rating } from '@material-tailwind/react';
 import toast from 'react-hot-toast';
 import Swal from 'sweetalert2';
+import { format } from 'date-fns';
 
 const PaymentHistory = () => {
   const { user } = useAuth();
@@ -20,21 +21,51 @@ const PaymentHistory = () => {
   const [comment, setComment] = useState('');
   const [submitting, setSubmitting] = useState(false);
 
+  // State to store reviews for each food item
+  const [foodReviews, setFoodReviews] = useState({});
+
   useEffect(() => {
     if (!user?.email) return;
+    
     const fetchPayments = async () => {
       try {
         setLoading(true);
         const response = await axiosSecure.get(`/payments?email=${encodeURIComponent(user.email)}`);
         setPayments(response.data);
+        
+        // Fetch reviews for each food item in payments
+        const reviewsMap = {};
+        for (const payment of response.data) {
+          for (const item of payment.items) {
+            const res = await axiosSecure.get(
+              `/getFoodReviews?restaurantName=${encodeURIComponent(item.restaurantName)}&foodName=${encodeURIComponent(item.foodName)}`
+            );
+            reviewsMap[`${item.restaurantName}-${item.foodName}`] = res.data.reviews || [];
+          }
+        }
+        setFoodReviews(reviewsMap);
       } catch (err) {
         setError(err.message || 'Failed to load payment history');
       } finally {
         setLoading(false);
       }
     };
+    
     fetchPayments();
   }, [user?.email, axiosSecure]);
+
+  // Function to render star ratings
+  const renderStars = (rating) => {
+    const stars = [];
+    for (let i = 1; i <= 5; i++) {
+      stars.push(
+        i <= rating ?
+          <FaStar key={i} className="text-yellow-400 inline" /> :
+          <FaRegStar key={i} className="text-yellow-400 inline" />
+      );
+    }
+    return stars;
+  };
 
   const getPaymentGatewayIcon = (transactionId, title) => {
     if (!transactionId && !title) return null;
@@ -99,9 +130,11 @@ const PaymentHistory = () => {
     const reviewData = {
       user: user?.displayName,
       email: user?.email,
+      userId: user?.uid,
       rating,
       comment,
       date: new Date(),
+      paymentId: selectedFood.paymentId
     };
     try {
       const res = await axiosSecure.patch(
@@ -110,6 +143,12 @@ const PaymentHistory = () => {
       );
       if (res.data.success) {
         toast.success("Review submitted successfully!");
+        // Update local reviews state
+        const key = `${selectedFood.restaurantName}-${selectedFood.foodName}`;
+        setFoodReviews(prev => ({
+          ...prev,
+          [key]: [...(prev[key] || []), reviewData]
+        }));
       } else {
         toast.error("Failed to submit review.");
       }
@@ -124,7 +163,7 @@ const PaymentHistory = () => {
   const handleDelete = async (paymentId) => {
     Swal.fire({
       title: "Are you sure?",
-      text: " Deleted ? ",
+      text: "Deleted?",
       icon: "warning",
       showCancelButton: true,
       confirmButtonColor: "#ff0000d8",
@@ -133,13 +172,11 @@ const PaymentHistory = () => {
     }).then((result) => {
       if (result.isConfirmed) {
         axiosSecure.delete(`/payments/${paymentId}`).then(() => {
-
           toast.success("Deleted successfully.");
           setPayments(payments.filter(payment => payment._id !== paymentId));
         });
       }
     });
-
   };
 
   return (
@@ -222,23 +259,62 @@ const PaymentHistory = () => {
                 <div className="border-t border-gray-200 pt-4">
                   <h4 className="text-sm font-semibold text-gray-900 mb-3">Items</h4>
                   <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4">
-                    {payment.items?.map((item, idx) => (
-                      <div key={idx} className="border rounded-lg p-4 bg-gray-50 hover:shadow-md transition-shadow">
-                        <div className="flex justify-between items-start">
-                          <div>
-                            <h4 className="text-sm font-semibold text-gray-800">{item.foodName}</h4>
-                            <p className="text-xs text-gray-500">From: {item.restaurantName}</p>
-                            <p className="text-xs text-gray-500">Qty: {item.quantity}</p>
+                    {payment.items?.map((item, idx) => {
+                      const key = `${item.restaurantName}-${item.foodName}`;
+                      const reviews = foodReviews[key] || [];
+                      const userReviews = reviews.filter(review => review.email === user.email);
+                      
+                      return (
+                        <div key={idx} className="border rounded-lg p-4 bg-gray-50 hover:shadow-md transition-shadow">
+                          <div className="flex justify-between items-start">
+                            <div>
+                              <h4 className="text-sm font-semibold text-gray-800">{item.foodName}</h4>
+                              <p className="text-xs text-gray-500">From: {item.restaurantName}</p>
+                              <p className="text-xs text-gray-500">Qty: {item.quantity}</p>
+                            </div>
+                            <button
+                              onClick={() => openReviewModal(item)}
+                              className="inline-flex items-center px-3 py-1 text-xs font-medium rounded-full shadow-sm text-white bg-[#ff0000d8] hover:bg-[#e60000] transition-all"
+                            >
+                              <FaStar className="mr-1" /> Review
+                            </button>
                           </div>
-                          <button
-                            onClick={() => openReviewModal(item)}
-                            className="inline-flex items-center px-3 py-1 text-xs font-medium rounded-full shadow-sm text-white bg-[#ff0000d8] hover:bg-[#e60000] transition-all"
-                          >
-                            <FaStar className="mr-1" /> Review
-                          </button>
+
+                          {/* Display user's reviews and replies */}
+                          {userReviews.length > 0 && (
+                            <div className="mt-3 pt-3 border-t border-gray-200">
+                              <h5 className="text-xs font-semibold text-gray-700 mb-2">Your Reviews</h5>
+                              {userReviews.map((review, reviewIdx) => (
+                                <div key={reviewIdx} className="mb-3 last:mb-0">
+                                  <div className="flex items-center">
+                                    {renderStars(review.rating)}
+                                    <span className="ml-2 text-xs text-gray-500">
+                                      {format(new Date(review.date), 'MMM d, yyyy')}
+                                    </span>
+                                  </div>
+                                  <p className="text-xs text-gray-700 mt-1">{review.comment}</p>
+                                  
+                                  {/* Display restaurant reply if exists */}
+                                  {review.reply && (
+                                    <div className="mt-2 pl-3 border-l-2 border-red-200">
+                                      <div className="flex items-center">
+                                        <span className="text-xs font-semibold text-red-600 mr-2">
+                                          Restaurant replied:
+                                        </span>
+                                        <span className="text-xs text-gray-500">
+                                          {format(new Date(review.replyDate), 'MMM d, yyyy')}
+                                        </span>
+                                      </div>
+                                      <p className="text-xs text-gray-700 mt-1">{review.reply}</p>
+                                    </div>
+                                  )}
+                                </div>
+                              ))}
+                            </div>
+                          )}
                         </div>
-                      </div>
-                    ))}
+                      );
+                    })}
                   </div>
                 </div>
               </div>

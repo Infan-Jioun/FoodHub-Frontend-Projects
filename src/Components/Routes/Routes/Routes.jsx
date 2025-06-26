@@ -48,6 +48,7 @@ import ErrorElement from "../../../ErrorElement/ErrorElement";
 import ManageMenu from "../../Dashboard/ManageMenu/ManageMenu";
 import RevenueDetails from "../../Dashboard/RevenueDetails/RevenueDetails";
 import Orders from "../../Dashboard/Orders/Orders";
+import Reviews from "../../Dashboard/Reviews/Reviews";
 
 
 
@@ -167,6 +168,10 @@ export const router = createBrowserRouter([
       {
         path: "/dashboard/revenueDetails",
         element: <PrivateRoutes><RevenueDetails/></PrivateRoutes>,
+      },
+      {
+        path: "/dashboard/reviews",
+        element: <PrivateRoutes><Reviews/></PrivateRoutes>,
       },
       {
         path: "/dashboard/orders",

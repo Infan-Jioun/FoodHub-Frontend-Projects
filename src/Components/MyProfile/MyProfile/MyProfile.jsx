@@ -197,7 +197,7 @@ const MyProfile = () => {
       });
 
       if (result.success) {
-        toast.success("Profile updated successfully!");
+       
         setSelectedFile(null);
         setProfileData({
           name,
@@ -210,11 +210,13 @@ const MyProfile = () => {
         setPreviewImage(imageUrl);
         setIsFormVisible(false);
         localStorage.setItem("isFormVisible", "false");
+        toast.success("Profile updated successfully!");
+
       } else {
         throw new Error(result.message || "Update completed with issues");
       }
     } catch (error) {
-      toast.error(error.message || "Failed to update profile");
+      // toast.error(error.message || "Failed to update profile");
     } finally {
       setIsUpdating(false);
     }

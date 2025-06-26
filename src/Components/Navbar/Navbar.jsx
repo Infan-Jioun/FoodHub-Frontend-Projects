@@ -219,7 +219,7 @@ const Navbar = () => {
         </Menu>
       ) : (
         <Link to="/login" className="flex items-center">
-          <button className="flex items-center justify-center p-2 rounded-full border-2 border-[#ff0000d8] text-primary hover:bg-primary hover:text-white transition-colors">
+          <button className="flex items-center justify-center p-2 rounded-full border-2 border-[#ff0000d8]  hover:bg-[#ff0000d8] text-[#ff0000d8] hover:text-white transition-colors">
             <IoMdLogIn size={20} />
           </button>
         </Link>

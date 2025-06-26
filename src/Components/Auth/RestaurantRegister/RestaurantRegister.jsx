@@ -62,7 +62,8 @@ import {
     };
   
     return (
-      <div className="min-h-screen max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 flex items-center justify-center">
+     <div className="bg-red-50">
+       <div className="min-h-screen max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 flex items-center justify-center">
         <div className="grid lg:grid-cols-2 w-full bg-white rounded-2xl shadow-2xl overflow-hidden mt-10">
           
           {/* Image Section */}
@@ -201,6 +202,7 @@ import {
           </div>
         </div>
       </div>
+     </div>
     );
   };
   

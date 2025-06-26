@@ -80,10 +80,11 @@ import {
         console.error("Google sign-in error:", error);
         toast.error("Google sign-in failed.");
       }
-    };
+    }; 
   
     return (
-      <div className="min-h-screen max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 flex items-center justify-center">
+      <div className="bg-red-50">
+        <div className="min-h-screen max-w-7xl mx-auto px-4 sm:px-6 lg:px-8  flex items-center justify-center">
         <div className="grid lg:grid-cols-2 gap-6 w-full bg-white rounded-2xl shadow-2xl overflow-hidden">
           
           {/* Image Section */}
@@ -211,6 +212,7 @@ import {
             </Card>
           </div>
         </div>
+      </div>
       </div>
     );
   };

@@ -80,7 +80,7 @@ const StripePayment = ({ formData }) => {
         foodPrice: total,
         date: new Date(),
         transactionId: paymentIntent.id,
-        status: "success",
+        status: "pending",
         customerName: formData?.customerName || "Guest",
         country: formData?.country,
         division: formData?.division,

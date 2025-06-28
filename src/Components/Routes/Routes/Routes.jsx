@@ -207,7 +207,7 @@ export const router = createBrowserRouter([
       },
       {
         path: "/dashboard/paymentHistory",
-        element: <PrivateRoutes><PaymentHistory /></PrivateRoutes>,
+        element: <PaymentHistory />,
       },
       {
         path: "/dashboard/AddDistrictCollection",

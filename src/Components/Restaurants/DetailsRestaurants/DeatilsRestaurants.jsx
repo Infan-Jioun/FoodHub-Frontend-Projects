@@ -26,9 +26,7 @@ import {
   IconButton
 } from "@material-tailwind/react";
 
-
 const FoodModal = ({ food, open, handleOpen, handleAddFood }) => {
-  // Return null if food is not provided
   if (!food) return null;
 
   const [selectedOption, setSelectedOption] = useState(
@@ -50,7 +48,7 @@ const FoodModal = ({ food, open, handleOpen, handleAddFood }) => {
   };
 
   return (
-    <Dialog open={open} handler={handleOpen} size="md" className="bg-red-50" >
+    <Dialog open={open} handler={handleOpen} size="md" className="bg-red-50">
       <DialogHeader className="flex justify-between items-center">
         <div>
           <Typography variant="h5" color="blue-gray">
@@ -85,7 +83,7 @@ const FoodModal = ({ food, open, handleOpen, handleAddFood }) => {
             <img
               src={food.foodImage}
               alt={food.foodName}
-              className="w-64 h-64 mx-auto drop-shadow-2xl  rounded-lg"
+              className="w-64 h-64 mx-auto drop-shadow-2xl rounded-lg"
             />
           </CardBody>
         </Card>
@@ -95,7 +93,6 @@ const FoodModal = ({ food, open, handleOpen, handleAddFood }) => {
             <Typography variant="h6" color="blue-gray">
               Select Pizza Size
             </Typography>
-
             <Radio
               id="size8"
               name="size"
@@ -113,7 +110,6 @@ const FoodModal = ({ food, open, handleOpen, handleAddFood }) => {
               checked={selectedOption === "8"}
               onChange={() => setSelectedOption("8")}
             />
-
             <Radio
               id="size12"
               name="size"
@@ -137,7 +133,6 @@ const FoodModal = ({ food, open, handleOpen, handleAddFood }) => {
             <Typography variant="h6" color="blue-gray">
               Select Portion
             </Typography>
-
             <Radio
               id="full"
               name="portion"
@@ -155,7 +150,6 @@ const FoodModal = ({ food, open, handleOpen, handleAddFood }) => {
               checked={selectedOption === "full"}
               onChange={() => setSelectedOption("full")}
             />
-
             <Radio
               id="half"
               name="portion"
@@ -256,7 +250,37 @@ const DetailsRestaurants = () => {
     }
   };
 
+  const calculateAverageRating = (reviews) => {
+    if (!reviews || reviews.length === 0) return 0;
+    const sum = reviews.reduce((total, review) => {
+      const ratingValue = review.rating?.$numberInt 
+        ? parseInt(review.rating.$numberInt) 
+        : typeof review.rating === 'number' 
+          ? review.rating 
+          : 0;
+      return total + ratingValue;
+    }, 0);
+    return (sum / reviews.length).toFixed(1);
+  };
 
+  const renderSingleRatingStar = (averageRating) => {
+    const percentage = (averageRating / 5) * 100;
+    
+    return (
+      <div className="relative w-6 h-4">
+        <div className="absolute flex">
+          <svg xmlns="http://www.w3.org/2000/svg" className="h-4 w-4 text-gray-300" viewBox="0 0 20 20" fill="currentColor">
+            <path d="M9.049 2.927c.3-.921 1.603-.921 1.902 0l1.07 3.292a1 1 0 00.95.69h3.462c.969 0 1.371 1.24.588 1.81l-2.8 2.034a1 1 0 00-.364 1.118l1.07 3.292c.3.921-.755 1.688-1.54 1.118l-2.8-2.034a1 1 0 00-1.175 0l-2.8 2.034c-.784.57-1.838-.197-1.539-1.118l1.07-3.292a1 1 0 00-.364-1.118L2.98 8.72c-.783-.57-.38-1.81.588-1.81h3.461a1 1 0 00.951-.69l1.07-3.292z"/>
+          </svg>
+        </div>
+        <div className="absolute flex overflow-hidden" style={{ width: `${percentage}%` }}>
+          <svg xmlns="http://www.w3.org/2000/svg" className="h-4 w-4 text-red-500" viewBox="0 0 20 20" fill="currentColor">
+            <path d="M9.049 2.927c.3-.921 1.603-.921 1.902 0l1.07 3.292a1 1 0 00.95.69h3.462c.969 0 1.371 1.24.588 1.81l-2.8 2.034a1 1 0 00-.364 1.118l1.07 3.292c.3.921-.755 1.688-1.54 1.118l-2.8-2.034a1 1 0 00-1.175 0l-2.8 2.034c-.784.57-1.838-.197-1.539-1.118l1.07-3.292a1 1 0 00-.364-1.118L2.98 8.72c-.783-.57-.38-1.81.588-1.81h3.461a1 1 0 00.951-.69l1.07-3.292z"/>
+          </svg>
+        </div>
+      </div>
+    );
+  };
 
   const handleAddFood = async (food) => {
     if (!user?.email) {
@@ -274,7 +298,6 @@ const DetailsRestaurants = () => {
     }
 
     try {
-      // Check if item already exists in cart
       const cartResponse = await axiosSecure.get(`/addItem?email=${user.email}`);
       const alreadyInCart = cartResponse.data.some(item =>
         item.foodName === food.foodName &&
@@ -350,7 +373,6 @@ const DetailsRestaurants = () => {
       });
     }
 
-    // Check if item already exists in cart
     if (existingItem[food.foodName]) {
       return Swal.fire({
         icon: "info",
@@ -369,12 +391,7 @@ const DetailsRestaurants = () => {
     setSelectedFood(food);
     setModalOpen(true);
   };
-  const calculateAverageRating = (reviews) => {
-    if (!reviews || reviews.length === 0) return 0;
-    const sum = reviews.reduce((total, review) => total + (review.rating?.$numberInt ? parseInt(review.rating.$numberInt) : 0), 0);
-    return (sum / reviews.length).toFixed(1);
-  };
-  
+
   return (
     <div className="max-w-7xl mx-auto min-h-screen mb-5">
       <br />
@@ -397,77 +414,78 @@ const DetailsRestaurants = () => {
             <div className="animate-spin rounded-full h-12 w-12 border-t-2 border-b-2 border-red-500"></div>
           </div>
         ) : foodItems.length > 0 ? (
-          foodItems.map((food) => (
-            <motion.div
-              key={food._id}
-              initial={{ opacity: 0, y: 50 }}
-              animate={{ opacity: 1, y: 0 }}
-              transition={{ duration: 0.3 }}
-              className="flex justify-center"
-            >
-              <div className="relative flex flex-col bg-white shadow-md border border-gray-200 rounded-lg w-full max-w-[400px] h-[420px] mx-auto overflow-hidden hover:shadow-lg transition-shadow">
-                <div className="relative h-64 overflow-hidden">
-                  <motion.img
-                    src={food.foodImage}
-                    alt={`${food.foodName} from ${restaurantName}`}
-                    className="h-full w-full object-cover"
-                    whileHover={{ scale: 1.05 }}
-                    transition={{ duration: 0.3 }}
-                  />
-                  {/* Rating badge overlay */}
-                  {food.reviews && food.reviews.length > 0 && (
-                    <div className="absolute top-2 left-2 bg-[#ff0000d8] bg-opacity-90 px-2 py-1 rounded-full flex items-center shadow-sm">
-                      <svg
-                        xmlns="http://www.w3.org/2000/svg"
-                        className="h-4 w-4 text-white"
-                        viewBox="0 0 20 20"
-                        fill="currentColor"
-                      >
-                        <path
-                          d="M9.049 2.927c.3-.921 1.603-.921 1.902 0l1.07 3.292a1 1 0 00.95.69h3.462c.969 0 1.371 1.24.588 1.81l-2.8 2.034a1 1 0 00-.364 1.118l1.07 3.292c.3.921-.755 1.688-1.54 1.118l-2.8-2.034a1 1 0 00-1.175 0l-2.8 2.034c-.784.57-1.838-.197-1.539-1.118l1.07-3.292a1 1 0 00-.364-1.118L2.98 8.72c-.783-.57-.38-1.81.588-1.81h3.461a1 1 0 00.951-.69l1.07-3.292z"
-                        />
-                      </svg>
-                      <span className="ml-1 text-sm font-medium text-white">
-                        {calculateAverageRating(food.reviews)}
-                      </span>
-                      <span className="text-xs text-white ml-1">
-                        ({food.reviews.length})
-                      </span>
+          [...foodItems]
+            .sort((a, b) => {
+              const ratingA = calculateAverageRating(a.reviews);
+              const ratingB = calculateAverageRating(b.reviews);
+              return ratingB - ratingA; 
+            })
+            .map((food) => {
+              const averageRating = calculateAverageRating(food.reviews);
+              const hasReviews = food.reviews && food.reviews.length > 0;
+              
+              return (
+                <motion.div
+                  key={food._id}
+                  initial={{ opacity: 0, y: 50 }}
+                  animate={{ opacity: 1, y: 0 }}
+                  transition={{ duration: 0.3 }}
+                  className="flex justify-center"
+                >
+                  <div className="relative flex flex-col bg-white shadow-md border border-gray-200 rounded-lg w-full max-w-[400px] h-[420px] mx-auto overflow-hidden hover:shadow-lg transition-shadow">
+                    <div className="relative h-64 overflow-hidden">
+                      <motion.img
+                        src={food.foodImage}
+                        alt={`${food.foodName} from ${restaurantName}`}
+                        className="h-full w-full object-cover"
+                        whileHover={{ scale: 1.05 }}
+                        transition={{ duration: 0.3 }}
+                      />
+                      {hasReviews && (
+                        <div className="absolute top-2 left-2 bg-white/90 backdrop-blur-sm px-2 py-1 rounded-full flex items-center shadow-sm">
+                          {renderSingleRatingStar(averageRating)}
+                          <span className="text-sm font-bold text-gray-800 ml-1">
+                            {averageRating}
+                            <span className="text-xs text-gray-500 ml-1">
+                              ({food.reviews.length})
+                            </span>
+                          </span>
+                        </div>
+                      )}
                     </div>
-                  )}
-                </div>
-                <div className="p-4 flex flex-col flex-grow">
-                  <div className="flex justify-between items-start mb-2">
-                    <h3 className="text-lg font-semibold text-gray-800">{food.foodName}</h3>
-                    <span className="text-lg font-bold text-red-600">$ {food.price}</span>
+                    <div className="p-4 flex flex-col flex-grow">
+                      <div className="flex justify-between items-start mb-2">
+                        <h3 className="text-lg font-semibold text-gray-800">{food.foodName}</h3>
+                        <span className="text-lg font-bold text-red-600">$ {food.price}</span>
+                      </div>
+                      <p className="text-gray-600 text-sm mb-4 flex-grow">
+                        {food.description || `Delicious ${food.foodName} from ${restaurantName}`}
+                      </p>
+                      <div className="flex justify-between items-center">
+                        {existingItem[food.foodName] ? (
+                          <button
+                            onClick={() => navigate("/dashboard/myOrder")}
+                            className="bg-[#ff0000d8] text-white px-4 py-2 rounded-lg hover:bg-red-700 transition-colors"
+                          >
+                            View Cart
+                          </button>
+                        ) : (
+                          <motion.button
+                            onClick={() => showFoodOptions(food)}
+                            className="text-xl font-bold bg-[#ff0000d8] text-white rounded-full shadow-lg p-2 ml-auto hover:bg-red-700"
+                            whileHover={{ scale: 1.1 }}
+                            whileTap={{ scale: 0.9 }}
+                            aria-label={`Add ${food.foodName} to cart`}
+                          >
+                            <MdOutlineAddCircleOutline />
+                          </motion.button>
+                        )}
+                      </div>
+                    </div>
                   </div>
-                  <p className="text-gray-600 text-sm mb-4 flex-grow">
-                    {food.description || `Delicious ${food.foodName} from ${restaurantName}`}
-                  </p>
-                  <div className="flex justify-between items-center">
-                    {existingItem[food.foodName] ? (
-                      <button
-                        onClick={() => navigate("/dashboard/myOrder")}
-                        className="bg-[#ff0000d8] text-white px-4 py-2 rounded-lg hover:bg-red-700 transition-colors"
-                      >
-                        View Cart
-                      </button>
-                    ) : (
-                      <motion.button
-                        onClick={() => showFoodOptions(food)}
-                        className="text-xl font-bold bg-[#ff0000d8] text-white rounded-full shadow-lg p-2 ml-auto hover:bg-red-700"
-                        whileHover={{ scale: 1.1 }}
-                        whileTap={{ scale: 0.9 }}
-                        aria-label={`Add ${food.foodName} to cart`}
-                      >
-                        <MdOutlineAddCircleOutline />
-                      </motion.button>
-                    )}
-                  </div>
-                </div>
-              </div>
-            </motion.div>
-          ))
+                </motion.div>
+              );
+            })
         ) : (
           <div className="col-span-full text-center py-10">
             <p className="text-gray-500 text-lg">No food items available in this restaurant.</p>

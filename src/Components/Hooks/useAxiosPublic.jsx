@@ -3,7 +3,7 @@ import axios from "axios";
 
 const useAxiosPublic = () => {
     const axiosPublic = axios.create({
-         baseURL : "https://foodhub-backend.vercel.app"
+         baseURL : "http://localhost:5000"
     })
     return axiosPublic
 };

@@ -7,7 +7,8 @@ import {
   FaCommentDots,
   FaUserEdit,
   FaEdit,
-  FaUsers
+  FaUsers,
+  FaClipboardList
 } from 'react-icons/fa';
 import { PiContactlessPaymentLight } from 'react-icons/pi';
 import { MdOutlineAddModerator } from 'react-icons/md';
@@ -25,6 +26,12 @@ const ModeratorHome = () => {
       title: "Edit Profile",
       desc: "Update your personal info and preferences.",
       link: "/myProfile",
+    },
+    {
+      icon: <FaClipboardList />,
+      title: "Manage Orders",
+      link: "/dashboard/myOrder",
+      desc: "Oversee and update all restaurant orders.",
     },
     {
       icon: <GoUpload />,

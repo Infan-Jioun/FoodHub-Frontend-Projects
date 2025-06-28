@@ -34,14 +34,15 @@ const SSLCommerzPayment = ({ onClose, total, cartFood, user, formData , restaura
                 upazila: formData.upazila,
                 address: formData.address,
                 contactNumber: formData.contactNumber,     
-                cartFoodId: cartFood.map(item => item._id), 
-                items: cartFood.map(item => ({
-                    foodId: item._id,
-                    restaurantName: item.restaurantName, 
-                    foodName: item.foodName,
-                    quantity: item.quantity || 1,
-                    price: item.foodPrice,
-                })),
+              
+                items: cartFood?.map(item => ({
+                    foodId: item?._id,
+                    restaurantName: item?.restaurantName,
+                    restaurantId: item?.restaurantId,
+                    foodName: item?.foodName,
+                    quantity: item?.quantity || 1,
+                    price: item?.foodPrice,
+                  })) || [],
             };
 
             const res = await axiosSecure.post("/create-ssl-payment", paymentData);

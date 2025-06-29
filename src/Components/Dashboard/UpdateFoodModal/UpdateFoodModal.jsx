@@ -1,6 +1,6 @@
-import React, { useState } from 'react';
+import React, { useState, useRef } from 'react';
 import { RxUpdate } from 'react-icons/rx';
-import { MdCloudUpload } from 'react-icons/md';
+import { MdCloudUpload, MdCancel } from 'react-icons/md';
 import Swal from 'sweetalert2';
 import useAxiosSecure from '../../Hooks/useAxiosSecure';
 
@@ -9,6 +9,8 @@ const UpdateFoodModal = ({ restaurantName, food, refetch, onClose }) => {
   const [imageFile, setImageFile] = useState(null);
   const [imagePreview, setImagePreview] = useState(food?.foodImage || '');
   const [imageError, setImageError] = useState('');
+  const [isDragging, setIsDragging] = useState(false);
+  const fileInputRef = useRef(null);
   const axiosSecure = useAxiosSecure();
 
   const [formData, setFormData] = useState({
@@ -21,17 +23,33 @@ const UpdateFoodModal = ({ restaurantName, food, refetch, onClose }) => {
 
   const categories = ['Pizza', 'Biryani', 'Burger', 'Pasta', 'Salad', 'Drink'];
 
+  const handleDragOver = (e) => {
+    e.preventDefault();
+    setIsDragging(true);
+  };
+
+  const handleDragLeave = () => {
+    setIsDragging(false);
+  };
+
+  const handleDrop = (e) => {
+    e.preventDefault();
+    setIsDragging(false);
+    const file = e.dataTransfer.files[0];
+    if (file) handleImageFile(file);
+  };
+
   const handleImageChange = (e) => {
     const file = e.target.files[0];
-    if (!file) return;
+    if (file) handleImageFile(file);
+  };
 
-    // Validate image
+  const handleImageFile = (file) => {
     if (!file.type.match('image.*')) {
       setImageError('Please select an image file (JPEG, PNG)');
       return;
     }
-
-    if (file.size > 2 * 1024 * 1024) { // 2MB limit
+    if (file.size > 2 * 1024 * 1024) {
       setImageError('Image size must be less than 2MB');
       return;
     }
@@ -41,6 +59,15 @@ const UpdateFoodModal = ({ restaurantName, food, refetch, onClose }) => {
     reader.onload = () => setImagePreview(reader.result);
     reader.readAsDataURL(file);
     setImageFile(file);
+  };
+
+  const removeImage = () => {
+    setImagePreview('');
+    setImageFile(null);
+    setImageError('');
+    if (fileInputRef.current) {
+      fileInputRef.current.value = '';
+    }
   };
 
   const handleChange = (e) => {
@@ -53,16 +80,11 @@ const UpdateFoodModal = ({ restaurantName, food, refetch, onClose }) => {
     setLoading(true);
 
     try {
-      // Client-side validation
-      if (!formData.foodName.trim()) {
-        throw new Error('Food name is required');
-      }
-
+      if (!formData.foodName.trim()) throw new Error('Food name is required');
       if (!formData.price || isNaN(formData.price) || parseFloat(formData.price) <= 0) {
         throw new Error('Please enter a valid price');
       }
 
-      // Upload new image if changed
       let imageUrl = formData.foodImage;
       if (imageFile) {
         const uploadFormData = new FormData();
@@ -71,67 +93,37 @@ const UpdateFoodModal = ({ restaurantName, food, refetch, onClose }) => {
         imageUrl = uploadRes.data.imageUrl;
       }
 
-      // Prepare update data
       const submitData = {
         ...formData,
         foodImage: imageUrl,
-        price: parseFloat(formData.price)
+        price: parseFloat(formData.price),
       };
 
-      // Send update request
       const response = await axiosSecure.put(
-        `/restaurantManage/${restaurantName}/${food.foodName}`,
+        `/restaurantManage/${restaurantName}/${food.foodName}/update`,
         submitData
       );
 
-      // Handle response
       if (response.data.success) {
-        let alertConfig = {
-          title: response.data.modifiedCount > 0 ? 'Success!' : 'No Changes',
-          text: response.data.modifiedCount > 0 
-            ? `${formData.foodName} updated successfully` 
-            : 'No changes were made',
-          icon: response.data.modifiedCount > 0 ? 'success' : 'info',
+        await Swal.fire({
+          icon: 'success',
+          title: 'Updated!',
+          text: response.data.message,
           timer: 1500,
-          showConfirmButton: false
-        };
-
-        await Swal.fire(alertConfig);
+          showConfirmButton: false,
+        });
         refetch();
         onClose();
+      } else {
+        throw new Error(response.data.message);
       }
     } catch (error) {
-      let errorTitle = 'Update Failed';
-      let errorMessage = error.message;
-
-      if (error.response) {
-        switch (error.response.data?.type) {
-          case 'VALIDATION_ERROR':
-            errorTitle = 'Validation Error';
-            errorMessage = error.response.data.message;
-            break;
-          case 'NOT_FOUND':
-          case 'FOOD_NOT_FOUND':
-            errorTitle = 'Not Found';
-            errorMessage = error.response.data.message;
-            break;
-          default:
-            errorMessage = error.response.data?.message || errorMessage;
-        }
-      }
-
       await Swal.fire({
         icon: 'error',
-        title: errorTitle,
-        text: errorMessage,
-        confirmButtonColor: '#e53e3e'
+        title: 'Update Failed',
+        text: error.response?.data?.message || error.message,
       });
-
-      // Close modal only if restaurant/food not found
-      if (error.response?.data?.type === 'NOT_FOUND' || 
-          error.response?.data?.type === 'FOOD_NOT_FOUND') {
-        onClose();
-      }
+      if (error.response?.status === 404) onClose();
     } finally {
       setLoading(false);
     }
@@ -139,33 +131,31 @@ const UpdateFoodModal = ({ restaurantName, food, refetch, onClose }) => {
 
   return (
     <div className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center p-4 z-50">
-      <div className="bg-white rounded-lg w-full max-w-md max-h-[90vh] overflow-auto">
+      <div className="bg-white rounded-xl shadow-2xl w-full max-w-md max-h-[90vh] overflow-auto">
         <div className="p-6">
-          <div className="flex justify-between items-center mb-4">
-            <h3 className="text-xl font-bold">Update Food Item</h3>
-            <button onClick={onClose} className="text-gray-500 hover:text-gray-700">
-              &times;
+          <div className="flex justify-between items-center mb-6">
+            <h3 className="text-2xl font-bold text-gray-800">Update Food Item</h3>
+            <button 
+              onClick={onClose} 
+              className="text-gray-500 hover:text-red-600 transition-colors"
+              disabled={loading}
+            >
+              <svg className="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M6 18L18 6M6 6l12 12" />
+              </svg>
             </button>
           </div>
 
-          <div className="mb-4">
-            <p className="text-sm text-gray-600">
-              Restaurant: <span className="font-medium">{restaurantName}</span>
-            </p>
-          </div>
-
-          <form className="space-y-4">
+          <form className="space-y-6" onSubmit={handleSubmit}>
             {/* Food Name */}
             <div>
-              <label className="block text-sm font-medium text-gray-700 mb-1">
-                Food Name *
-              </label>
+              <label className="block text-sm font-medium text-gray-700 mb-2">Food Name *</label>
               <input
                 type="text"
                 name="foodName"
                 value={formData.foodName}
                 onChange={handleChange}
-                className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-red-500"
+                className="w-full px-4 py-2 border border-gray-300 rounded-lg bg-white focus:outline-none focus:ring-2 focus:ring-red-500 focus:border-red-500 transition"
                 required
                 disabled={loading}
               />
@@ -173,66 +163,88 @@ const UpdateFoodModal = ({ restaurantName, food, refetch, onClose }) => {
 
             {/* Food Image */}
             <div>
-              <label className="block text-sm font-medium text-gray-700 mb-1">
-                Food Image
-              </label>
+              <label className="block text-sm font-medium text-gray-700 mb-2">Food Image</label>
               <div className="flex flex-col items-center">
-                <label className="relative w-32 h-32 flex items-center justify-center border-2 border-dashed border-gray-300 rounded-full cursor-pointer hover:border-red-400 transition-colors">
+                <div 
+                  className={`relative w-full h-48 rounded-xl border-2 border-dashed ${
+                    isDragging ? 'border-red-500 bg-red-50' : 
+                    imageError ? 'border-red-500' : 
+                    'border-gray-300 hover:border-red-400'
+                  } transition-all duration-300 flex items-center justify-center cursor-pointer overflow-hidden`}
+                  onDragOver={handleDragOver}
+                  onDragLeave={handleDragLeave}
+                  onDrop={handleDrop}
+                  onClick={() => fileInputRef.current?.click()}
+                >
                   <input
                     type="file"
+                    ref={fileInputRef}
                     className="absolute inset-0 opacity-0 cursor-pointer"
                     accept="image/*"
                     onChange={handleImageChange}
                     disabled={loading}
                   />
-                  <div className="flex flex-col items-center text-red-500">
-                    <MdCloudUpload className="w-8 h-8 mb-2" />
-                    <span className="text-sm">Upload Image</span>
-                  </div>
-                </label>
-                {imageError && (
-                  <p className="mt-2 text-sm text-red-600 text-center">{imageError}</p>
-                )}
-                {(imagePreview || formData.foodImage) && (
-                  <div className="mt-4">
-                    <img
-                      src={imagePreview || formData.foodImage}
-                      alt="Food Preview"
-                      className="w-32 h-32 rounded-full object-cover border-2 border-gray-200 mx-auto"
-                    />
-                  </div>
-                )}
+                  {imagePreview ? (
+                    <div className="relative w-full h-full group">
+                      <img
+                        src={imagePreview}
+                        alt="Preview"
+                        className="w-full h-full object-cover"
+                      />
+                      <div className="absolute inset-0 bg-black bg-opacity-0 group-hover:bg-opacity-30 flex items-center justify-center transition-all duration-300">
+                        <button
+                          type="button"
+                          onClick={(e) => {
+                            e.stopPropagation();
+                            removeImage();
+                          }}
+                          className="opacity-0 group-hover:opacity-100 bg-white rounded-full p-2 shadow-lg hover:bg-red-100 transition transform hover:scale-110"
+                          aria-label="Remove image"
+                        >
+                          <MdCancel className="text-red-500 text-xl" />
+                        </button>
+                      </div>
+                    </div>
+                  ) : (
+                    <div className="text-center p-4">
+                      <div className="mx-auto mb-3 flex items-center justify-center w-12 h-12 bg-red-100 rounded-full">
+                        <MdCloudUpload className="text-2xl text-red-500" />
+                      </div>
+                      <h4 className="text-sm font-medium text-gray-700 mb-1">
+                        {isDragging ? 'Drop your image here' : 'Click to upload or drag and drop'}
+                      </h4>
+                      <p className="text-xs text-gray-500">
+                        PNG, JPG up to 2MB
+                      </p>
+                    </div>
+                  )}
+                </div>
+                {imageError && <p className="mt-2 text-sm text-red-600 text-center">{imageError}</p>}
               </div>
             </div>
 
             {/* Category */}
             <div>
-              <label className="block text-sm font-medium text-gray-700 mb-1">
-                Category
-              </label>
+              <label className="block text-sm font-medium text-gray-700 mb-2">Category</label>
               <select
                 name="category"
                 value={formData.category}
                 onChange={handleChange}
-                className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-red-500"
+                className="w-full px-4 py-2 border border-gray-300 rounded-lg bg-white focus:outline-none focus:ring-2 focus:ring-red-500 focus:border-red-500 transition"
                 disabled={loading}
               >
                 <option value="">Select a category</option>
-                {categories.map(category => (
-                  <option key={category} value={category}>{category}</option>
+                {categories.map(cat => (
+                  <option key={cat} value={cat}>{cat}</option>
                 ))}
               </select>
             </div>
 
             {/* Price */}
             <div>
-              <label className="block text-sm font-medium text-gray-700 mb-1">
-                Price *
-              </label>
+              <label className="block text-sm font-medium text-gray-700 mb-2">Price *</label>
               <div className="relative">
-                <div className="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none">
-                  <span className="text-gray-500">$</span>
-                </div>
+                <div className="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none text-gray-500">$</div>
                 <input
                   type="number"
                   name="price"
@@ -240,7 +252,7 @@ const UpdateFoodModal = ({ restaurantName, food, refetch, onClose }) => {
                   step="0.01"
                   value={formData.price}
                   onChange={handleChange}
-                  className="block w-full pl-8 pr-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-red-500"
+                  className="block w-full pl-10 pr-4 py-2 border border-gray-300 rounded-lg bg-white focus:outline-none focus:ring-2 focus:ring-red-500 focus:border-red-500 transition"
                   placeholder="0.00"
                   required
                   disabled={loading}
@@ -250,34 +262,33 @@ const UpdateFoodModal = ({ restaurantName, food, refetch, onClose }) => {
 
             {/* Description */}
             <div>
-              <label className="block text-sm font-medium text-gray-700 mb-1">
-                Description
-              </label>
+              <label className="block text-sm font-medium text-gray-700 mb-2">Description</label>
               <textarea
                 name="description"
                 rows={3}
                 value={formData.description}
                 onChange={handleChange}
-                className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-red-500"
+                className="w-full px-4 py-2 border border-gray-300 rounded-lg bg-white focus:outline-none focus:ring-2 focus:ring-red-500 focus:border-red-500 transition"
                 disabled={loading}
               />
             </div>
 
-            {/* Form Actions */}
-            <div className="flex justify-end space-x-3 pt-4">
-              <button
-                type="button"
-                onClick={onClose}
-                className="px-4 py-2 border border-gray-300 rounded-md hover:bg-gray-50 transition-colors"
+            {/* Actions */}
+            <div className="flex justify-end space-x-4 pt-2">
+              <button 
+                type="button" 
+                onClick={onClose} 
+                className="px-5 py-2.5 border border-gray-300 rounded-lg hover:bg-gray-50 transition disabled:opacity-70"
                 disabled={loading}
               >
                 Cancel
               </button>
-              <button
-                type="submit"
-                onClick={handleSubmit}
-                disabled={loading}
-                className={`px-4 py-2 rounded-md text-white ${loading ? 'bg-red-400' : 'bg-red-600 hover:bg-red-700'} transition-colors flex items-center justify-center`}
+              <button 
+                type="submit" 
+                disabled={loading} 
+                className={`px-5 py-2.5 rounded-lg text-white flex items-center ${
+                  loading ? 'bg-red-400' : 'bg-red-600 hover:bg-red-700'
+                } transition`}
               >
                 {loading ? (
                   <>

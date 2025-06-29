@@ -97,7 +97,7 @@ const RestaurantsCard = () => {
                 <Typography className="text-[18px] font-bold font-Caveat text-gray-900">
                   {restaurant?.restaurantName}
                 </Typography>
-                <Typography className="mb-2 font-Kanit">
+                <Typography className="mb-2 font-bold drop-shadow-xl text-red-500 font-Kanit">
                   {restaurant?.restaurantAddress}
                 </Typography>
 
@@ -113,7 +113,7 @@ const RestaurantsCard = () => {
                   </Link>
                 </div>
 
-                {/* Rating badge - right side */}
+
                 {average > 0 && (
                   <motion.div 
                     className="absolute top-4 left-4 bg-white/90 backdrop-blur-sm px-3 py-1 rounded-full shadow-md flex items-center"
@@ -125,7 +125,6 @@ const RestaurantsCard = () => {
                   </motion.div>
                 )}
 
-                {/* Delete button - right side */}
                 {(isAdmin || isModerator) && (
                   <motion.button
                     onClick={() => handleDeleted(restaurant.restaurantName)}

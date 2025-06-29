@@ -49,6 +49,7 @@ import ManageMenu from "../../Dashboard/ManageMenu/ManageMenu";
 import RevenueDetails from "../../Dashboard/RevenueDetails/RevenueDetails";
 import Orders from "../../Dashboard/Orders/Orders";
 import Reviews from "../../Dashboard/Reviews/Reviews";
+import Coffee from "../../Home/Home/Coffee/Coffee";
 
 
 
@@ -93,6 +94,10 @@ export const router = createBrowserRouter([
       {
         path: "/burger",
         element: <Burger />,
+      },
+      {
+        path: "/coffee",
+       element : <Coffee/>
       },
       {
         path: "/restaurants",

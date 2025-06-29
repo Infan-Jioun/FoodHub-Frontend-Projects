@@ -1,18 +1,14 @@
 import { useEffect, useState } from "react";
-import useAxiosSecure from "../../Hooks/useAxiosSecure";
+
 import { Link, useNavigate, useParams } from "react-router-dom";
 import { MdOutlineAddCircleOutline } from "react-icons/md";
 import { motion } from "framer-motion";
-import useAuth from "../../Hooks/useAuth";
+
 import Swal from "sweetalert2";
-import useAddFood from "../../Hooks/useAddFood";
-import useAdmin from "../../Hooks/useAdmin";
-import useModerator from "../../Hooks/useModerator";
-import useRestaurantOwner from "../../Hooks/useRestaurantOwner";
+
 import { AiOutlineDelete } from "react-icons/ai";
-import useRestaurantData from "../../Hooks/useRestaurantData";
+
 import { RxUpdate } from "react-icons/rx";
-import ReactGA from 'react-ga4';
 import {
   Dialog,
   DialogHeader,
@@ -25,6 +21,15 @@ import {
   CardBody,
   IconButton
 } from "@material-tailwind/react";
+import useAxiosSecure from "../../../Hooks/useAxiosSecure";
+import useAuth from "../../../Hooks/useAuth";
+import useAddFood from "../../../Hooks/useAddFood";
+import useAdmin from "../../../Hooks/useAdmin";
+import useModerator from "../../../Hooks/useModerator";
+import useRestaurantOwner from "../../../Hooks/useRestaurantOwner";
+import useRestaurantData from "../../../Hooks/useRestaurantData";
+
+
 
 const FoodModal = ({ food, open, handleOpen, handleAddFood }) => {
   if (!food) return null;
@@ -200,10 +205,10 @@ const FoodModal = ({ food, open, handleOpen, handleAddFood }) => {
   );
 };
 
-const DetailsRestaurants = () => {
+const Coffee = () => {
   const { restaurantName } = useParams();
-  const [foodItems, setFoodItems] = useState([]);
-  const [loading, setLoading] = useState(true);
+  const [cart, setCart] = useState([]);
+  const [isCartOpen, setIsCartOpen] = useState(false);
   const axiosSecure = useAxiosSecure();
   const navigate = useNavigate();
   const { user } = useAuth();
@@ -211,25 +216,26 @@ const DetailsRestaurants = () => {
   const [isAdmin] = useAdmin();
   const [isModerator] = useModerator();
   const [isOwner] = useRestaurantOwner();
-  const [, refetchTwo] = useRestaurantData();
+  const [isRestaurantData, refetchTwo] = useRestaurantData();
   const [existingItem, setExistingItem] = useState({});
   const [modalOpen, setModalOpen] = useState(false);
   const [selectedFood, setSelectedFood] = useState(null);
 
+  const CoffeeFoods = isRestaurantData
+    ?.flatMap((restaurant) =>
+      restaurant?.foods?.map((food) => ({
+        ...food,
+        restaurantName: restaurant?.restaurantName,
+      }))
+    )
+    ?.filter((food) => food?.category === "Coffee") || [];
+
   useEffect(() => {
-    const fetchData = async () => {
-      try {
-        const res = await axiosSecure.get(`/restaurantUpload/${restaurantName}`);
-        setFoodItems(res.data?.foods || []);
-      } catch (error) {
-        console.error("Error fetching food items:", error);
-        Swal.fire("Error", "Failed to load food items", "error");
-      } finally {
-        setLoading(false);
-      }
-    };
-    fetchData();
-  }, [restaurantName, refetch, refetchTwo, axiosSecure]);
+    const storedCart = localStorage.getItem("cart");
+    if (storedCart) {
+      setCart(JSON.parse(storedCart));
+    }
+  }, [restaurantName, refetch, refetchTwo]);
 
   useEffect(() => {
     if (user?.email) {
@@ -301,7 +307,7 @@ const DetailsRestaurants = () => {
       const cartResponse = await axiosSecure.get(`/addItem?email=${user.email}`);
       const alreadyInCart = cartResponse.data.some(item =>
         item.foodName === food.foodName &&
-        item.restaurantName === restaurantName
+        item.restaurantName === food.restaurantName
       );
 
       if (alreadyInCart) {
@@ -322,15 +328,14 @@ const DetailsRestaurants = () => {
       const foodInfo = {
         foodId: food._id,
         foodName: food.foodName,
-        restaurantName,
+        restaurantName: food.restaurantName,
         foodPrice: food.price,
         foodImage: food.foodImage,
         email: user.email,
         category: food.category,
         quantity: 1,
         ...(food.portion && { portion: food.portion }),
-        ...(food.variation && { variation: food.variation }),
-        ...(food.toppings && { toppings: food.toppings })
+        ...(food.variation && { variation: food.variation })
       };
 
       const res = await axiosSecure.post("/addFood", foodInfo);
@@ -343,14 +348,11 @@ const DetailsRestaurants = () => {
           timer: 1000,
         });
         refetch();
-        ReactGA.event("add_to_cart", {
-          food_name: food.foodName,
-          category: food.category,
-          price: food.price,
-          restaurant: restaurantName,
-          user_email: user.email,
-        });
         navigate("/dashboard/myOrder");
+        const updatedCart = [...cart, food];
+        setCart(updatedCart);
+        localStorage.setItem("cart", JSON.stringify(updatedCart));
+        setIsCartOpen(true);
       }
     } catch (error) {
       console.error("Error adding food:", error);
@@ -395,55 +397,40 @@ const DetailsRestaurants = () => {
   return (
     <div className="max-w-7xl mx-auto min-h-screen mb-5">
       <br />
-      {(isAdmin || isModerator || isOwner) && (
-        <Link to={"/dashboard/addFoods"}>
-          <div className="flex justify-end items-end mr-4">
-            <button
-              className="text-xl font-bold bg-[#ff0000d8] text-white rounded-full shadow-lg p-3 hover:bg-red-700 transition-colors"
-              aria-label="Add new food item"
-            >
-              <MdOutlineAddCircleOutline />
-            </button>
-          </div>
-        </Link>
-      )}
-
       <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 mt-4 px-6 lg:px-4">
-        {loading ? (
-          <div className="col-span-full flex justify-center">
-            <div className="animate-spin rounded-full h-12 w-12 border-t-2 border-b-2 border-red-500"></div>
-          </div>
-        ) : foodItems.length > 0 ? (
-          [...foodItems]
+        {CoffeeFoods.length > 0 ? (
+          [...CoffeeFoods]
             .sort((a, b) => {
               const ratingA = calculateAverageRating(a.reviews);
               const ratingB = calculateAverageRating(b.reviews);
-              return ratingB - ratingA; 
+              return ratingB - ratingA; // Sort by highest rating first
             })
-            .map((food) => {
+            .map((food, index) => {
               const averageRating = calculateAverageRating(food.reviews);
               const hasReviews = food.reviews && food.reviews.length > 0;
               
               return (
                 <motion.div
-                  key={food._id}
+                  key={index}
                   initial={{ opacity: 0, y: 50 }}
                   animate={{ opacity: 1, y: 0 }}
                   transition={{ duration: 0.3 }}
                   className="flex justify-center"
                 >
-                  <div className="relative flex flex-col bg-white shadow-md border border-gray-200 rounded-lg w-[380px] h-[420px] mx-auto overflow-hidden hover:shadow-lg transition-shadow">
+                  <div className="relative flex flex-col bg-white shadow-md border border-gray-200 rounded-lg w-full max-w-[400px] h-[420px] mx-auto overflow-hidden hover:shadow-lg transition-shadow">
                     <div className="relative h-64 overflow-hidden">
                       <motion.img
                         src={food.foodImage}
-                        alt={`${food.foodName} from ${restaurantName}`}
-                        className=" w-[380px] h-[350px] object-cover"
+                        alt={`${food.foodName} from ${food.restaurantName}`}
+                        className="h-full w-full object-cover"
                         whileHover={{ scale: 1.05 }}
                         transition={{ duration: 0.3 }}
                       />
                       {hasReviews && (
                         <div className="absolute top-2 left-2 bg-white/90 backdrop-blur-sm px-2 py-1 rounded-full flex items-center shadow-sm">
-                          {renderSingleRatingStar(averageRating)}
+                          <div className="flex items-center mr-1">
+                            {renderSingleRatingStar(averageRating)}
+                          </div>
                           <span className="text-sm font-bold text-gray-800 ml-1">
                             {averageRating}
                             <span className="text-xs text-gray-500 ml-1">
@@ -458,8 +445,12 @@ const DetailsRestaurants = () => {
                         <h3 className="text-lg font-semibold text-gray-800">{food.foodName}</h3>
                         <span className="text-lg font-bold text-red-600">$ {food.price}</span>
                       </div>
-                      <p className="text-gray-600 text-sm mb-4 flex-grow">
-                        {food.description || `Delicious ${food.foodName} from ${restaurantName}`}
+                      <p className="text-red-500 text-sm">
+                        Delicious {food.foodName} from{" "}
+                        <Link to={`/restaurantUpload/${food.restaurantName}`}>
+                          <span className="font-bold">{food.restaurantName}</span>
+                        </Link>
+                        . Price: ${food.price}
                       </p>
                       <div className="flex justify-between items-center">
                         {existingItem[food.foodName] ? (
@@ -488,7 +479,7 @@ const DetailsRestaurants = () => {
             })
         ) : (
           <div className="col-span-full text-center py-10">
-            <p className="text-gray-500 text-lg">No food items available in this restaurant.</p>
+            <p className="text-gray-500 text-lg">No Coffee items available.</p>
             <Link
               to="/restaurants"
               className="mt-4 inline-block bg-[#ff0000d8] text-white px-6 py-2 rounded-lg hover:bg-red-700 transition-colors"
@@ -499,16 +490,14 @@ const DetailsRestaurants = () => {
         )}
       </div>
 
-      {selectedFood && (
-        <FoodModal
-          open={modalOpen}
-          handleOpen={() => setModalOpen(!modalOpen)}
-          food={selectedFood}
-          handleAddFood={handleAddFood}
-        />
-      )}
+      <FoodModal
+        open={modalOpen}
+        handleOpen={() => setModalOpen(!modalOpen)}
+        food={selectedFood}
+        handleAddFood={handleAddFood}
+      />
     </div>
   );
 };
 
-export default DetailsRestaurants;
+export default Coffee;

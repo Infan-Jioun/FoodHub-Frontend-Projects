@@ -12,6 +12,7 @@ const items = [
   { name: "Cake", path: "/cake", img: "https://i.ibb.co/12qMjL0/Cake.png" },
   { name: "Beef", path: "/beef", img: "https://i.ibb.co/wMjCr5Q/beep.png" },
   { name: "Juice", path: "/juice", img: "https://i.ibb.co/LRQjdvF/drinks.png" },
+  { name: "Coffee", path: "/coffee", img: "https://i.ibb.co/XkLP2ctZ/coffee-2.png" },
 ];
 
 const AvailableItem = () => {

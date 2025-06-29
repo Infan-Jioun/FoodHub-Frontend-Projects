@@ -181,6 +181,7 @@ const UploadInfo = () => {
                             <option>Cake</option>
                             <option>Chicken</option>
                             <option>Juice</option>
+                            <option>Coffee</option>
                             <option>Beef</option>
                             <option>Chinese</option>
                         </select>

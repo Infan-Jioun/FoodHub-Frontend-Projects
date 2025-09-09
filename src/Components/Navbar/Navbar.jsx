@@ -21,7 +21,7 @@ import useModerator from "../Hooks/useModerator";
 import useRestaurantOwner from "../Hooks/useRestaurantOwner";
 import useAddFood from "../Hooks/useAddFood";
 import { GiHamburger } from "react-icons/gi";
-
+import { useTypewriter } from "react-simple-typewriter";
 const Navbar = () => {
   const DashboardLink = ({ to, icon, label }) => (
     <Link to={to}>
@@ -109,7 +109,15 @@ const Navbar = () => {
       window.removeEventListener("scroll", handleScroll);
     }
   }, [])
-
+  const [text] = useTypewriter({
+    words: [
+      "Search your Favorite Restaurant...",
+      "Pizza, Burger, Pasta...",
+      "Find...",
+    ],
+    loop: true,
+    delaySpeed: 2000,
+  });
   return (
     <div>
       {/* First Navbar */}
@@ -118,113 +126,116 @@ const Navbar = () => {
           <a className=" w-10 text-xl   lg:w-14 drop-shadow-md  rounded-full "><img src="https://i.ibb.co.com/F57mtch/logo2.png" alt="" /></a>
         </div>
         <div className="navbar-center " >
-         <Link to={"/search"}>
-         <div className="relative flex  md:w-max ">
-            <Input
-              type="search" a
-              placeholder="Search"
-              color="red"
-              onBlurCapture={"red"}
-              containerProps={{
-                className: " w-[17px] md:w-[50px] lg:w-[600px] rounded-ful"
-              }}
-              className=" !border-red-500 pl-9 font-extrabold  rounded-full text-red-500 md:rounded-full placeholder:text-red-500 focus:!border-red-500"
-              labelProps={{
-                className: "before:content-none after:content-none",
-              }}
-            />
-            <div className="!absolute left-3 top-[13px] text-red-500">
-              <svg
-                xmlns="http://www.w3.org/2000/svg"
-                className="h-4 w-4"
-                fill="none"
-                viewBox="0 0 24 24"
-                stroke="currentColor">
-                <path
-                  strokeLinecap="round"
-                  strokeLinejoin="round"
-                  strokeWidth="2"
-                  d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z" />
-              </svg>
+          <Link to={"/search"} className="w-full flex justify-center">
+            <div className="relative flex items-center w-full md:w-[400px] lg:w-[600px]">
+              <input
+                type="search"
+                placeholder={text}
+                className="pl-12 pr-4 py-3 p-2 bg-white border-2 border-red-500 
+      text-red-500 placeholder:text-red-500 font-semibold shadow-md 
+      focus:ring-2 focus:ring-red-400 focus:outline-none 
+      transition-all duration-300 w-[200px] md:w-[400px] lg:w-[600px] rounded-full"
+              />
+              <button
+                type="submit"
+                className="absolute left-3 flex items-center justify-center text-red-500 
+      hover:text-white hover:bg-red-500 p-2 rounded-full 
+      transition-all duration-300"
+              >
+                <svg
+                  xmlns="http://www.w3.org/2000/svg"
+                  className="h-5 w-5"
+                  fill="none"
+                  viewBox="0 0 24 24"
+                  stroke="currentColor"
+                >
+                  <path
+                    strokeLinecap="round"
+                    strokeLinejoin="round"
+                    strokeWidth="2"
+                    d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z"
+                  />
+                </svg>
+              </button>
             </div>
-          </div>
-         </Link>
+
+          </Link>
 
         </div>
         <div className="navbar-end gap-2">
-      {user ? (
-        <Menu placement="bottom-end">
-          <MenuHandler>
-            <Avatar
-              variant="circular"
-              alt="User profile"
-              className="cursor-pointer border-2 border-[#ff0000d8] w-10 h-10 hover:scale-105 transition-transform"
-              src={user?.photoURL || "https://i.ibb.co/PGwHS087/profile-Imagw.jpg"}
-            />
-          </MenuHandler>
-          
-          <MenuList className="min-w-[220px] p-2 shadow-lg rounded-xl">
-            
-            
-            {/* Menu Items */}
-            <Link to="/myProfile">
-              <MenuItem className="flex items-center gap-3 hover:bg-gray-50 rounded-lg p-2">
-                <IoMdSettings className="text-gray-600" size={18} />
-                <Typography className="font-medium">Edit Profile</Typography>
-              </MenuItem>
+          {user ? (
+            <Menu placement="bottom-end">
+              <MenuHandler>
+                <Avatar
+                  variant="circular"
+                  alt="User profile"
+                  className="cursor-pointer border-2 border-[#ff0000d8] w-10 h-10 hover:scale-105 transition-transform"
+                  src={user?.photoURL || "https://i.ibb.co/PGwHS087/profile-Imagw.jpg"}
+                />
+              </MenuHandler>
+
+              <MenuList className="min-w-[220px] p-2 shadow-lg rounded-xl">
+
+
+                {/* Menu Items */}
+                <Link to="/myProfile">
+                  <MenuItem className="flex items-center gap-3 hover:bg-gray-50 rounded-lg p-2">
+                    <IoMdSettings className="text-gray-600" size={18} />
+                    <Typography className="font-medium">Edit Profile</Typography>
+                  </MenuItem>
+                </Link>
+
+                {/* Dashboard Links */}
+                {isAdmin && (
+                  <DashboardLink
+                    to="/dashboard/adminHome"
+                    icon={<IoMdHome size={18} />}
+                    label="Admin Dashboard"
+                  />
+                )}
+
+                {isModerator && (
+                  <DashboardLink
+                    to="/dashboard/moderator"
+                    icon={<IoMdHome size={18} />}
+                    label="Moderator Dashboard"
+                  />
+                )}
+
+                {isOwner && (
+                  <DashboardLink
+                    to="/dashboard/ownerHome"
+                    icon={<IoMdHome size={18} />}
+                    label="Owner Dashboard"
+                  />
+                )}
+
+                {!isAdmin && !isModerator && !isOwner && (
+                  <DashboardLink
+                    to="/dashboard/userHome"
+                    icon={<IoMdHome size={18} />}
+                    label="User Dashboard"
+                  />
+                )}
+
+                {/* Logout */}
+                <MenuItem
+                  onClick={handleLogut}
+                  className="flex items-center gap-3 hover:bg-red-50 rounded-lg p-2 mt-1"
+                >
+                  <IoMdLogOut className="text-red-500" size={18} />
+                  <Typography className="font-medium text-red-500">Sign Out</Typography>
+                </MenuItem>
+              </MenuList>
+            </Menu>
+          ) : (
+            <Link to="/login" className="flex items-center">
+              <button className="flex items-center justify-center p-2 rounded-full border-2 border-[#ff0000d8]  hover:bg-[#ff0000d8] text-[#ff0000d8] hover:text-white transition-colors">
+                <IoMdLogIn size={20} />
+              </button>
             </Link>
-            
-            {/* Dashboard Links */}
-            {isAdmin && (
-              <DashboardLink 
-                to="/dashboard/adminHome" 
-                icon={<IoMdHome size={18} />}
-                label="Admin Dashboard"
-              />
-            )}
-            
-            {isModerator && (
-              <DashboardLink 
-                to="/dashboard/moderator" 
-                icon={<IoMdHome size={18} />}
-                label="Moderator Dashboard"
-              />
-            )}
-            
-            {isOwner && (
-              <DashboardLink 
-                to="/dashboard/ownerHome" 
-                icon={<IoMdHome size={18} />}
-                label="Owner Dashboard"
-              />
-            )}
-            
-            {!isAdmin && !isModerator && !isOwner && (
-              <DashboardLink 
-                to="/dashboard/userHome" 
-                icon={<IoMdHome size={18} />}
-                label="User Dashboard"
-              />
-            )}
-            
-            {/* Logout */}
-            <MenuItem 
-              onClick={handleLogut}
-              className="flex items-center gap-3 hover:bg-red-50 rounded-lg p-2 mt-1"
-            >
-              <IoMdLogOut className="text-red-500" size={18} />
-              <Typography className="font-medium text-red-500">Sign Out</Typography>
-            </MenuItem>
-          </MenuList>
-        </Menu>
-      ) : (
-        <Link to="/login" className="flex items-center">
-          <button className="flex items-center justify-center p-2 rounded-full border-2 border-[#ff0000d8]  hover:bg-[#ff0000d8] text-[#ff0000d8] hover:text-white transition-colors">
-            <IoMdLogIn size={20} />
-          </button>
-        </Link>
-      )}
-    </div>
+          )}
+        </div>
       </div>
       {/* Second Navbar */}
       <div className={`navbar  px-3 md:px-6 lg:px-8 bg-[#ff0000d8] ${scrolled ? "fixed top-0 left-0 w-full  shadow z-10 " : ""}`}>

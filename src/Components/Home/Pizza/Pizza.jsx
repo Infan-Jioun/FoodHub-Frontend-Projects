@@ -177,7 +177,7 @@ const FoodModal = ({ food, open, handleOpen, handleAddFood }) => {
         <div className="mt-6">
           <Typography variant="small" color="gray" className="font-normal">
             <span className="font-semibold">Popular:</span> Topped with mozzarella cheese,
-            secret sauce, chicken, tomato, and special spices
+            secret sauce, Pizza, tomato, and special spices
           </Typography>
         </div>
       </DialogBody>
@@ -204,7 +204,7 @@ const FoodModal = ({ food, open, handleOpen, handleAddFood }) => {
   );
 };
 
-const Chicken = () => {
+const Pizza = () => {
   const { restaurantName } = useParams();
   const [cart, setCart] = useState([]);
   const [isCartOpen, setIsCartOpen] = useState(false);
@@ -220,14 +220,14 @@ const Chicken = () => {
   const [modalOpen, setModalOpen] = useState(false);
   const [selectedFood, setSelectedFood] = useState(null);
 
-  const ChickenFoods = isRestaurantData
+  const PizzaFoods = isRestaurantData
     ?.flatMap((restaurant) =>
       restaurant?.foods?.map((food) => ({
         ...food,
         restaurantName: restaurant?.restaurantName,
       }))
     )
-    ?.filter((food) => food?.category === "Chicken") || [];
+    ?.filter((food) => food?.category === "Pizza") || [];
 
   useEffect(() => {
     const storedCart = localStorage.getItem("cart");
@@ -397,8 +397,8 @@ const Chicken = () => {
     <div className="max-w-7xl mx-auto min-h-screen mb-5">
       <br />
       <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 mt-4 px-6 lg:px-4">
-        {ChickenFoods.length > 0 ? (
-          [...ChickenFoods]
+        {PizzaFoods.length > 0 ? (
+          [...PizzaFoods]
             .sort((a, b) => {
               const ratingA = calculateAverageRating(a.reviews);
               const ratingB = calculateAverageRating(b.reviews);
@@ -478,7 +478,7 @@ const Chicken = () => {
             })
         ) : (
           <div className="col-span-full text-center py-10">
-            <p className="text-gray-500 text-lg">No Chicken items available.</p>
+            <p className="text-gray-500 text-lg">No Pizza items available.</p>
             <Link
               to="/restaurants"
               className="mt-4 inline-block bg-[#ff0000d8] text-white px-6 py-2 rounded-lg hover:bg-red-700 transition-colors"
@@ -499,4 +499,4 @@ const Chicken = () => {
   );
 };
 
-export default Chicken;
+export default Pizza;

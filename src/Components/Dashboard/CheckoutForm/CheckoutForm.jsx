@@ -13,7 +13,6 @@ import useAuth from '../../Hooks/useAuth';
 import bangladeshGeoData from '../../../../public/District-Upzilas.json';
 import { Dialog, DialogTitle, DialogContent, Box, Typography, DialogActions, Tooltip } from '@mui/material';
 import { Elements } from "@stripe/react-stripe-js";
-import { loadStripe } from "@stripe/stripe-js";
 import StripePayment from './StripePayment/StripePayment';
 import SSLCommerzPayment from './SSLCommerzPayment/SSLCommerzPayment';
 

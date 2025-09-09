@@ -104,11 +104,12 @@ const Loader = () => (
       animate={{ opacity: [0.5, 1, 0.5] }}
       transition={{ duration: 1.5, repeat: Infinity }}
     >
-    
+
     </motion.div>
   </motion.div>
 );
 
+// Main App
 // Main App
 const AppWithLoader = () => {
   const [loading, setLoading] = useState(true);
@@ -117,7 +118,13 @@ const AppWithLoader = () => {
   useEffect(() => {
     const timer = setTimeout(() => {
       setLoading(false);
-      setShowModal(true);
+
+      // Check if modal was already shown
+      const modalShown = localStorage.getItem('modalShown');
+      if (!modalShown) {
+        setShowModal(true);
+        localStorage.setItem('modalShown', 'true');
+      }
     }, 1500);
     return () => clearTimeout(timer);
   }, []);

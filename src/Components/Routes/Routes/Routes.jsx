@@ -39,9 +39,7 @@ import CheckoutForm from "../../Dashboard/CheckoutForm/CheckoutForm";
 import PaymentSuccess from "../../Dashboard/PaymentSuccess/PaymentSuccess";
 import PaymentPage from "../../Dashboard/PaymentPage/PaymentPage";
 import AddDistrictCollection from "../../Dashboard/AddDistrictCollection/AddDistrictCollection";
-
 import DistrictRes from "../../Home/DistrictAvailable/DistrictRes/DistrictRes";
-import Serach from "../../Navbar/Search/Serach";
 import AdminRoutes from "../AdminRoutes/AdminRoutes";
 import Revenue from "../../Dashboard/Revenue/Revenue";
 import ErrorElement from "../../../ErrorElement/ErrorElement";
@@ -50,6 +48,7 @@ import RevenueDetails from "../../Dashboard/RevenueDetails/RevenueDetails";
 import Orders from "../../Dashboard/Orders/Orders";
 import Reviews from "../../Dashboard/Reviews/Reviews";
 import Coffee from "../../Home/Home/Coffee/Coffee";
+import Search from "../../Navbar/Search/Search";
 
 
 
@@ -137,7 +136,7 @@ export const router = createBrowserRouter([
       },
       {
         path: "/search",
-        element : <Serach/>
+        element : <Search/>
       }
     ],
   },

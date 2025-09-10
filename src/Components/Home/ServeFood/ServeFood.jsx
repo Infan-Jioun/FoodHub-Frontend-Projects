@@ -1,17 +1,33 @@
+
+import { useState } from "react";
 import { FaUtensilSpoon, FaFireAlt, FaCheckCircle } from "react-icons/fa";
 import { motion } from "framer-motion";
+import Skeleton from "react-loading-skeleton";
+import "react-loading-skeleton/dist/skeleton.css";
 
 const ServeFood = () => {
+  const [loaded, setLoaded] = useState(false);
+
   return (
     <div className="mt-5">
-      <div
-        className="hero  h-[500px] bg-fixed  bg-cover bg-center"
-        style={{
-          backgroundImage: "url(https://i.ibb.co.com/zRQk4Bw/chef-service.jpg)",
-        }}
-      >
-        <div className="hero-overlay bg-black bg-opacity-50"></div>
-        <div className="hero-content text-neutral-content text-center rounded-2xl px-4">
+      <div className="relative h-[500px]">
+        {/* Skeleton for loading */}
+        {!loaded && (
+          <Skeleton height="100%" width="100%" className="absolute top-0 left-0" />
+        )}
+
+        {/* Background Image */}
+        <img
+          src="https://i.ibb.co.com/zRQk4Bw/chef-service.jpg"
+          alt="Chef Service"
+          className={`w-full h-full object-cover transition-opacity duration-500 ${
+            loaded ? "opacity-100" : "opacity-0"
+          }`}
+          onLoad={() => setLoaded(true)}
+        />
+
+        {/* Overlay Content */}
+        <div className="absolute inset-0 bg-black bg-opacity-50 flex justify-center items-center text-center px-4">
           <motion.div
             className="w-full max-w-[400px] md:max-w-3xl rounded-3xl bg-[#ff0000d8] p-6 md:p-10"
             initial={{ opacity: 0, y: 30 }}

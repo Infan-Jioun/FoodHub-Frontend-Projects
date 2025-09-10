@@ -1,16 +1,17 @@
-"use client";
 
 import {
   FaUtensils,
   FaBullseye,
   FaHistory,
   FaThumbsUp,
-  FaEnvelope,
   FaUserTie,
   FaGlobe,
   FaPhone,
 } from "react-icons/fa";
 import { motion } from "framer-motion";
+import { useState } from "react";
+import Skeleton from "react-loading-skeleton";
+import "react-loading-skeleton/dist/skeleton.css";
 
 const About = () => {
   const fadeUp = {
@@ -21,6 +22,12 @@ const About = () => {
   const imageAnim = {
     hidden: { opacity: 0, scale: 0.9 },
     visible: { opacity: 1, scale: 1, transition: { duration: 0.8, ease: "easeOut" } },
+  };
+
+  const [loadedImg, setLoadedImg] = useState({});
+
+  const handleImgLoad = (key) => {
+    setLoadedImg((prev) => ({ ...prev, [key]: true }));
   };
 
   return (
@@ -50,10 +57,14 @@ const About = () => {
           viewport={{ once: true }}
           variants={fadeUp}
         >
+          {!loadedImg.foodhub && <Skeleton height={400} className="rounded-xl" />}
           <motion.img
             src="https://images.unsplash.com/photo-1600891964599-f61ba0e24092?w=800"
             alt="Foodhub"
-            className="rounded-xl shadow-lg object-cover"
+            className={`rounded-xl shadow-lg object-cover transition-opacity duration-500 ${
+              loadedImg.foodhub ? "opacity-100" : "opacity-0"
+            }`}
+            onLoad={() => handleImgLoad("foodhub")}
             variants={imageAnim}
           />
           <div>
@@ -92,10 +103,14 @@ const About = () => {
               By embracing technology and innovation, Foodhub aims to make food delivery convenient, enjoyable, and accessible to everyone, anytime and anywhere.
             </p>
           </div>
+          {!loadedImg.mission && <Skeleton height={400} className="rounded-xl w-full" />}
           <motion.img
             src="https://images.unsplash.com/photo-1551218808-94e220e084d2?w=800"
             alt="Mission"
-            className="rounded-xl shadow-lg object-cover w-full h-80 md:h-[28rem]"
+            className={`rounded-xl shadow-lg object-cover w-full h-80 md:h-[28rem] transition-opacity duration-500 ${
+              loadedImg.mission ? "opacity-100" : "opacity-0"
+            }`}
+            onLoad={() => handleImgLoad("mission")}
             variants={imageAnim}
           />
         </motion.section>
@@ -108,10 +123,14 @@ const About = () => {
           viewport={{ once: true }}
           variants={fadeUp}
         >
+          {!loadedImg.journey && <Skeleton height={400} className="rounded-xl w-full" />}
           <motion.img
             src="https://images.unsplash.com/photo-1555396273-367ea4eb4db5?w=800"
             alt="Journey"
-            className="rounded-xl shadow-lg object-cover w-full h-80 md:h-[28rem]"
+            className={`rounded-xl shadow-lg object-cover w-full h-80 md:h-[28rem] transition-opacity duration-500 ${
+              loadedImg.journey ? "opacity-100" : "opacity-0"
+            }`}
+            onLoad={() => handleImgLoad("journey")}
             variants={imageAnim}
           />
           <div className="space-y-4">
@@ -130,7 +149,6 @@ const About = () => {
             </p>
           </div>
         </motion.section>
-
 
         {/* Why Choose */}
         <motion.section
@@ -153,7 +171,6 @@ const About = () => {
               <li>24/7 customer support</li>
             </ul>
           </div>
-
         </motion.section>
 
         {/* Developer Info */}
@@ -164,38 +181,23 @@ const About = () => {
           viewport={{ once: true }}
           variants={fadeUp}
         >
-          {/* Background Image Overlay */}
           <div className="absolute inset-0 bg-[url('https://images.unsplash.com/photo-1603415526960-f8f1e8f1c0a6?w=1200')] bg-cover bg-center opacity-20" />
 
-          {/* Floating Icons */}
-          <motion.div
-            className="absolute top-4 md:top-10 left-4 md:left-10 text-white text-3xl md:text-4xl opacity-50"
-            animate={{ y: [0, 15, 0] }}
-            transition={{ duration: 4, repeat: Infinity, ease: "easeInOut" }}
-          >
-            <FaBullseye />
-          </motion.div>
-          <motion.div
-            className="absolute bottom-4 md:bottom-10 right-4 md:right-10 text-white text-4xl md:text-5xl opacity-40"
-            animate={{ y: [0, -20, 0] }}
-            transition={{ duration: 6, repeat: Infinity, ease: "easeInOut" }}
-          >
-            <FaUtensils />
-          </motion.div>
-
           <div className="relative z-10 grid grid-cols-1 md:grid-cols-3 gap-6 md:gap-8 items-center">
-            {/* Developer Image */}
+            {!loadedImg.dev && <Skeleton circle height={192} width={192} />}
             <div className="flex justify-center md:justify-start">
               <motion.img
                 src="https://i.ibb.co.com/wZ5pnr4K/IMG-20250907-122427-2.jpg"
                 alt="Developer"
-                className="rounded-full w-32 h-32 md:w-48 md:h-48 object-cover shadow-2xl border-4 border-white"
+                className={`rounded-full w-32 h-32 md:w-48 md:h-48 object-cover shadow-2xl border-4 border-white transition-opacity duration-500 ${
+                  loadedImg.dev ? "opacity-100" : "opacity-0"
+                }`}
+                onLoad={() => handleImgLoad("dev")}
                 whileHover={{ scale: 1.05 }}
                 transition={{ type: "spring", stiffness: 300 }}
               />
             </div>
 
-            {/* Developer Info */}
             <div className="md:col-span-2 space-y-4">
               <h2 className="text-xl md:text-3xl font-bold flex items-center gap-2 md:gap-3">
                 <FaUserTie /> Developer Info
@@ -235,7 +237,6 @@ const About = () => {
             </div>
           </div>
         </motion.section>
-
       </div>
 
       {/* Thank You */}

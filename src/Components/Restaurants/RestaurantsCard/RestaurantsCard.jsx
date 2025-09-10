@@ -15,14 +15,18 @@ import toast from "react-hot-toast";
 import { AiOutlineDelete } from "react-icons/ai";
 import { motion } from "framer-motion";
 import { FaStar } from "react-icons/fa";
+import { useState } from "react";
+import Skeleton from "react-loading-skeleton";
+import "react-loading-skeleton/dist/skeleton.css";
 
 const RestaurantsCard = () => {
   const [isRestaurantData, refetch] = useRestaurantData();
   const [isAdmin] = useAdmin();
   const [isModerator] = useModerator();
   const axiosSecure = useAxiosSecure();
+  const [loadedBanners, setLoadedBanners] = useState({});
+  const [loadedAvatars, setLoadedAvatars] = useState({});
 
-  // Calculate average rating and total reviews
   const getRestaurantRating = (restaurant) => {
     if (!restaurant.foods) return { average: 0, total: 0 };
     
@@ -75,7 +79,7 @@ const RestaurantsCard = () => {
     <div className="grid md:grid-cols-3 gap-7 px-8 max-w-7xl mx-auto mt-10 mb-10 min-h-screen">
       {[...isRestaurantData]
         .sort((a, b) => getRestaurantRating(b).total - getRestaurantRating(a).total)
-        .map((restaurant) => {
+        .map((restaurant, index) => {
           const { average, total } = getRestaurantRating(restaurant);
           
           return (
@@ -88,9 +92,20 @@ const RestaurantsCard = () => {
                 floated={false}
                 shadow={false}
                 className="relative h-[250px] bg-cover bg-center"
-                style={{ backgroundImage: `url(${restaurant.banner})` }}
               >
-                <div className="absolute inset-0 transition-all duration-300" />
+                {!loadedBanners[index] && (
+                  <Skeleton height="100%" width="100%" className="absolute top-0 left-0" />
+                )}
+                <img
+                  src={restaurant.banner}
+                  alt={`${restaurant.restaurantName} banner`}
+                  className={`w-full h-full object-cover transition-opacity duration-500 ${
+                    loadedBanners[index] ? "opacity-100" : "opacity-0"
+                  }`}
+                  onLoad={() =>
+                    setLoadedBanners(prev => ({ ...prev, [index]: true }))
+                  }
+                />
               </CardHeader>
 
               <CardBody className="text-center p-6">
@@ -102,17 +117,24 @@ const RestaurantsCard = () => {
                 </Typography>
 
                 <div className="mt-4 flex justify-center">
+                  {!loadedAvatars[index] && (
+                    <Skeleton height={80} width={80} circle className="absolute" />
+                  )}
                   <Link to={`/restaurantUpload/${restaurant.restaurantName}`}>
                     <Avatar
                       size="xl"
                       variant="circular"
                       alt={restaurant?.restaurantName}
-                      className="border-2 border-gray-300 shadow-lg transition-transform duration-300 hover:scale-110"
+                      className={`border-2 border-gray-300 shadow-lg transition-transform duration-300 hover:scale-110 ${
+                        loadedAvatars[index] ? "opacity-100" : "opacity-0"
+                      }`}
                       src={restaurant?.photo}
+                      onLoad={() =>
+                        setLoadedAvatars(prev => ({ ...prev, [index]: true }))
+                      }
                     />
                   </Link>
                 </div>
-
 
                 {average > 0 && (
                   <motion.div 
@@ -121,7 +143,6 @@ const RestaurantsCard = () => {
                   >
                     <FaStar className="text-red-500 mr-1" />
                     <span className="font-bold text-gray-800">{average}</span>
-                    {/* <span className="text-xs text-gray-500 ml-1">({total})</span> */}
                   </motion.div>
                 )}
 

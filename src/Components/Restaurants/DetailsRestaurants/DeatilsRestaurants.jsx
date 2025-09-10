@@ -200,6 +200,30 @@ const FoodModal = ({ food, open, handleOpen, handleAddFood }) => {
   );
 };
 
+// Skeleton Loader Component
+const FoodCardSkeleton = () => {
+  return (
+    <div className="flex justify-center">
+      <div className="flex flex-col bg-white shadow-md border border-gray-200 rounded-lg w-[380px] h-[420px] mx-auto overflow-hidden">
+        <div className="relative h-64 overflow-hidden bg-gray-300 animate-pulse">
+          <div className="w-full h-full"></div>
+        </div>
+        <div className="p-4 flex flex-col flex-grow">
+          <div className="flex justify-between items-start mb-2">
+            <div className="h-6 bg-gray-300 rounded w-2/3 animate-pulse"></div>
+            <div className="h-6 bg-gray-300 rounded w-1/6 animate-pulse"></div>
+          </div>
+          <div className="h-4 bg-gray-300 rounded w-full mb-2 animate-pulse"></div>
+          <div className="h-4 bg-gray-300 rounded w-4/5 mb-4 animate-pulse"></div>
+          <div className="flex justify-end">
+            <div className="h-10 w-10 bg-gray-300 rounded-full animate-pulse"></div>
+          </div>
+        </div>
+      </div>
+    </div>
+  );
+};
+
 const DetailsRestaurants = () => {
   const { restaurantName } = useParams();
   const [foodItems, setFoodItems] = useState([]);
@@ -410,9 +434,10 @@ const DetailsRestaurants = () => {
 
       <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 mt-4 px-6 lg:px-4">
         {loading ? (
-          <div className="col-span-full flex justify-center">
-            <div className="animate-spin rounded-full h-12 w-12 border-t-2 border-b-2 border-red-500"></div>
-          </div>
+          // Skeleton Loaders
+          Array.from({ length: 6 }).map((_, index) => (
+            <FoodCardSkeleton key={index} />
+          ))
         ) : foodItems.length > 0 ? (
           [...foodItems]
             .sort((a, b) => {

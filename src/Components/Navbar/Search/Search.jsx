@@ -200,7 +200,7 @@ const Search = ({ searchQuery, setSearchQuery }) => {
           }}
           onFocus={handleFocus}
           onBlur={handleBlur}
-          className="w-[240px] lg:w-[500px] pl-12 pr-10 py-2 rounded-full bg-white text-red-500 placeholder-red-400 font-medium text-lg outline-none focus:ring-2 focus:ring-red-400 transition-all duration-300"
+          className="w-[240px] lg:w-[500px] pl-12 pr-10 py-2 border-2 border-[#ff0000d8] rounded-full bg-white text-red-500 placeholder-red-400 font-medium text-lg outline-none  transition-all duration-300"
         />
         {searchQuery && (
           <button

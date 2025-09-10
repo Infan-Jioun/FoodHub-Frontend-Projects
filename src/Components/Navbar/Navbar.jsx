@@ -22,6 +22,7 @@ import useRestaurantOwner from "../Hooks/useRestaurantOwner";
 import useAddFood from "../Hooks/useAddFood";
 import { GiHamburger } from "react-icons/gi";
 import { useTypewriter } from "react-simple-typewriter";
+import Search from "./Search/Search";
 const Navbar = () => {
   const DashboardLink = ({ to, icon, label }) => (
     <Link to={to}>
@@ -95,6 +96,7 @@ const Navbar = () => {
 
 
   const [scrolled, setScrolled] = useState(false);
+  const [searchQuery, setSearchQuery] = useState("");
   useEffect(() => {
     const handleScroll = () => {
       if (window.scrollY > 50) {
@@ -126,40 +128,7 @@ const Navbar = () => {
           <a className=" w-10 text-xl   lg:w-14 drop-shadow-md  rounded-full "><img src="https://i.ibb.co.com/F57mtch/logo2.png" alt="" /></a>
         </div>
         <div className="navbar-center " >
-          <Link to={"/search"} className="w-full flex justify-center">
-            <div className="relative flex items-center w-full md:w-[400px] lg:w-[600px]">
-              <input
-                type="search"
-                placeholder={text}
-                className="pl-12 pr-4 py-3 p-2 bg-white border-2 border-red-500 
-      text-red-500 placeholder:text-red-500 font-semibold shadow-md 
-      focus:ring-2 focus:ring-red-400 focus:outline-none 
-      transition-all duration-300 w-[200px] md:w-[400px] lg:w-[600px] rounded-full"
-              />
-              <button
-                type="submit"
-                className="absolute left-3 flex items-center justify-center text-red-500 
-      hover:text-white hover:bg-red-500 p-2 rounded-full 
-      transition-all duration-300"
-              >
-                <svg
-                  xmlns="http://www.w3.org/2000/svg"
-                  className="h-5 w-5"
-                  fill="none"
-                  viewBox="0 0 24 24"
-                  stroke="currentColor"
-                >
-                  <path
-                    strokeLinecap="round"
-                    strokeLinejoin="round"
-                    strokeWidth="2"
-                    d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z"
-                  />
-                </svg>
-              </button>
-            </div>
-
-          </Link>
+        <Search searchQuery={searchQuery} setSearchQuery={setSearchQuery} />
 
         </div>
         <div className="navbar-end gap-2">

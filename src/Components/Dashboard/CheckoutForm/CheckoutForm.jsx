@@ -13,6 +13,7 @@ import useAuth from '../../Hooks/useAuth';
 import bangladeshGeoData from '../../../../public/District-Upzilas.json';
 import { Dialog, DialogTitle, DialogContent, Box, Typography, DialogActions, Tooltip } from '@mui/material';
 import { Elements } from "@stripe/react-stripe-js";
+import { loadStripe } from "@stripe/stripe-js";
 import StripePayment from './StripePayment/StripePayment';
 import SSLCommerzPayment from './SSLCommerzPayment/SSLCommerzPayment';
 
@@ -23,7 +24,7 @@ const CheckoutForm = () => {
     const { user } = useAuth();
     const [isProcessing, setIsProcessing] = useState(false);
     const [selectedPaymentMethod, setSelectedPaymentMethod] = useState(null);
-    const {restaurantName} = cartFood;
+    const { restaurantName } = cartFood;
 
     const stripeKey = import.meta.env.VITE_STRIPE_PAYMENT || "";
     const stripePromise = loadStripe(stripeKey);
@@ -393,7 +394,7 @@ const CheckoutForm = () => {
                                             >
                                                 Proceed to Payment
                                             </Button>
-                                            
+
                                         </span>
                                     </Tooltip>
 
@@ -406,14 +407,14 @@ const CheckoutForm = () => {
 
                                         <DialogContent>
                                             <Box sx={{ display: 'flex', justifyContent: 'center', gap: 2, mb: 3 }}>
-                                                <Button 
-                                                    variant={selectedPaymentMethod === 'stripe' ? 'contained' : 'outlined'} 
+                                                <Button
+                                                    variant={selectedPaymentMethod === 'stripe' ? 'contained' : 'outlined'}
                                                     onClick={() => handlePaymentMethodSelect('stripe')}
                                                 >
                                                     Stripe
                                                 </Button>
-                                                <Button 
-                                                    variant={selectedPaymentMethod === 'sslcommerz' ? 'contained' : 'outlined'} 
+                                                <Button
+                                                    variant={selectedPaymentMethod === 'sslcommerz' ? 'contained' : 'outlined'}
                                                     onClick={() => handlePaymentMethodSelect('sslcommerz')}
                                                 >
                                                     SSLCommerz
@@ -429,7 +430,7 @@ const CheckoutForm = () => {
                                                         user={user}
                                                         formData={watchFields}
                                                         restaurantName={restaurantName}
-                                                        
+
                                                     />
                                                 </Elements>
                                             )}

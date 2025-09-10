@@ -1,118 +1,257 @@
+"use client";
+
 import {
   FaUtensils,
   FaBullseye,
   FaHistory,
   FaThumbsUp,
   FaEnvelope,
-  FaPhoneAlt,
-  FaMapMarkerAlt,
+  FaUserTie,
+  FaGlobe,
+  FaPhone,
 } from "react-icons/fa";
+import { motion } from "framer-motion";
 
 const About = () => {
-  const red = "#ff0000d8";
+  const fadeUp = {
+    hidden: { opacity: 0, y: 50 },
+    visible: { opacity: 1, y: 0, transition: { duration: 0.7, ease: "easeOut" } },
+  };
+
+  const imageAnim = {
+    hidden: { opacity: 0, scale: 0.9 },
+    visible: { opacity: 1, scale: 1, transition: { duration: 0.8, ease: "easeOut" } },
+  };
 
   return (
-    <div className="min-h-screen bg-white py-12 px-4 md:px-20 text-gray-800 font-Kanit">
-    
-      <div className="text-center mb-12">
-        
-        <p className="text-lg text-gray-600">Delivering joy, one meal at a time.</p>
+    <div className="min-h-screen bg-gradient-to-b from-white via-gray-50 to-gray-100 py-12 px-4 md:px-20 text-gray-800 font-Kanit">
+      {/* Header */}
+      <motion.div
+        className="text-center mb-16"
+        initial="hidden"
+        whileInView="visible"
+        viewport={{ once: true }}
+        variants={fadeUp}
+      >
+        <h1 className="text-4xl font-bold text-gray-800 mb-2">
+          Welcome to <span className="text-red-600">Foodhub</span>
+        </h1>
+        <p className="text-lg text-gray-600">
+          Delivering joy, one meal at a time.
+        </p>
+      </motion.div>
+
+      <div className="space-y-20">
+        {/* What is Foodhub */}
+        <motion.section
+          className="grid md:grid-cols-2 gap-10 items-center bg-white rounded-2xl shadow-lg p-6 md:p-10 hover:shadow-2xl transition"
+          initial="hidden"
+          whileInView="visible"
+          viewport={{ once: true }}
+          variants={fadeUp}
+        >
+          <motion.img
+            src="https://images.unsplash.com/photo-1600891964599-f61ba0e24092?w=800"
+            alt="Foodhub"
+            className="rounded-xl shadow-lg object-cover"
+            variants={imageAnim}
+          />
+          <div>
+            <div className="flex items-center gap-3 mb-4">
+              <FaUtensils className="text-red-600 text-2xl" />
+              <h2 className="text-2xl font-semibold">What is Foodhub?</h2>
+            </div>
+            <p className="text-lg leading-relaxed">
+              Foodhub is a modern restaurant delivery platform that connects
+              local restaurants and customers. Browse, order, and enjoy meals
+              from your favorite places — all from the comfort of your home.
+            </p>
+          </div>
+        </motion.section>
+
+        {/* Mission */}
+        <motion.section
+          className="grid md:grid-cols-2 gap-10 items-center bg-white rounded-2xl shadow-lg p-6 md:p-10 hover:shadow-2xl transition"
+          initial="hidden"
+          whileInView="visible"
+          viewport={{ once: true }}
+          variants={fadeUp}
+        >
+          <div className="space-y-4">
+            <div className="flex items-center gap-3 mb-4">
+              <FaBullseye className="text-red-600 text-2xl" />
+              <h2 className="text-2xl font-semibold">Our Mission</h2>
+            </div>
+            <p className="text-lg leading-relaxed text-gray-700">
+              Our mission is to empower local restaurants and simplify food ordering for everyone. Whether traditional or trending cuisines, Foodhub brings the best food to your doorstep — fast, fresh, and reliable.
+            </p>
+            <p className="text-lg leading-relaxed text-gray-700">
+              We are committed to supporting local businesses, providing a seamless ordering experience, and ensuring that every meal delivered maintains the highest quality standards.
+            </p>
+            <p className="text-lg leading-relaxed text-gray-700">
+              By embracing technology and innovation, Foodhub aims to make food delivery convenient, enjoyable, and accessible to everyone, anytime and anywhere.
+            </p>
+          </div>
+          <motion.img
+            src="https://images.unsplash.com/photo-1551218808-94e220e084d2?w=800"
+            alt="Mission"
+            className="rounded-xl shadow-lg object-cover w-full h-80 md:h-[28rem]"
+            variants={imageAnim}
+          />
+        </motion.section>
+
+        {/* Journey */}
+        <motion.section
+          className="grid md:grid-cols-2 gap-10 items-center bg-white rounded-2xl shadow-lg p-6 md:p-10 hover:shadow-2xl transition"
+          initial="hidden"
+          whileInView="visible"
+          viewport={{ once: true }}
+          variants={fadeUp}
+        >
+          <motion.img
+            src="https://images.unsplash.com/photo-1555396273-367ea4eb4db5?w=800"
+            alt="Journey"
+            className="rounded-xl shadow-lg object-cover w-full h-80 md:h-[28rem]"
+            variants={imageAnim}
+          />
+          <div className="space-y-4">
+            <div className="flex items-center gap-3 mb-4">
+              <FaHistory className="text-red-600 text-2xl" />
+              <h2 className="text-2xl font-semibold">Our Journey</h2>
+            </div>
+            <p className="text-lg leading-relaxed">
+              Launched in 2025 by food and tech enthusiasts, Foodhub began with a simple idea: make great food more accessible. Today, we serve thousands of happy customers and partner with diverse restaurants.
+            </p>
+            <p className="text-lg leading-relaxed">
+              Over the years, we have expanded our network, introduced faster delivery options, and incorporated cutting-edge technology to ensure that every order reaches our customers fresh and on time.
+            </p>
+            <p className="text-lg leading-relaxed">
+              Our journey is driven by a passion for connecting people with delicious meals and supporting local businesses. With every milestone, we aim to redefine convenience and delight in food delivery.
+            </p>
+          </div>
+        </motion.section>
+
+
+        {/* Why Choose */}
+        <motion.section
+          className="grid md:grid-cols-2 gap-10 items-center bg-white rounded-2xl shadow-lg p-6 md:p-10 hover:shadow-2xl transition"
+          initial="hidden"
+          whileInView="visible"
+          viewport={{ once: true }}
+          variants={fadeUp}
+        >
+          <div>
+            <div className="flex items-center gap-3 mb-4">
+              <FaThumbsUp className="text-red-600 text-2xl" />
+              <h2 className="text-2xl font-semibold">Why Choose Foodhub?</h2>
+            </div>
+            <ul className="list-disc list-inside text-lg space-y-2">
+              <li>Fast and secure ordering process</li>
+              <li>Wide variety of restaurants and cuisines</li>
+              <li>Real-time order tracking</li>
+              <li>Secure payments (Stripe & SSLCommerz)</li>
+              <li>24/7 customer support</li>
+            </ul>
+          </div>
+
+        </motion.section>
+
+        {/* Developer Info */}
+        <motion.section
+          className="bg-gradient-to-r from-red-500 to-red-700 text-white p-6 md:p-10 rounded-2xl shadow-2xl relative overflow-hidden"
+          initial="hidden"
+          whileInView="visible"
+          viewport={{ once: true }}
+          variants={fadeUp}
+        >
+          {/* Background Image Overlay */}
+          <div className="absolute inset-0 bg-[url('https://images.unsplash.com/photo-1603415526960-f8f1e8f1c0a6?w=1200')] bg-cover bg-center opacity-20" />
+
+          {/* Floating Icons */}
+          <motion.div
+            className="absolute top-4 md:top-10 left-4 md:left-10 text-white text-3xl md:text-4xl opacity-50"
+            animate={{ y: [0, 15, 0] }}
+            transition={{ duration: 4, repeat: Infinity, ease: "easeInOut" }}
+          >
+            <FaBullseye />
+          </motion.div>
+          <motion.div
+            className="absolute bottom-4 md:bottom-10 right-4 md:right-10 text-white text-4xl md:text-5xl opacity-40"
+            animate={{ y: [0, -20, 0] }}
+            transition={{ duration: 6, repeat: Infinity, ease: "easeInOut" }}
+          >
+            <FaUtensils />
+          </motion.div>
+
+          <div className="relative z-10 grid grid-cols-1 md:grid-cols-3 gap-6 md:gap-8 items-center">
+            {/* Developer Image */}
+            <div className="flex justify-center md:justify-start">
+              <motion.img
+                src="https://i.ibb.co.com/wZ5pnr4K/IMG-20250907-122427-2.jpg"
+                alt="Developer"
+                className="rounded-full w-32 h-32 md:w-48 md:h-48 object-cover shadow-2xl border-4 border-white"
+                whileHover={{ scale: 1.05 }}
+                transition={{ type: "spring", stiffness: 300 }}
+              />
+            </div>
+
+            {/* Developer Info */}
+            <div className="md:col-span-2 space-y-4">
+              <h2 className="text-xl md:text-3xl font-bold flex items-center gap-2 md:gap-3">
+                <FaUserTie /> Developer Info
+              </h2>
+              <div className="grid grid-cols-1 md:grid-cols-2 gap-4 md:gap-6">
+                <div className="bg-white/10 p-4 md:p-5 rounded-xl backdrop-blur-md hover:bg-white/20 transition">
+                  <p className="text-base md:text-lg mb-1 md:mb-2">
+                    <span className="font-semibold">Name:</span> Infan Jioun Rahman
+                  </p>
+                  <p className="text-base md:text-lg">
+                    <span className="font-semibold">Email:</span>{" "}
+                    <a
+                      href="mailto:infanjiounrahman20606@gmail.com"
+                      className="underline hover:text-gray-200 break-all"
+                    >
+                      infanjiounrahman20606@gmail.com
+                    </a>
+                  </p>
+                </div>
+                <div className="bg-white/10 p-4 md:p-5 rounded-xl backdrop-blur-md hover:bg-white/20 transition">
+                  <p className="text-base md:text-lg mb-1 md:mb-2 flex items-center gap-2">
+                    <FaPhone /> 01610240096
+                  </p>
+                  <p className="text-base md:text-lg flex items-center gap-2">
+                    <FaGlobe />
+                    <a
+                      href="https://infan-portfolio.web.app/"
+                      target="_blank"
+                      rel="noreferrer"
+                      className="underline hover:text-gray-200 break-all"
+                    >
+                      Portfolio Website
+                    </a>
+                  </p>
+                </div>
+              </div>
+            </div>
+          </div>
+        </motion.section>
+
       </div>
 
-      <section className="mb-12">
-        <div className="flex items-center gap-3 mb-3 text-xl font-semibold text-gray-800">
-          <FaUtensils style={{ color: red }} /> <h2>What is Foodhub?</h2>
-        </div>
-        <p className="text-lg leading-relaxed">
-          Foodhub is a modern restaurant delivery platform that bridges the gap
-          between local restaurants and customers. We make it easy for users to
-          browse, order, and enjoy their favorite meals from nearby eateries — all
-          from the comfort of their home.
-        </p>
-      </section>
-
-      <hr className="border-t border-gray-200 my-8" />
-
-      <section className="mb-12">
-        <div className="flex items-center gap-3 mb-3 text-xl font-semibold text-gray-800">
-          <FaBullseye style={{ color: red }} /> <h2>Our Mission</h2>
-        </div>
-        <p className="text-lg leading-relaxed">
-          Our mission is to empower local restaurants and simplify food ordering
-          for everyone. Whether you’re craving traditional dishes or trending
-          cuisines, Foodhub brings the best food to your doorstep — fast, fresh,
-          and reliable.
-        </p>
-      </section>
-
-      <hr className="border-t border-gray-200 my-8" />
-
-      <section className="mb-12">
-        <div className="flex items-center gap-3 mb-3 text-xl font-semibold text-gray-800">
-          <FaHistory style={{ color: red }} /> <h2>Our Journey</h2>
-        </div>
-        <p className="text-lg leading-relaxed">
-          Launched in 2024 by a group of passionate food and tech enthusiasts,
-          Foodhub started with a simple idea: to make great food more accessible.
-          Since then, we’ve grown into a trusted platform serving thousands of
-          happy customers and partnering with a wide range of restaurants.
-        </p>
-      </section>
-
-      <hr className="border-t border-gray-200 my-8" />
-
-      <section className="mb-12">
-        <div className="flex items-center gap-3 mb-3 text-xl font-semibold text-gray-800">
-          <FaThumbsUp style={{ color: red }} /> <h2>Why Choose Foodhub?</h2>
-        </div>
-        <ul className="list-disc list-inside text-lg space-y-2">
-          <li>Fast and secure ordering process</li>
-          <li>Wide variety of restaurants and cuisines</li>
-          <li>Real-time order tracking</li>
-          <li>Secure payment with Stripe & SSLCommerz</li>
-          <li>24/7 customer support</li>
-        </ul>
-      </section>
-
-      <hr className="border-t border-gray-200 my-8" />
-
-   
-      <section className="mb-12">
-        <h2 className="text-xl font-semibold mb-4 flex items-center gap-2">
-          <FaEnvelope style={{ color: red }} /> Contact Us
-        </h2>
-        <p className="text-lg mb-2">
-          Have questions, feedback, or partnership inquiries? We’d love to hear from you!
-        </p>
-        <div className="space-y-2 text-lg">
-          <p className="flex items-center gap-2">
-            <FaEnvelope style={{ color: red }} />{" "}
-            <a href="mailto:support@foodhub.com" className="text-red-600 hover:underline">
-              support@foodhub.com
-            </a>
-          </p>
-          <p className="flex items-center gap-2">
-            <FaPhoneAlt style={{ color: red }} />{" "}
-            <a href="tel:+0161040096" className="text-red-600 hover:underline">
-              +01610 (240) 096
-            </a>
-          </p>
-          <p className="flex items-center gap-2">
-            <FaMapMarkerAlt style={{ color: red }} /> 123 Main Street, Food City, FC 10001
-          </p>
-        </div>
-      </section>
-
-      <hr className="border-t border-gray-200 my-8" />
-
-      
-      <section className="text-center mt-10">
+      {/* Thank You */}
+      <motion.section
+        className="text-center mt-16"
+        initial="hidden"
+        whileInView="visible"
+        viewport={{ once: true }}
+        variants={fadeUp}
+      >
         <p className="text-lg font-medium text-gray-700">
           Thank you for choosing{" "}
-          <span className="text-red-600 font-bold">Foodhub</span> — where your next
-          favorite meal is just a click away!
+          <span className="text-red-600 font-bold">Foodhub</span> — where your
+          next favorite meal is just a click away!
         </p>
-      </section>
+      </motion.section>
     </div>
   );
 };

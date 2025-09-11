@@ -30,18 +30,17 @@ const RestaurantBanner = () => {
           <SwiperSlide key={index} className="flex justify-center items-center">
             {/* Skeleton */}
             {!loadedImages[index] && (
-              <Skeleton 
-                height={400} 
-                width="100%" 
+              <Skeleton
+                height={400}
+                width="100%"
                 className="absolute top-0 left-0"
               />
             )}
             <img
               src={imgSrc}
               alt={`Slide ${index + 1}`}
-              className={`w-full object-cover transition-opacity duration-500 ${
-                loadedImages[index] ? "opacity-100" : "opacity-0"
-              }`}
+              className={`w-full object-cover transition-opacity duration-500 ${loadedImages[index] ? "opacity-100" : "opacity-0"
+                }`}
               onLoad={() =>
                 setLoadedImages(prev => ({ ...prev, [index]: true }))
               }

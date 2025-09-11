@@ -18,8 +18,10 @@ module.exports = withMT({
          theme: {
           fontFamily: {
             Kanit : ["Kanit" , "sans-serif"],
-            Caveat : ["Caveat" , "sans-serif"]
+            Caveat : ["Caveat" , "sans-serif"],
+            Poppins :  ["Poppins" , "sans-serif"]
           }
+
         },
   plugins: [require("daisyui")],
 });

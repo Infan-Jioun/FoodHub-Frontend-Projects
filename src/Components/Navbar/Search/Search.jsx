@@ -213,7 +213,7 @@ const Search = ({ searchQuery, setSearchQuery }) => {
       </div>
 
       {(showRecent || filteredResults.length > 0) && (
-        <div className="absolute top-full mt-2 left-0 w-full max-h-96 overflow-y-auto bg-white/90 backdrop-blur-md border border-red-200 rounded-xl shadow-2xl z-50 animate-fadeIn">
+        <div className="absolute top-full px-3 mt-2 left-0 w-full max-h-96 overflow-y-auto bg-white/90 backdrop-blur-md border border-red-200 rounded-xl shadow-2xl z-50 animate-fadeIn">
           {loading ? (
             <div className="flex justify-center items-center p-6">
               <div className="w-12 h-12 border-4 border-red-400 border-t-transparent rounded-full animate-spin"></div>
@@ -245,7 +245,7 @@ const Search = ({ searchQuery, setSearchQuery }) => {
               <div>
                 <div className="flex border-b border-red-200">
                   <button
-                    className={`flex-1 py-2 text-center font-semibold ${activeTab === "restaurants"
+                    className={`flex-1 py-2 text-center text-[10px] lg:text-[20px] font-semibold ${activeTab === "restaurants"
                       ? "border-b-2 border-red-500 text-red-600"
                       : "text-gray-500"
                       } transition-colors duration-300`}
@@ -254,7 +254,7 @@ const Search = ({ searchQuery, setSearchQuery }) => {
                     Restaurants ({restaurantsResults.length})
                   </button>
                   <button
-                    className={`flex-1 py-2 text-center font-semibold ${activeTab === "foods"
+                    className={`flex-1 py-2 text-center font-semibold text-[10px] lg:text-[20px]  ${activeTab === "foods"
                       ? "border-b-2 border-red-500 text-red-600"
                       : "text-gray-500"
                       } transition-colors duration-300`}
@@ -277,11 +277,11 @@ const Search = ({ searchQuery, setSearchQuery }) => {
                             <img
                               src={r.photo}
                               alt={r.restaurantName}
-                              className="w-12 h-12 rounded-full object-cover mr-3"
+                              className="w-12 h-12 rounded-full sm:block hidden object-cover mr-3"
                             />
                             <div className="flex-1">
                               <div className="flex justify-between items-start">
-                                <p className="font-bold text-red-600">{highlight(r.restaurantName)}</p>
+                                <p className="font-bold text-red-600 text-[10px] lg:text-[20px] ">{highlight(r.restaurantName)}</p>
                                 <span className="text-xs bg-red-100 text-red-600 px-2 py-1 rounded-full">
                                   {r.foodCount} foods
                                 </span>
@@ -312,10 +312,10 @@ const Search = ({ searchQuery, setSearchQuery }) => {
                             <img
                               src={r.foodImage}
                               alt={r.foodName}
-                              className="w-12 h-12 rounded-full object-cover mr-3"
+                              className="w-12 h-12 rounded-full sm:block hidden object-cover mr-3"
                             />
                             <div className="flex-1">
-                              <p className="font-bold text-red-600">{highlight(r.foodName)}</p>
+                              <p className="font-bold text-red-600 text-[10px] lg:text-[20px] ">{highlight(r.foodName)}</p>
                               <p className="text-gray-700 text-sm">{r.foodCategory}</p>
                               <div className="flex items-center mt-1">
                                 <span className="text-xs text-gray-500 mr-1">from</span>

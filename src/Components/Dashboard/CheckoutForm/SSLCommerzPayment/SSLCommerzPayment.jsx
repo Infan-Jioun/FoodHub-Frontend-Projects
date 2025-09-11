@@ -1,31 +1,49 @@
 import React, { useState } from 'react';
-import { Typography, Button, CircularProgress } from '@mui/material';
+import { Typography, Button, CircularProgress, Box, Paper } from '@mui/material';
+import { styled } from '@mui/material/styles';
 import toast from 'react-hot-toast';
 import useAxiosSecure from '../../../Hooks/useAxiosSecure';
 import { useNavigate } from 'react-router-dom';
-import useAddFood from '../../../Hooks/useAddFood';
 import useAuth from '../../../Hooks/useAuth';
 
-const SSLCommerzPayment = ({ onClose, total, cartFood, user, formData , restaurantName }) => {
+// Styled components
+const PaymentContainer = styled(Paper)(({ theme }) => ({
+  padding: theme.spacing(3),
+  borderRadius: theme.spacing(2),
+  boxShadow: '0 4px 20px rgba(0,0,0,0.1)',
+  maxWidth: 500,
+  margin: '0 auto'
+}));
+
+const ActionButton = styled(Button)(({ theme }) => ({
+  borderRadius: theme.spacing(1.5),
+  padding: theme.spacing(1.5),
+  fontWeight: 'bold',
+  fontSize: '1rem'
+}));
+
+const SSLCommerzPayment = ({ onClose, total, cartFood, user, formData, restaurantName }) => {
     const axiosSecure = useAxiosSecure();
-    const navigate = useNavigate();
+    const { user: authUser } = useAuth();
     const [isProcessing, setIsProcessing] = useState(false);
+    const [isRedirecting, setIsRedirecting] = useState(false);
 
     const handleSSLPayment = async () => {
         if (cartFood.length === 0) {
             toast.error("Your cart is empty!");
             return;
         }
-
+    
         setIsProcessing(true);
         try {
+            const transactionId = "TXN" + Date.now() + Math.floor(Math.random() * 1000);
+            
             const paymentData = {
                 title: "Online Payment via SSLCommerz",
-                email: user?.email,
+                email: user?.email || authUser?.email,
                 foodPrice: parseFloat(total.toFixed(2)),
-                transactionId: "",
+                transactionId,
                 date: new Date(),
-                
                 status: "pending",
                 customerName: formData.customerName,
                 country: formData.country,
@@ -34,7 +52,6 @@ const SSLCommerzPayment = ({ onClose, total, cartFood, user, formData , restaura
                 upazila: formData.upazila,
                 address: formData.address,
                 contactNumber: formData.contactNumber,     
-              
                 items: cartFood?.map(item => ({
                     foodId: item?._id,
                     restaurantName: item?.restaurantName,
@@ -42,12 +59,13 @@ const SSLCommerzPayment = ({ onClose, total, cartFood, user, formData , restaura
                     foodName: item?.foodName,
                     quantity: item?.quantity || 1,
                     price: item?.foodPrice,
-                  })) || [],
+                })) || [],
             };
-
+    
             const res = await axiosSecure.post("/create-ssl-payment", paymentData);
             if (res.data.gatewayPageURL) {
                 localStorage.removeItem("checkoutForm");
+                setIsRedirecting(true);
                 window.location.replace(res.data.gatewayPageURL);
             } else {
                 toast.error("Failed to initiate SSLCommerz payment.");
@@ -60,46 +78,56 @@ const SSLCommerzPayment = ({ onClose, total, cartFood, user, formData , restaura
         }
     };
 
+    if (isRedirecting) {
+        return (
+            <Box sx={{ display: 'flex', flexDirection: 'column', alignItems: 'center', p: 4 }}>
+                <CircularProgress sx={{ mb: 2 }} />
+                <Typography variant="h6" color="primary">
+                    Redirecting to SSLCommerz...
+                </Typography>
+                <Typography variant="body2" sx={{ mt: 1 }} color="text.secondary">
+                    Please wait while we redirect you to the secure payment gateway.
+                </Typography>
+            </Box>
+        );
+    }
+
     return (
-        <div className="space-y-4">
-            <Typography variant="h6" gutterBottom>
+        <PaymentContainer elevation={3}>
+            <Typography variant="h5" gutterBottom align="center" color="primary" fontWeight="bold">
                 SSLCommerz Payment
             </Typography>
-            <Typography>
-                Total Amount: ${total.toFixed(2)}
-            </Typography>
-            <Typography sx={{ mb: 3 }}>
-                You'll be redirected to SSLCommerz secure payment page.
+            
+            <Box sx={{ display: 'flex', justifyContent: 'space-between', my: 2 }}>
+                <Typography variant="body1" fontWeight="medium">
+                    Total Amount:
+                </Typography>
+                <Typography variant="h6" color="primary" fontWeight="bold">
+                    ${total.toFixed(2)}
+                </Typography>
+            </Box>
+            
+            <Typography variant="body2" color="text.secondary" sx={{ mb: 3 }}>
+                You'll be redirected to SSLCommerz secure payment page to complete your transaction.
+                A confirmation email will be sent to your email address after successful payment.
             </Typography>
 
-            <div className="flex gap-3">
-                <Button
+            <Box sx={{ display: 'flex', gap: 2, mt: 3 }}>
+                <ActionButton
                     variant="contained"
-                    sx={{ 
-                        backgroundColor: '#00b894', 
-                        '&:hover': { backgroundColor: '#019875' },
-                        flex: 1
-                    }}
+                    fullWidth
                     onClick={handleSSLPayment}
                     disabled={isProcessing}
+                    sx={{ background: 'linear-gradient(45deg, #00b894 30%, #019875 90%)' }}
                 >
-                    {isProcessing ? (
-                        <CircularProgress size={24} sx={{ color: 'white' }} />
-                    ) : (
-                        'Confirm Payment'
-                    )}
-                </Button>
+                    {isProcessing ? <CircularProgress size={24} sx={{ color: 'white' }} /> : 'Confirm Payment'}
+                </ActionButton>
                 
-                <Button 
-                    variant="outlined" 
-                    color="error" 
-                    onClick={onClose}
-                    sx={{ flex: 1 }}
-                >
+                <ActionButton variant="outlined" color="error" fullWidth onClick={onClose}>
                     Cancel
-                </Button>
-            </div>
-        </div>
+                </ActionButton>
+            </Box>
+        </PaymentContainer>
     );
 };
 

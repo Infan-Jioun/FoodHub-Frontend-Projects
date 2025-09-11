@@ -89,24 +89,7 @@ const PaymentHistory = () => {
     }
   };
 
-  const handleDelete = async (paymentId) => {
-    Swal.fire({
-      title: "Are you sure?",
-      text: "Deleted?",
-      icon: "warning",
-      showCancelButton: true,
-      confirmButtonColor: "#ff0000d8",
-      cancelButtonColor: "#d33",
-      confirmButtonText: "Yes, delete it!",
-    }).then((result) => {
-      if (result.isConfirmed) {
-        axiosSecure.delete(`/payments/${paymentId}`).then(() => {
-          toast.success("Deleted successfully.");
-          setPayments(payments.filter(payment => payment._id !== paymentId));
-        });
-      }
-    });
-  };
+ 
 
   // Review handlers
   const handleOpenFoodReview = (payment) => {
@@ -189,13 +172,7 @@ const PaymentHistory = () => {
                       <p className="text-xl font-bold text-gray-900">${Number(payment.foodPrice).toFixed(2)}</p>
                       {getPaymentGatewayIcon(payment.transactionId, payment.title)}
                     </div>
-                    <button
-                      onClick={() => handleDelete(payment._id)}
-                      className="p-2 text-red-500 hover:text-red-700 transition-colors"
-                      title="Delete payment"
-                    >
-                      <FaTrash />
-                    </button>
+               
                   </div>
                 </div>
 

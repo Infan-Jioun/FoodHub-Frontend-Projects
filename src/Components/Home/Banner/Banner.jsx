@@ -17,7 +17,7 @@ const Banner = () => {
   ];
 
   return (
-    <div className='relative w-full h-[400px] md:h-[500px] lg:h-[600px]'>
+    <div className='relative w-full '>
       <Swiper
         autoplay={{ delay: 3000 }}
         loop={true}
@@ -26,18 +26,17 @@ const Banner = () => {
         {images.map((src, index) => (
           <SwiperSlide key={index} className="flex justify-center items-center h-full">
             {!loadedImages[index] && (
-              <Skeleton 
-                height="100%" 
-                width="100%" 
+              <Skeleton
+                height="100%"
+                width="100%"
                 className="absolute top-0 left-0"
               />
             )}
             <img
               src={src}
               alt={`Slide ${index + 1}`}
-              className={`w-full h-full object-cover transition-opacity duration-500 ${
-                loadedImages[index] ? 'opacity-100' : 'opacity-0'
-              }`}
+              className={`w-full h-full object-cover transition-opacity duration-500 ${loadedImages[index] ? 'opacity-100' : 'opacity-0'
+                }`}
               onLoad={() =>
                 setLoadedImages((prev) => ({ ...prev, [index]: true }))
               }

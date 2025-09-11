@@ -194,7 +194,7 @@ createRoot(document.getElementById('root')).render(
       <AuthProvider>
         <Toaster />
         <QueryClientProvider client={queryClient}>
-          <div className="font-Kanit bg-white text-black min-h-screen">
+          <div className="font-Poppins bg-white text-black min-h-screen">
             <AppWithLoader />
           </div>
         </QueryClientProvider>

@@ -398,11 +398,22 @@ const CheckoutForm = () => {
                                         </span>
                                     </Tooltip>
 
-                                    <Dialog open={openModal} onClose={handleCloseModal} className='rounded-lg' fullWidth maxWidth="sm">
-                                        <DialogTitle>
-                                            <Typography variant="h6" align="center">
-                                                Select Payment Method
-                                            </Typography>
+                                    <Dialog
+                                        open={openModal}
+                                        onClose={handleCloseModal}
+                                        className='rounded-lg'
+                                        fullWidth
+                                        maxWidth="sm"
+                                        PaperProps={{
+                                            sx: {
+                                                borderRadius: 3,
+                                                border: '2px solid #ff1818',
+                                                boxShadow: '0 8px 20px rgba(255,24,24,0.2)',
+                                            }
+                                        }}
+                                    >
+                                        <DialogTitle sx={{ backgroundColor: '#ff1818', color: '#fff', textAlign: 'center', fontWeight: 'bold', py: 2 }}>
+                                            Select Payment Method
                                         </DialogTitle>
 
                                         <DialogContent>
@@ -410,12 +421,34 @@ const CheckoutForm = () => {
                                                 <Button
                                                     variant={selectedPaymentMethod === 'stripe' ? 'contained' : 'outlined'}
                                                     onClick={() => handlePaymentMethodSelect('stripe')}
+                                                    sx={{
+                                                        color: selectedPaymentMethod === 'stripe' ? '#fff' : '#ff1818',
+                                                        borderColor: '#ff1818',
+                                                        '&.MuiButton-contained': {
+                                                            background: '#ff1818',
+                                                        },
+                                                        '&:hover': {
+                                                            background: '#e60000',
+                                                            borderColor: '#e60000'
+                                                        }
+                                                    }}
                                                 >
                                                     Stripe
                                                 </Button>
                                                 <Button
                                                     variant={selectedPaymentMethod === 'sslcommerz' ? 'contained' : 'outlined'}
                                                     onClick={() => handlePaymentMethodSelect('sslcommerz')}
+                                                    sx={{
+                                                        color: selectedPaymentMethod === 'sslcommerz' ? '#fff' : '#ff1818',
+                                                        borderColor: '#ff1818',
+                                                        '&.MuiButton-contained': {
+                                                            background: '#ff1818',
+                                                        },
+                                                        '&:hover': {
+                                                            background: '#e60000',
+                                                            borderColor: '#e60000'
+                                                        }
+                                                    }}
                                                 >
                                                     SSLCommerz
                                                 </Button>
@@ -430,7 +463,6 @@ const CheckoutForm = () => {
                                                         user={user}
                                                         formData={watchFields}
                                                         restaurantName={restaurantName}
-
                                                     />
                                                 </Elements>
                                             )}
@@ -447,12 +479,23 @@ const CheckoutForm = () => {
                                             )}
                                         </DialogContent>
 
-                                        <DialogActions>
-                                            <Button onClick={handleCloseModal} color="error">
+                                        <DialogActions sx={{ justifyContent: 'center', pb: 2 }}>
+                                            <Button
+                                                onClick={handleCloseModal}
+                                                sx={{
+                                                    color: '#ff1818',
+                                                    borderColor: '#ff1818',
+                                                    border: '1px solid',
+                                                    '&:hover': {
+                                                        backgroundColor: '#ffe5e5',
+                                                    }
+                                                }}
+                                            >
                                                 Cancel
                                             </Button>
                                         </DialogActions>
                                     </Dialog>
+
                                 </Box>
                             </>
                         )}

@@ -13,13 +13,14 @@ import { useState } from "react";
 import { Eye, EyeOff } from "lucide-react";
 import Skeleton from "react-loading-skeleton";
 import "react-loading-skeleton/dist/skeleton.css";
+import { motion } from "framer-motion";
 
 const Login = () => {
   const { login, googleAuth } = useAuth();
   const location = useLocation();
   const navigate = useNavigate();
   const [showPassword, setShowPassword] = useState(false);
-  const [loading, setLoading] = useState(false); // loader state
+  const [loading, setLoading] = useState(false); // skeleton toggle
   const from = location.state?.from?.pathname || "/";
 
   const {
@@ -60,9 +61,12 @@ const Login = () => {
         {/* Image Section */}
         <div className="hidden lg:block bg-gray-100">
           {loading ? (
-            <Skeleton height={"100%"} width={"100%"} />
+            <Skeleton height="100%" />
           ) : (
-            <img
+            <motion.img
+              initial={{ opacity: 0, x: -50 }}
+              animate={{ opacity: 1, x: 0 }}
+              transition={{ duration: 0.6 }}
               src="https://i.ibb.co.com/F6hmykd/Login.png"
               alt="Login"
               className="object-cover w-full h-full"
@@ -78,27 +82,33 @@ const Login = () => {
             className="w-full max-w-sm mx-auto"
           >
             {loading ? (
-              <div className="space-y-5">
-                <Skeleton width={100} height={30} className="mx-auto" />
-                <Skeleton height={45} />
-                <Skeleton height={45} />
-                <Skeleton height={20} width={150} />
-                <Skeleton height={20} width={200} />
-                <Skeleton height={45} />
-                <Skeleton height={40} />
-              </div>
+              <Skeleton height={40} width={120} className="mx-auto mb-6" />
             ) : (
-              <>
+              <motion.div
+                initial={{ opacity: 0, y: -30 }}
+                animate={{ opacity: 1, y: 0 }}
+                transition={{ duration: 0.6 }}
+              >
                 <Typography
                   variant="h4"
                   className="text-center text-[#ff1818] font-extrabold font-Kanit drop-shadow-2xl mb-6"
                 >
                   LOGIN
                 </Typography>
+              </motion.div>
+            )}
 
-                <form onSubmit={handleSubmit(onSubmit)} className="space-y-6">
-                  {/* Email */}
-                  <div>
+            <form onSubmit={handleSubmit(onSubmit)} className="space-y-6">
+              {/* Email */}
+              <div>
+                {loading ? (
+                  <Skeleton height={45} />
+                ) : (
+                  <motion.div
+                    initial={{ opacity: 0, x: -30 }}
+                    animate={{ opacity: 1, x: 0 }}
+                    transition={{ duration: 0.5, delay: 0.2 }}
+                  >
                     <Input
                       size="lg"
                       type="email"
@@ -106,15 +116,25 @@ const Login = () => {
                       label="Email"
                       {...register("email", { required: true })}
                     />
-                    {errors.email && (
-                      <span className="text-[#ff1818] text-sm font-medium">
-                        Email is required
-                      </span>
-                    )}
-                  </div>
+                  </motion.div>
+                )}
+                {errors.email && (
+                  <span className="text-[#ff1818] text-sm font-medium">
+                    Email is required
+                  </span>
+                )}
+              </div>
 
-                  {/* Password */}
-                  <div className="relative">
+              {/* Password */}
+              <div className="relative">
+                {loading ? (
+                  <Skeleton height={45} />
+                ) : (
+                  <motion.div
+                    initial={{ opacity: 0, x: 30 }}
+                    animate={{ opacity: 1, x: 0 }}
+                    transition={{ duration: 0.5, delay: 0.3 }}
+                  >
                     <Input
                       type={showPassword ? "text" : "password"}
                       label="Password"
@@ -138,19 +158,37 @@ const Login = () => {
                         <Eye className="w-5 h-5 text-[#ff1818]" />
                       )}
                     </button>
-                  </div>
+                  </motion.div>
+                )}
+              </div>
 
-                  {/* Forgot Password */}
-                  <div>
-                    <Link
-                      to="/resetPassword"
-                      className="text-sm text-[#ff1818] font-semibold hover:underline"
-                    >
-                      Forgot password?
-                    </Link>
-                  </div>
+              {/* Forgot Password */}
+              {loading ? (
+                <Skeleton width={120} height={15} />
+              ) : (
+                <motion.div
+                  initial={{ opacity: 0 }}
+                  animate={{ opacity: 1 }}
+                  transition={{ delay: 0.4 }}
+                >
+                  <Link
+                    to="/resetPassword"
+                    className="text-sm text-[#ff1818] font-semibold hover:underline"
+                  >
+                    Forgot password?
+                  </Link>
+                </motion.div>
+              )}
 
-                  {/* Terms */}
+              {/* Terms */}
+              {loading ? (
+                <Skeleton height={20} />
+              ) : (
+                <motion.div
+                  initial={{ opacity: 0, y: 20 }}
+                  animate={{ opacity: 1, y: 0 }}
+                  transition={{ duration: 0.4, delay: 0.5 }}
+                >
                   <Checkbox
                     color="red"
                     label={
@@ -168,30 +206,65 @@ const Login = () => {
                       </Typography>
                     }
                   />
+                </motion.div>
+              )}
 
-                  {/* Submit */}
-                  <button
-                    type="submit"
-                    className="w-full py-2 bg-[#ff1818] text-white font-bold rounded-lg hover:bg-[#e01515] transition"
-                  >
-                    Login
-                  </button>
+              {/* Submit */}
+              {loading ? (
+                <Skeleton height={40} />
+              ) : (
+                <motion.button
+                  initial={{ opacity: 0, scale: 0.9 }}
+                  animate={{ opacity: 1, scale: 1 }}
+                  transition={{ duration: 0.5, delay: 0.6 }}
+                  type="submit"
+                  className="w-full py-2 bg-[#ff1818] text-white font-bold rounded-lg hover:bg-[#e01515] transition"
+                >
+                  Login
+                </motion.button>
+              )}
 
-                  <div className="divider text-center text-gray-500">OR</div>
+              {loading ? (
+                <Skeleton height={20} />
+              ) : (
+                <motion.div
+                  initial={{ opacity: 0 }}
+                  animate={{ opacity: 1 }}
+                  transition={{ delay: 0.7 }}
+                  className="divider text-center text-gray-500"
+                >
+                  OR
+                </motion.div>
+              )}
 
-                  {/* Google */}
-                  <button
-                    type="button"
-                    onClick={handleGoogle}
-                    className="flex items-center justify-center gap-2 border border-gray-300 py-2 rounded-full hover:bg-gray-100 transition w-full"
-                  >
-                    <FcGoogle size={20} />
-                    <span className="font-medium text-sm">
-                      Continue with Google
-                    </span>
-                  </button>
+              {/* Google */}
+              {loading ? (
+                <Skeleton height={40} />
+              ) : (
+                <motion.button
+                  initial={{ opacity: 0, y: 20 }}
+                  animate={{ opacity: 1, y: 0 }}
+                  transition={{ duration: 0.5, delay: 0.8 }}
+                  type="button"
+                  onClick={handleGoogle}
+                  className="flex items-center justify-center gap-2 border border-gray-300 py-2 rounded-full hover:bg-gray-100 transition w-full"
+                >
+                  <FcGoogle size={20} />
+                  <span className="font-medium text-sm">
+                    Continue with Google
+                  </span>
+                </motion.button>
+              )}
 
-                  {/* Register */}
+              {/* Register */}
+              {loading ? (
+                <Skeleton height={20} />
+              ) : (
+                <motion.div
+                  initial={{ opacity: 0 }}
+                  animate={{ opacity: 1 }}
+                  transition={{ delay: 0.9 }}
+                >
                   <Typography
                     color="gray"
                     className="text-center font-normal mt-4"
@@ -204,9 +277,9 @@ const Login = () => {
                       Sign Up
                     </Link>
                   </Typography>
-                </form>
-              </>
-            )}
+                </motion.div>
+              )}
+            </form>
           </Card>
         </div>
       </div>

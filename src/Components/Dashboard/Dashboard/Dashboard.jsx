@@ -55,7 +55,7 @@ const Dashboard = () => {
           {user && (
             <Button
               onClick={handleLogout}
-              className="flex items-center gap-2 bg-red-600 hover:bg-red-700 text-white shadow-lg hover:shadow-xl rounded-full px-4 py-2"
+              className="flex items-center gap-2 bg-[#ff1818] hover:bg-[#ff1818] text-white shadow-lg hover:shadow-xl rounded-full px-4 py-2"
             >
               <HiLogout size={18} />
               Logout

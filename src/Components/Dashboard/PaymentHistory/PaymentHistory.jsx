@@ -112,13 +112,13 @@ const PaymentHistory = () => {
       <div className="max-w-6xl mx-auto">
         <div className="flex flex-col sm:flex-row items-start sm:items-center justify-between mb-8">
           <div>
-            <h1 className="text-3xl font-bold text-[#ff0000d8]">Payment History</h1>
+            <h1 className="text-3xl font-bold text-[#ff1818]">Payment History</h1>
             <p className="text-gray-600">View your past transactions and orders</p>
           </div>
-          <div className="bg-[#ff00001a] p-3 rounded-lg shadow-sm border border-[#ff0000d8] mt-4 sm:mt-0">
+          <div className="bg-[#ff00001a] p-3 rounded-lg shadow-sm border border-[#ff1818] mt-4 sm:mt-0">
             <div className="flex items-center">
-              <FaReceipt className="text-[#ff0000d8] text-xl mr-2" />
-              <span className="font-medium text-[#ff0000d8]">{payments.length} transactions</span>
+              <FaReceipt className="text-[#ff1818] text-xl mr-2" />
+              <span className="font-medium text-[#ff1818]">{payments.length} transactions</span>
             </div>
           </div>
         </div>
@@ -140,10 +140,10 @@ const PaymentHistory = () => {
         )}
 
         {error && (
-          <div className="bg-red-50 border-l-4 border-red-500 p-4 rounded-lg">
+          <div className="bg-red-50 border-l-4 border-[#ff1818] p-4 rounded-lg">
             <div className="flex">
-              <FiXCircle className="h-5 w-5 text-red-500 mr-2" />
-              <p className="text-sm text-red-700">{error}</p>
+              <FiXCircle className="h-5 w-5 text-[#ff1818] mr-2" />
+              <p className="text-sm text-[#ff1818]">{error}</p>
             </div>
           </div>
         )}
@@ -159,7 +159,7 @@ const PaymentHistory = () => {
         {!loading && !error && payments.length > 0 && (
           <div className="space-y-6">
             {payments.map((payment) => (
-              <div key={payment._id} className="bg-white p-6 rounded-xl shadow-sm border border-[#ff000010] hover:border-[#ff0000d8] transition-all">
+              <div key={payment._id} className="bg-white p-6 rounded-xl shadow-sm border border-[#ff000010] hover:border-[#ff1818] transition-all">
                 <div className="flex flex-col md:flex-row md:items-center md:justify-between gap-4 mb-4">
                   <div>
                     <h3 className="text-lg font-semibold text-gray-900 flex items-center">
@@ -194,13 +194,13 @@ const PaymentHistory = () => {
                   <div className="mt-4 flex gap-4">
                     <button
                       onClick={() => handleOpenFoodReview(payment)}
-                      className="text-sm text-[#ff0000d8] underline hover:text-red-700"
+                      className="text-sm text-[#ff1818] underline hover:text-[#ff1818]"
                     >
                       Review Food
                     </button>
                     <button
                       onClick={() => handleOpenRestaurantReview(payment)}
-                      className="text-sm text-[#ff0000d8] underline hover:text-red-700"
+                      className="text-sm text-[#ff1818] underline hover:text-[#ff1818]"
                     >
                       Review Restaurant
                     </button>

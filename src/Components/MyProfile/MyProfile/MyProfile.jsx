@@ -35,7 +35,7 @@ const MyProfile = () => {
   const [checkingName, setCheckingName] = useState(false);
   const [initialName, setInitialName] = useState("");
 
-  const red = "#ff0000d8";
+  const red = "#ff1818";
   const [isAdmin] = useAdmin();
   const [isModerator] = useModerator();
   const [isOwner] = useRestaurantOwner();
@@ -227,7 +227,7 @@ const MyProfile = () => {
       <div className="bg-white rounded-xl shadow-2xl max-w-6xl w-full flex flex-col md:flex-row gap-10 p-8 transition-colors duration-300">
         {/* Left: Profile Image */}
         <div className="flex flex-col items-center md:w-1/3 space-y-6">
-          <div className="relative group w-52 h-52 rounded-full border-4 border-red-500 overflow-hidden shadow-xl cursor-pointer transition-transform hover:scale-105">
+          <div className="relative group w-52 h-52 rounded-full border-4 border-[#ff1818] overflow-hidden shadow-xl cursor-pointer transition-transform hover:scale-105">
             <img
               src={previewImage || "https://i.ibb.co/PGwHS087/profile-Imagw.jpg"}
               alt="Profile"
@@ -239,7 +239,7 @@ const MyProfile = () => {
                   setCameraMode(true);
                   handleImageClick();
                 }}
-                className="bg-white bg-opacity-80 hover:bg-opacity-100 text-red-500 px-3 py-1 rounded-full flex items-center space-x-1 text-sm"
+                className="bg-white bg-opacity-80 hover:bg-opacity-100 text-[#ff1818] px-3 py-1 rounded-full flex items-center space-x-1 text-sm"
               >
                 <FaPhotoVideo />
                 <span>Camera</span>
@@ -250,7 +250,7 @@ const MyProfile = () => {
                   setCameraMode(false);
                   handleImageClick();
                 }}
-                className="bg-white bg-opacity-80 hover:bg-opacity-100 text-red-500 px-3 py-1 rounded-full flex items-center space-x-1 text-sm"
+                className="bg-white bg-opacity-80 hover:bg-opacity-100 text-[#ff1818] px-3 py-1 rounded-full flex items-center space-x-1 text-sm"
               >
                 <FaCamera />
                 <span>Upload</span>
@@ -259,7 +259,7 @@ const MyProfile = () => {
               {previewImage && (
                 <button
                   onClick={() => setShowImageModal(true)}
-                  className="bg-white bg-opacity-80 hover:bg-opacity-100 text-red-500 px-3 py-1 rounded-full flex items-center space-x-1 text-sm"
+                  className="bg-white bg-opacity-80 hover:bg-opacity-100 text-[#ff1818] px-3 py-1 rounded-full flex items-center space-x-1 text-sm"
                 >
                   <FaExpand />
                   <span>View</span>
@@ -300,7 +300,7 @@ const MyProfile = () => {
                 setIsFormVisible(!isFormVisible);
                 localStorage.setItem("isFormVisible", !isFormVisible);
               }}
-              className="px-6 py-2 bg-red-500 text-white rounded-md hover:bg-red-600 transition w-full flex items-center justify-center space-x-2"
+              className="px-6 py-2 bg-[#ff1818] text-white rounded-md hover:bg-red-600 transition w-full flex items-center justify-center space-x-2"
             >
               <FaEdit />
               <span>{isFormVisible ? "View Profile" : "Edit Profile"}</span>
@@ -347,13 +347,13 @@ const MyProfile = () => {
                           ) : nameAvailable ? (
                             <FaCheck className="text-green-500" />
                           ) : (
-                            <FaTimesCircle className="text-red-500" />
+                            <FaTimesCircle className="text-[#ff1818]" />
                           )}
                         </div>
                       )}
                     </div>
                     {profileData.name.length > 0 && !checkingName && !nameAvailable && (
-                      <p className="text-red-500 text-sm mt-1">This username is already taken</p>
+                      <p className="text-[#ff1818] text-sm mt-1">This username is already taken</p>
                     )}
                   </div>
 
@@ -416,7 +416,7 @@ const MyProfile = () => {
                   <button
                     type="submit"
                     disabled={isUpdating || !nameAvailable}
-                    className={`flex-1 py-3 bg-red-500 text-white font-semibold rounded-md shadow transition duration-300 ${
+                    className={`flex-1 py-3 bg-[#ff1818] text-white font-semibold rounded-md shadow transition duration-300 ${
                       isUpdating || !nameAvailable ? "opacity-70 cursor-not-allowed" : "hover:bg-red-600"
                     } flex items-center justify-center space-x-2`}
                   >

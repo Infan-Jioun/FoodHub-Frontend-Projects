@@ -65,7 +65,7 @@ const Navbar = () => {
         to="/"
         className={({ isActive }) =>
           isActive
-            ? "font-extrabold text-white border-b-2 border-red-[#ff1818] relative inline-block transition-colors duration-300 before:content-[''] before:absolute before:bottom-[-2px] before:left-0 before:w-full before:h-[2px] before:bg-white before:scale-100 before:transition-transform before:duration-300 hover:before:scale-100"
+            ? "font-extrabold text-white border-b-2 border-[#ff1818] relative inline-block transition-colors duration-300 before:content-[''] before:absolute before:bottom-[-2px] before:left-0 before:w-full before:h-[2px] before:bg-white before:scale-100 before:transition-transform before:duration-300 hover:before:scale-100"
             : "font-extrabold text-white relative inline-block transition-colors duration-300 before:content-[''] before:absolute before:bottom-[-2px] before:left-0 before:w-full before:h-[2px] before:bg-white before:scale-0 before:transition-transform before:duration-300 hover:before:scale-100 rounded"
         }
       >
@@ -75,7 +75,7 @@ const Navbar = () => {
         to="/restaurants"
         className={({ isActive }) =>
           isActive
-            ? "font-extrabold text-white border-b-2 border-red-[#ff1818] relative inline-block transition-colors duration-300 before:content-[''] before:absolute before:bottom-[-2px] before:left-0 before:w-full before:h-[2px] before:bg-white before:scale-100 before:transition-transform before:duration-300 hover:before:scale-100"
+            ? "font-extrabold text-white border-b-2 border-[#ff1818] relative inline-block transition-colors duration-300 before:content-[''] before:absolute before:bottom-[-2px] before:left-0 before:w-full before:h-[2px] before:bg-white before:scale-100 before:transition-transform before:duration-300 hover:before:scale-100"
             : "font-extrabold text-white relative inline-block transition-colors duration-300 before:content-[''] before:absolute before:bottom-[-2px] before:left-0 before:w-full before:h-[2px] before:bg-white before:scale-0 before:transition-transform before:duration-300 hover:before:scale-100 rounded"
         }
       >
@@ -85,7 +85,7 @@ const Navbar = () => {
         to="/about"
         className={({ isActive }) =>
           isActive
-            ? "font-extrabold text-white border-b-2 border-red-[#ff1818] relative inline-block transition-colors duration-300 before:content-[''] before:absolute before:bottom-[-2px] before:left-0 before:w-full before:h-[2px] before:bg-white before:scale-100 before:transition-transform before:duration-300 hover:before:scale-100"
+            ? "font-extrabold text-white border-b-2 border-[#ff1818] relative inline-block transition-colors duration-300 before:content-[''] before:absolute before:bottom-[-2px] before:left-0 before:w-full before:h-[2px] before:bg-white before:scale-100 before:transition-transform before:duration-300 hover:before:scale-100"
             : "font-extrabold text-white relative inline-block transition-colors duration-300 before:content-[''] before:absolute before:bottom-[-2px] before:left-0 before:w-full before:h-[2px] before:bg-white before:scale-0 before:transition-transform before:duration-300 hover:before:scale-100 rounded"
         }
       >
@@ -138,7 +138,7 @@ const Navbar = () => {
                 <Avatar
                   variant="circular"
                   alt="User profile"
-                  className="cursor-pointer border-2 border-[#ff0000d8] w-10 h-10 hover:scale-105 transition-transform"
+                  className="cursor-pointer border-2 border-[#ff1818] w-10 h-10 hover:scale-105 transition-transform"
                   src={user?.photoURL || "https://i.ibb.co/PGwHS087/profile-Imagw.jpg"}
                 />
               </MenuHandler>
@@ -192,14 +192,14 @@ const Navbar = () => {
                   onClick={handleLogut}
                   className="flex items-center gap-3 hover:bg-red-50 rounded-lg p-2 mt-1"
                 >
-                  <IoMdLogOut className="text-red-500" size={18} />
-                  <Typography className="font-medium text-red-500">Sign Out</Typography>
+                  <IoMdLogOut className="text-[#ff1818]" size={18} />
+                  <Typography className="font-medium text-[#ff1818]">Sign Out</Typography>
                 </MenuItem>
               </MenuList>
             </Menu>
           ) : (
             <Link to="/login" className="flex items-center">
-              <button className="flex items-center justify-center p-2 rounded-full border-2 border-[#ff0000d8]  hover:bg-[#ff0000d8] text-[#ff0000d8] hover:text-white transition-colors">
+              <button className="flex items-center justify-center p-2 rounded-full border-2 border-[#ff1818]  hover:bg-[#ff1818] text-[#ff1818] hover:text-white transition-colors">
                 <IoMdLogIn size={20} />
               </button>
             </Link>
@@ -207,7 +207,7 @@ const Navbar = () => {
         </div>
       </div>
       {/* Second Navbar */}
-      <div className={`navbar  px-3 md:px-6 lg:px-8 bg-[#ff0000d8] ${scrolled ? "fixed top-0 left-0 w-full  shadow z-10 " : ""}`}>
+      <div className={`navbar  px-3 md:px-6 lg:px-8 bg-[#ff1818] ${scrolled ? "fixed top-0 left-0 w-full  shadow z-10 " : ""}`}>
         <div className="navbar-start">
           <div className="dropdown lg:hidden">
             <div tabIndex={0} role="button" className="btn btn-ghost btn-circle text-white  font-extrabold">
@@ -225,7 +225,7 @@ const Navbar = () => {
                       to="/"
                       className={({ isActive }) =>
                         isActive
-                          ? "font-extrabold text-[#ff1818] border-b-2 border-red-[#ff1818] relative inline-block transition-colors duration-300 before:content-[''] before:absolute before:bottom-[-2px] before:left-0 before:w-full before:h-[2px] before:bg-red-600 before:scale-100 before:transition-transform before:duration-300 hover:before:scale-100"
+                          ? "font-extrabold text-[#ff1818] border-b-2 border-[#ff1818] relative inline-block transition-colors duration-300 before:content-[''] before:absolute before:bottom-[-2px] before:left-0 before:w-full before:h-[2px] before:bg-red-600 before:scale-100 before:transition-transform before:duration-300 hover:before:scale-100"
                           : "font-extrabold text-[#ff1818] relative inline-block transition-colors duration-300 before:content-[''] before:absolute before:bottom-[-2px] before:left-0 before:w-full before:h-[2px] before:bg-red-600 before:scale-0 before:transition-transform before:duration-300 hover:before:scale-100 rounded"
                       }
                     >
@@ -247,7 +247,7 @@ const Navbar = () => {
                     to="/restaurants"
                     className={({ isActive }) =>
                       isActive
-                        ? "font-extrabold text-[#ff1818] border-b-2 border-red-[#ff1818] relative inline-block transition-colors duration-300 before:content-[''] before:absolute before:bottom-[-2px] before:left-0 before:w-full before:h-[2px] before:bg-red-600 before:scale-100 before:transition-transform before:duration-300 hover:before:scale-100"
+                        ? "font-extrabold text-[#ff1818] border-b-2 border-[#ff1818] relative inline-block transition-colors duration-300 before:content-[''] before:absolute before:bottom-[-2px] before:left-0 before:w-full before:h-[2px] before:bg-red-600 before:scale-100 before:transition-transform before:duration-300 hover:before:scale-100"
                         : "font-extrabold text-[#ff1818] relative inline-block transition-colors duration-300 before:content-[''] before:absolute before:bottom-[-2px] before:left-0 before:w-full before:h-[2px] before:bg-red-600 before:scale-0 before:transition-transform before:duration-300 hover:before:scale-100 rounded"
                     }
                   >
@@ -259,7 +259,7 @@ const Navbar = () => {
                       to="/about"
                       className={({ isActive }) =>
                         isActive
-                          ? "font-extrabold text-[#ff1818] border-b-2 border-red-[#ff1818] relative inline-block transition-colors duration-300 before:content-[''] before:absolute before:bottom-[-2px] before:left-0 before:w-full before:h-[2px] before:bg-red-600 before:scale-100 before:transition-transform before:duration-300 hover:before:scale-100"
+                          ? "font-extrabold text-[#ff1818] border-b-2 border-[#ff1818] relative inline-block transition-colors duration-300 before:content-[''] before:absolute before:bottom-[-2px] before:left-0 before:w-full before:h-[2px] before:bg-red-600 before:scale-100 before:transition-transform before:duration-300 hover:before:scale-100"
                           : "font-extrabold text-[#ff1818] relative inline-block transition-colors duration-300 before:content-[''] before:absolute before:bottom-[-2px] before:left-0 before:w-full before:h-[2px] before:bg-red-600 before:scale-0 before:transition-transform before:duration-300 hover:before:scale-100 rounded"
                       }
                     >
@@ -291,7 +291,7 @@ const Navbar = () => {
 
                   <div tabIndex={0} role="button" className="md:block hidden">
                     <div className="">
-                      <div className="badge text-[12px] bg-white  text-[#ff0000d8] ">  <p className="flex justify-center items-center gap-3 font-bold "><FaUserCircle /> {user?.displayName}</p></div>
+                      <div className="badge text-[12px] bg-white  text-[#ff1818] ">  <p className="flex justify-center items-center gap-3 font-bold "><FaUserCircle /> {user?.displayName}</p></div>
 
                     </div>
                   </div>
@@ -308,7 +308,7 @@ const Navbar = () => {
                   <div tabIndex={0} role="button" className="btn btn-ghost btn-circle">
                     <div className="indicator">
                       <div className="text-2xl text-white">  <GiHamburger /></div>
-                      <span className="badge bg-white text-[10px] indicator-item text-[#ff0000d8]">{cartFood.length}</span>
+                      <span className="badge bg-white text-[10px] indicator-item text-[#ff1818]">{cartFood.length}</span>
                     </div>
                   </div>
 

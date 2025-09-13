@@ -116,7 +116,7 @@ import {
                     {...register("displayName", { required: true })}
                   />
                   {errors.displayName && (
-                    <span className="text-red-500 text-sm">This field is required</span>
+                    <span className="text-[#ff1818] text-sm">This field is required</span>
                   )}
                 </div>
   
@@ -130,7 +130,7 @@ import {
                     {...register("email", { required: true })}
                   />
                   {errors.email && (
-                    <span className="text-red-500 text-sm">This field is required</span>
+                    <span className="text-[#ff1818] text-sm">This field is required</span>
                   )}
                 </div>
   
@@ -151,13 +151,13 @@ import {
                     {showPassword ? <EyeOff className="w-5 h-5 text-[#ff1818]" /> : <Eye className="w-5 h-5 text-[#ff1818]" />}
                   </button>
                   {errors.password?.type === "required" && (
-                    <span className="text-red-500 text-sm">This field is required</span>
+                    <span className="text-[#ff1818] text-sm">This field is required</span>
                   )}
                   {errors.password?.type === "minLength" && (
-                    <span className="text-red-500 text-sm">Password must be at least 6 characters</span>
+                    <span className="text-[#ff1818] text-sm">Password must be at least 6 characters</span>
                   )}
                   {errors.password?.type === "maxLength" && (
-                    <span className="text-red-500 text-sm">Password must be at most 8 characters</span>
+                    <span className="text-[#ff1818] text-sm">Password must be at most 8 characters</span>
                   )}
                 </div>
   

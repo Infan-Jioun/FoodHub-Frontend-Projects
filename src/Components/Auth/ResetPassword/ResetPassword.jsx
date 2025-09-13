@@ -103,11 +103,11 @@ const ResetPassword = () => {
                       message: "Enter a valid email",
                     },
                   })}
-                  className="block w-full pl-10 pr-3 py-3 border bg-white text-[#ff0000d8] border-gray-300 rounded-lg focus:ring-2 focus:ring-red-500 focus:border-red-500 outline-none transition duration-200"
+                  className="block w-full pl-10 pr-3 py-3 border bg-white text-[#ff1818] border-gray-300 rounded-lg focus:ring-2 focus:ring-red-500 focus:border-[#ff1818] outline-none transition duration-200"
                   placeholder="Your email address"
                 />
                 {errors.email && (
-                  <p className="mt-1 text-sm text-red-600">
+                  <p className="mt-1 text-sm text-[#ff1818]">
                     {errors.email.message}
                   </p>
                 )}
@@ -127,7 +127,7 @@ const ResetPassword = () => {
             <div className="mt-6 text-center">
               <p className="text-sm text-gray-600">
                 Remember your password?{" "}
-                <a href="/login" className="font-medium text-red-600 hover:text-red-700">
+                <a href="/login" className="font-medium text-[#ff1818] hover:text-[#ff1818]">
                   Sign in
                 </a>
               </p>

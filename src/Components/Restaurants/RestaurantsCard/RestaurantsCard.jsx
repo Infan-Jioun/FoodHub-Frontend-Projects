@@ -113,7 +113,7 @@ const RestaurantsCard = () => {
                 <Typography className="text-[18px] font-bold font-Caveat text-gray-900">
                   {restaurant?.restaurantName}
                 </Typography>
-                <Typography className="mb-2 font-bold drop-shadow-xl text-red-500 font-Kanit">
+                <Typography className="mb-2 font-bold drop-shadow-xl text-[#ff1818] font-Kanit">
                   {restaurant?.restaurantAddress}
                 </Typography>
 
@@ -142,7 +142,7 @@ const RestaurantsCard = () => {
                     className="absolute top-4 left-4 bg-white/90 backdrop-blur-sm px-3 py-1 rounded-full shadow-md flex items-center"
                     whileHover={{ scale: 1.05 }}
                   >
-                    <FaStar className="text-red-500 mr-1" />
+                    <FaStar className="text-[#ff1818] mr-1" />
                     <span className="font-bold text-gray-800">{average}</span>
                   </motion.div>
                 )}

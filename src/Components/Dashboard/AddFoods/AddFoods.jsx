@@ -171,7 +171,7 @@ const AddFoods = () => {
                         onClick={removeImage}
                         className="absolute top-0 right-0 bg-white rounded-full p-1 shadow-md hover:bg-red-50 transition"
                       >
-                        <MdCancel className="text-red-500 text-lg" />
+                        <MdCancel className="text-[#ff1818] text-lg" />
                       </button>
                     </div>
                   ) : (
@@ -184,10 +184,10 @@ const AddFoods = () => {
                 </div>
               </div>
               {errors.foodImage && !imagePreview && (
-                <p className="mt-2 text-sm text-red-500">Please upload a food image</p>
+                <p className="mt-2 text-sm text-[#ff1818]">Please upload a food image</p>
               )}
               {imageError && (
-                <p className="mt-2 text-sm text-red-500">{imageError}</p>
+                <p className="mt-2 text-sm text-[#ff1818]">{imageError}</p>
               )}
             </div>
 
@@ -222,7 +222,7 @@ const AddFoods = () => {
                 })}
               />
               {errors.foodName && (
-                <p className="mt-1 text-sm text-red-500">{errors.foodName.message}</p>
+                <p className="mt-1 text-sm text-[#ff1818]">{errors.foodName.message}</p>
               )}
             </div>
 
@@ -249,7 +249,7 @@ const AddFoods = () => {
                 />
               </div>
               {errors.price && (
-                <p className="mt-1 text-sm text-red-500">{errors.price.message}</p>
+                <p className="mt-1 text-sm text-[#ff1818]">{errors.price.message}</p>
               )}
             </div>
 
@@ -276,7 +276,7 @@ const AddFoods = () => {
                 <option value="Beef">Beef</option>
               </select>
               {errors.category && (
-                <p className="mt-1 text-sm text-red-500">{errors.category.message}</p>
+                <p className="mt-1 text-sm text-[#ff1818]">{errors.category.message}</p>
               )}
             </div>
 

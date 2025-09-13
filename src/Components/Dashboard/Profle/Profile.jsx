@@ -54,7 +54,7 @@ const Profile = () => {
                                             {...register("restaurantName", { required: true })}
 
                                         />
-                                        {errors.restaurantName && <span className="text-red-600 text-sm font-bold">This field is required</span>}
+                                        {errors.restaurantName && <span className="text-[#ff1818] text-sm font-bold">This field is required</span>}
 
                                         <Input
                                             size="lg"
@@ -63,7 +63,7 @@ const Profile = () => {
                                             label="Restaurant Email"
                                             {...register("restaurantEmail", { required: true })}
                                         />
-                                        {errors.restaurantEmail && <span className="text-red-600 text-sm font-bold">This field is required</span>}
+                                        {errors.restaurantEmail && <span className="text-[#ff1818] text-sm font-bold">This field is required</span>}
 
                                         <Input
                                             size="lg"
@@ -72,7 +72,7 @@ const Profile = () => {
                                             label="Restaurant Address"
                                             {...register("restaurantAdddress", { required: true })}
                                         />
-                                        {errors.restaurantAdddress && <span className="text-red-600 text-sm font-bold">This field is required</span>}
+                                        {errors.restaurantAdddress && <span className="text-[#ff1818] text-sm font-bold">This field is required</span>}
                                         <Input
                                             size="lg"
                                             name="restaurantNumber"
@@ -80,7 +80,7 @@ const Profile = () => {
                                             label="Restaurant Number"
                                             {...register("restaurantNumber", { required: true })}
                                         />
-                                        {errors.restaurantNumber && <span className="text-red-600 text-sm font-bold">This field is required</span>}
+                                        {errors.restaurantNumber && <span className="text-[#ff1818] text-sm font-bold">This field is required</span>}
                                       
                                         
                                     </div>
@@ -88,7 +88,7 @@ const Profile = () => {
                                     {...register("photo", { required: true })}
                                     
                                     className="file-input file-input-ghost w-full max-w-xs" />
-                                       {errors.photo && <span className="text-red-600 text-sm font-bold">This field is required</span>}
+                                       {errors.photo && <span className="text-[#ff1818] text-sm font-bold">This field is required</span>}
                                     <Checkbox
                                         label={
                                             <Typography

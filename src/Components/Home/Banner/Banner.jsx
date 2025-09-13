@@ -19,7 +19,7 @@ const Banner = () => {
   return (
     <div className='relative w-full '>
       <Swiper
-        autoplay={{ delay: 3000 }}
+        autoplay={{ delay: 1000 }}
         loop={true}
         className="mySwiper h-full"
       >

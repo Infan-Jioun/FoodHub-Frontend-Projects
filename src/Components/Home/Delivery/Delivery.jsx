@@ -10,7 +10,7 @@ const Delivery = () => {
       transition={{ duration: 0.8 }}
     >
       <div className="max-w-5xl mx-auto text-center">
-        <h2 className="text-4xl font-bold text-red-600 font-Caveat mb-6">Fast & Fresh Delivery</h2>
+        <h2 className="text-4xl font-bold text-[#ff1818] font-Caveat mb-6">Fast & Fresh Delivery</h2>
         <p className="text-lg text-gray-700 mb-10">
           We bring your favorite meals right to your door – hot, fresh, and fast!
         </p>
@@ -41,7 +41,7 @@ const Delivery = () => {
               viewport={{ once: true }}
               transition={{ delay: i * 0.2, duration: 0.6 }}
             >
-              <div className="text-4xl text-[#ff0000d8] mb-4">{item.icon}</div>
+              <div className="text-4xl text-[#ff1818] mb-4">{item.icon}</div>
               <h3 className="text-xl font-semibold mb-2">{item.title}</h3>
               <p className="text-gray-600 text-sm">{item.desc}</p>
             </motion.div>

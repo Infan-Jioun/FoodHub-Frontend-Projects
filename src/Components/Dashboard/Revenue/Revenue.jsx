@@ -11,7 +11,7 @@ import { FaMoneyBillWave, FaStore, FaPercentage, FaClipboardList, FaUtensils } f
 const Revenue = () => {
   // Color scheme
   const colors = {
-    red: "#ff0000d8",
+    red: "#ff1818",
     blue: "#0088fed8",
     
     orange: "#ff9900d8",
@@ -84,12 +84,12 @@ const Revenue = () => {
   if (error) {
     return (
       <div className="flex flex-col justify-center items-center min-h-screen p-6">
-        <div className="bg-red-100 border border-red-400 text-red-700 px-4 py-3 rounded max-w-md">
+        <div className="bg-red-100 border border-red-400 text-[#ff1818] px-4 py-3 rounded max-w-md">
           <h3 className="font-bold text-lg">Error</h3>
           <p className="mb-3">{error}</p>
           <button 
             onClick={() => window.location.reload()}
-            className="bg-red-500 hover:bg-red-700 text-white font-bold py-2 px-4 rounded"
+            className="bg-[#ff1818] hover:bg-red-700 text-white font-bold py-2 px-4 rounded"
           >
             Retry
           </button>

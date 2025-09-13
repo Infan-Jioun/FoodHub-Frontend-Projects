@@ -68,7 +68,7 @@ const UpdateFood = () => {
 
   return (
     <div className="min-h-screen py-8 bg-gray-100">
-      <h2 className="text-3xl font-bold text-center text-red-600 mb-8">
+      <h2 className="text-3xl font-bold text-center text-[#ff1818] mb-8">
         Update Your Food
       </h2>
       <div className="max-w-3xl mx-auto bg-white rounded-xl shadow-lg p-8">

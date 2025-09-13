@@ -70,7 +70,7 @@ const people = [
 const RatingSlider = () => {
   return (
     <div className="bg-white py-12 px-4 md:px-20">
-      <h2 className="text-3xl font-bold font-Caveat text-center text-red-600 mb-10">
+      <h2 className="text-3xl font-bold font-Caveat text-center text-[#ff1818] mb-10">
         What Our Customers Say
       </h2>
 
@@ -94,10 +94,10 @@ const RatingSlider = () => {
                 <img
                   src={person.image}
                   alt={person.name}
-                  className="w-24 h-24 rounded-full mb-4 object-cover border-4 border-red-500"
+                  className="w-24 h-24 rounded-full mb-4 object-cover border-4 border-[#ff1818]"
                 />
                 <p className="text-gray-800 mb-3 text-sm">"{person.comment}"</p>
-                <div className="flex items-center justify-center text-[#ff0000d8] mb-2">
+                <div className="flex items-center justify-center text-[#ff1818] mb-2">
                   {Array.from({ length: person.rating }, (_, i) => (
                     <FaStar key={i} />
                   ))}

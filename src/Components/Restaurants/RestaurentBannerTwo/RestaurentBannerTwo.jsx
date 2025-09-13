@@ -82,7 +82,7 @@ const RestaurentBannerTwo = ({
   return (
     <div
       ref={ref}
-      className={`blur-text ${className} flex flex-wrap gap-y-2 text-xl text-[#ff0000d8] md:text-3xl leading-relaxed`}
+      className={`blur-text ${className} flex flex-wrap gap-y-2 text-xl text-[#ff1818] md:text-3xl leading-relaxed`}
     >
       {elements.map((segment, index) => {
         const animateKeyframes = buildKeyframes(fromSnapshot, toSnapshots);

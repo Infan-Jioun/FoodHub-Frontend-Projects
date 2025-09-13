@@ -107,7 +107,7 @@ const FoodModal = ({ food, open, handleOpen, handleAddFood }) => {
                     8 Inch
                   </Typography>
                   <Typography color="blue-gray" className="text-sm">
-                    <span className="text-red-500 font-bold">$ {(food.price * 1).toFixed(0)}</span>
+                    <span className="text-[#ff1818] font-bold">$ {(food.price * 1).toFixed(0)}</span>
                   </Typography>
                 </div>
               }
@@ -124,7 +124,7 @@ const FoodModal = ({ food, open, handleOpen, handleAddFood }) => {
                     12 Inch
                   </Typography>
                   <Typography color="blue-gray" className="text-sm">
-                    <span className="text-red-500 font-bold">$ {(food.price * 1.5).toFixed(0)}</span>
+                    <span className="text-[#ff1818] font-bold">$ {(food.price * 1.5).toFixed(0)}</span>
                   </Typography>
                 </div>
               }
@@ -147,7 +147,7 @@ const FoodModal = ({ food, open, handleOpen, handleAddFood }) => {
                     Full Portion
                   </Typography>
                   <Typography color="blue-gray" className="text-sm">
-                    <span className="text-red-500 font-bold">$ {food.price}</span>
+                    <span className="text-[#ff1818] font-bold">$ {food.price}</span>
                   </Typography>
                 </div>
               }
@@ -164,7 +164,7 @@ const FoodModal = ({ food, open, handleOpen, handleAddFood }) => {
                     Half Portion
                   </Typography>
                   <Typography color="blue-gray" className="text-sm">
-                    <span className="text-red-500 font-bold">$ {(food.price * 0.6).toFixed(0)}</span>
+                    <span className="text-[#ff1818] font-bold">$ {(food.price * 0.6).toFixed(0)}</span>
                   </Typography>
                 </div>
               }
@@ -280,7 +280,7 @@ const Coffee = () => {
           </svg>
         </div>
         <div className="absolute flex overflow-hidden" style={{ width: `${percentage}%` }}>
-          <svg xmlns="http://www.w3.org/2000/svg" className="h-4 w-4 text-red-500" viewBox="0 0 20 20" fill="currentColor">
+          <svg xmlns="http://www.w3.org/2000/svg" className="h-4 w-4 text-[#ff1818]" viewBox="0 0 20 20" fill="currentColor">
             <path d="M9.049 2.927c.3-.921 1.603-.921 1.902 0l1.07 3.292a1 1 0 00.95.69h3.462c.969 0 1.371 1.24.588 1.81l-2.8 2.034a1 1 0 00-.364 1.118l1.07 3.292c.3.921-.755 1.688-1.54 1.118l-2.8-2.034a1 1 0 00-1.175 0l-2.8 2.034c-.784.57-1.838-.197-1.539-1.118l1.07-3.292a1 1 0 00-.364-1.118L2.98 8.72c-.783-.57-.38-1.81.588-1.81h3.461a1 1 0 00.951-.69l1.07-3.292z"/>
           </svg>
         </div>
@@ -443,9 +443,9 @@ const Coffee = () => {
                     <div className="p-4 flex flex-col flex-grow">
                       <div className="flex justify-between items-start mb-2">
                         <h3 className="text-lg font-semibold text-gray-800">{food.foodName}</h3>
-                        <span className="text-lg font-bold text-red-600">$ {food.price}</span>
+                        <span className="text-lg font-bold text-[#ff1818]">$ {food.price}</span>
                       </div>
-                      <p className="text-red-500 text-sm">
+                      <p className="text-[#ff1818] text-sm">
                         Delicious {food.foodName} from{" "}
                         <Link to={`/restaurantUpload/${food.restaurantName}`}>
                           <span className="font-bold">{food.restaurantName}</span>
@@ -456,14 +456,14 @@ const Coffee = () => {
                         {existingItem[food.foodName] ? (
                           <button
                             onClick={() => navigate("/dashboard/myOrder")}
-                            className="bg-[#ff0000d8] text-white px-4 py-2 rounded-lg hover:bg-red-700 transition-colors"
+                            className="bg-[#ff1818] text-white px-4 py-2 rounded-lg hover:bg-red-700 transition-colors"
                           >
                             View Cart
                           </button>
                         ) : (
                           <motion.button
                             onClick={() => showFoodOptions(food)}
-                            className="text-xl font-bold bg-[#ff0000d8] text-white rounded-full shadow-lg p-2 ml-auto hover:bg-red-700"
+                            className="text-xl font-bold bg-[#ff1818] text-white rounded-full shadow-lg p-2 ml-auto hover:bg-red-700"
                             whileHover={{ scale: 1.1 }}
                             whileTap={{ scale: 0.9 }}
                             aria-label={`Add ${food.foodName} to cart`}
@@ -482,7 +482,7 @@ const Coffee = () => {
             <p className="text-gray-500 text-lg">No Coffee items available.</p>
             <Link
               to="/restaurants"
-              className="mt-4 inline-block bg-[#ff0000d8] text-white px-6 py-2 rounded-lg hover:bg-red-700 transition-colors"
+              className="mt-4 inline-block bg-[#ff1818] text-white px-6 py-2 rounded-lg hover:bg-red-700 transition-colors"
             >
               Browse Other Restaurants
             </Link>

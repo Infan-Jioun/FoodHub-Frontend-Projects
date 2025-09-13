@@ -6,7 +6,7 @@ import { PiContactlessPaymentLight } from "react-icons/pi";
 
 const UserHome = () => {
   const { user } = useAuth();
-  const red = "#ff0000d8";
+  const red = "#ff1818";
 
   // Action buttons including new Payment History
   const actions = [
@@ -96,7 +96,7 @@ const UserHome = () => {
             </div>
             <div className="mt-10 text-center">
           <Link to={"/"}
-            className="bg-[#ff0000d8] hover:bg-[#ff0000] text-white font-semibold px-6 py-2 rounded-lg shadow transition duration-300"
+            className="bg-[#ff1818] hover:bg-[#ff0000] text-white font-semibold px-6 py-2 rounded-lg shadow transition duration-300"
           >
             Go to Home Page 
           </Link>
@@ -117,7 +117,7 @@ const UserHome = () => {
             </p>
             <button
               aria-label="Login Now"
-              className="bg-red-500 hover:bg-red-600 text-white px-6 py-2 rounded-lg transition focus:outline-none focus:ring-2 focus:ring-red-600"
+              className="bg-[#ff1818] hover:bg-red-600 text-white px-6 py-2 rounded-lg transition focus:outline-none focus:ring-2 focus:ring-red-600"
               onClick={() => alert("Redirect to login page")}
             >
               Login Now

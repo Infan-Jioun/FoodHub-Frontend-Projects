@@ -182,7 +182,7 @@ const CheckoutForm = () => {
                     onChange(sel?.value || "");
                     trigger(name);
                 }}
-                className={`text-[#ff1818] ${error ? 'border-red-500 rounded-md' : ''}`}
+                className={`text-[#ff1818] ${error ? 'border-[#ff1818] rounded-md' : ''}`}
                 classNamePrefix="select"
                 isLoading={isLoading}
                 noOptionsMessage={() => "No options found"}
@@ -195,7 +195,7 @@ const CheckoutForm = () => {
                     )
                 }}
             />
-            {error && <p className="text-red-500 text-xs mt-1">{error.message}</p>}
+            {error && <p className="text-[#ff1818] text-xs mt-1">{error.message}</p>}
         </div>
     );
 
@@ -223,7 +223,7 @@ const CheckoutForm = () => {
                                     error={!!errors.customerName}
                                 />
                                 {errors.customerName && (
-                                    <p className="text-red-500 text-xs mt-1">{errors.customerName.message}</p>
+                                    <p className="text-[#ff1818] text-xs mt-1">{errors.customerName.message}</p>
                                 )}
                             </div>
 
@@ -243,7 +243,7 @@ const CheckoutForm = () => {
                                     error={!!errors.contactNumber}
                                 />
                                 {errors.contactNumber && (
-                                    <p className="text-red-500 text-xs mt-1">{errors.contactNumber.message}</p>
+                                    <p className="text-[#ff1818] text-xs mt-1">{errors.contactNumber.message}</p>
                                 )}
                             </div>
 
@@ -335,7 +335,7 @@ const CheckoutForm = () => {
                                     error={!!errors.address}
                                 />
                                 {errors.address && (
-                                    <p className="text-red-500 text-xs mt-1">{errors.address.message}</p>
+                                    <p className="text-[#ff1818] text-xs mt-1">{errors.address.message}</p>
                                 )}
                             </div>
                         </div>
@@ -365,7 +365,7 @@ const CheckoutForm = () => {
                                                 </div>
                                                 <div className="flex justify-between mt-1">
                                                     <p className="text-sm text-gray-500">Qty: {item.quantity || 1}</p>
-                                                    <button type="button" className="text-red-500 hover:text-red-700" onClick={() => handleRemove(item._id)}>
+                                                    <button type="button" className="text-[#ff1818] hover:text-[#ff1818]" onClick={() => handleRemove(item._id)}>
                                                         <MdDeleteOutline size={18} />
                                                     </button>
                                                 </div>

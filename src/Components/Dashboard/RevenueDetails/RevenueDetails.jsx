@@ -8,7 +8,7 @@ import { MdFastfood, MdRestaurant } from 'react-icons/md';
 const RevenueDetails = () => {
     const { user } = useAuth();
     const axiosSecure = useAxiosSecure();
-    const red = '#ff0000d8';
+    const red = '#ff1818';
 
     // Fetch payment history for this restaurant
     const { data: paymentResponse = { data: [], totals: {} }, isLoading } = useQuery({

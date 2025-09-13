@@ -89,7 +89,7 @@ const AddDistrictCollection = () => {
           onSubmit={handleSubmit(onSubmit)}
           className="md:w-1/2 p-8 space-y-6"
         >
-          <h2 className="text-2xl font-bold text-red-600 mb-4">Add District</h2>
+          <h2 className="text-2xl font-bold text-[#ff1818] mb-4">Add District</h2>
 
           {/* District Dropdown */}
           <div>
@@ -120,14 +120,14 @@ const AddDistrictCollection = () => {
               ))}
             </select>
             {errors.districtName && (
-              <p className="text-sm text-red-600 mt-1">{errors.districtName.message}</p>
+              <p className="text-sm text-[#ff1818] mt-1">{errors.districtName.message}</p>
             )}
           </div>
 
           {/* Submit Button */}
           <button
             type="submit"
-            className="w-full bg-red-500 hover:bg-red-600 text-white font-semibold py-2 rounded-md transition shadow"
+            className="w-full bg-[#ff1818] hover:bg-red-600 text-white font-semibold py-2 rounded-md transition shadow"
           >
             Upload District
           </button>

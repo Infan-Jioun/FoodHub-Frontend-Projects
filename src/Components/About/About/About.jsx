@@ -41,7 +41,7 @@ const About = () => {
         variants={fadeUp}
       >
         <h1 className="text-4xl font-bold text-gray-800 mb-2">
-          Welcome to <span className="text-red-600">Foodhub</span>
+          Welcome to <span className="text-[#ff1818]">Foodhub</span>
         </h1>
         <p className="text-lg text-gray-600">
           Delivering joy, one meal at a time.
@@ -69,7 +69,7 @@ const About = () => {
           />
           <div>
             <div className="flex items-center gap-3 mb-4">
-              <FaUtensils className="text-red-600 text-2xl" />
+              <FaUtensils className="text-[#ff1818] text-2xl" />
               <h2 className="text-2xl font-semibold">What is Foodhub?</h2>
             </div>
             <p className="text-lg leading-relaxed">
@@ -90,7 +90,7 @@ const About = () => {
         >
           <div className="space-y-4">
             <div className="flex items-center gap-3 mb-4">
-              <FaBullseye className="text-red-600 text-2xl" />
+              <FaBullseye className="text-[#ff1818] text-2xl" />
               <h2 className="text-2xl font-semibold">Our Mission</h2>
             </div>
             <p className="text-lg leading-relaxed text-gray-700">
@@ -135,7 +135,7 @@ const About = () => {
           />
           <div className="space-y-4">
             <div className="flex items-center gap-3 mb-4">
-              <FaHistory className="text-red-600 text-2xl" />
+              <FaHistory className="text-[#ff1818] text-2xl" />
               <h2 className="text-2xl font-semibold">Our Journey</h2>
             </div>
             <p className="text-lg leading-relaxed">
@@ -160,7 +160,7 @@ const About = () => {
         >
           <div>
             <div className="flex items-center gap-3 mb-4">
-              <FaThumbsUp className="text-red-600 text-2xl" />
+              <FaThumbsUp className="text-[#ff1818] text-2xl" />
               <h2 className="text-2xl font-semibold">Why Choose Foodhub?</h2>
             </div>
             <ul className="list-disc list-inside text-lg space-y-2">
@@ -249,7 +249,7 @@ const About = () => {
       >
         <p className="text-lg font-medium text-gray-700">
           Thank you for choosing{" "}
-          <span className="text-red-600 font-bold">Foodhub</span> — where your
+          <span className="text-[#ff1818] font-bold">Foodhub</span> — where your
           next favorite meal is just a click away!
         </p>
       </motion.section>

@@ -12,7 +12,7 @@ const Restaurants = () => {
                 text="Your Favorite Restaurant"
                 delay={100}
                 animateBy="words"
-                className="mt-10 px-4 text-cente   font-bold drop-shadow-2xl text-[#ff0000d8]"
+                className="mt-10 px-4 text-cente   font-bold drop-shadow-2xl text-[#ff1818]"
             />
          </div>
             <RestaurantsCard />

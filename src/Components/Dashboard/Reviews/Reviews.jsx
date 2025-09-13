@@ -70,7 +70,7 @@ const Reviews = () => {
 
                 {isLoading ? (
                     <div className="text-center py-10">
-                        <div className="animate-spin rounded-full h-12 w-12 border-t-2 border-b-2 border-red-500 mx-auto"></div>
+                        <div className="animate-spin rounded-full h-12 w-12 border-t-2 border-b-2 border-[#ff1818] mx-auto"></div>
                         <p className="mt-4 text-gray-600">Loading reviews...</p>
                     </div>
                 ) : allReviews.length === 0 ? (
@@ -90,7 +90,7 @@ const Reviews = () => {
                                         />
                                     ) : (
                                         <div className="w-10 h-10 rounded-full bg-red-100 flex items-center justify-center">
-                                            <FaUser className="text-red-500" />
+                                            <FaUser className="text-[#ff1818]" />
                                         </div>
                                     )}
 
@@ -117,7 +117,7 @@ const Reviews = () => {
                                         {review.reply && (
                                             <div className="mt-3 pl-4 border-l-2 border-red-200">
                                                 <div className="flex items-center">
-                                                    <span className="font-semibold text-red-600 mr-2">
+                                                    <span className="font-semibold text-[#ff1818] mr-2">
                                                         Your reply:
                                                     </span>
                                                     <span className="text-xs text-gray-500">
@@ -142,7 +142,7 @@ const Reviews = () => {
                                                         <div className="flex space-x-2">
                                                             <button
                                                                 onClick={() => handleReply(review.foodName, review._id)}
-                                                                className="bg-red-500 hover:bg-red-600 text-white px-3 py-2 rounded-md flex items-center"
+                                                                className="bg-[#ff1818] hover:bg-red-600 text-white px-3 py-2 rounded-md flex items-center"
                                                             >
                                                                 <FaReply className="mr-1" />
                                                                 Send Reply
@@ -161,7 +161,7 @@ const Reviews = () => {
                                                 ) : (
                                                     <button
                                                         onClick={() => setReplyingTo(index)}
-                                                        className="text-red-500 hover:text-red-600 flex items-center text-sm"
+                                                        className="text-[#ff1818] hover:text-[#ff1818] flex items-center text-sm"
                                                     >
                                                         <FaReply className="mr-1" />
                                                         Reply to this review

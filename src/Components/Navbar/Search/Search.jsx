@@ -58,7 +58,7 @@ const Search = ({ searchQuery, setSearchQuery }) => {
       // First pass: Find matching restaurants and their foods
       restaurantData.forEach((restaurant) => {
         const restaurantMatch = restaurant.restaurantName.toLowerCase().includes(searchQuery.toLowerCase());
-        
+
         if (restaurantMatch) {
           restaurantResults.push({
             type: "restaurant",
@@ -68,7 +68,7 @@ const Search = ({ searchQuery, setSearchQuery }) => {
             photo: restaurant.photo || "/default-restaurant.png",
             foodCount: restaurant.foods?.length || 0
           });
-          
+
           // Add all foods from this restaurant to food results
           restaurant.foods?.forEach((food) => {
             foodResults.push({
@@ -82,7 +82,7 @@ const Search = ({ searchQuery, setSearchQuery }) => {
               fromMatchedRestaurant: true // Flag to indicate this food comes from a matched restaurant
             });
           });
-          
+
           matchedRestaurantIds.add(restaurant._id);
         }
       });
@@ -106,7 +106,7 @@ const Search = ({ searchQuery, setSearchQuery }) => {
               foodId: food._id,
               fromMatchedRestaurant: false
             });
-            
+
             // Also add the restaurant to restaurant results if it's not already there
             if (!restaurantResults.some(r => r.restaurantId === restaurant._id)) {
               restaurantResults.push({
@@ -185,7 +185,7 @@ const Search = ({ searchQuery, setSearchQuery }) => {
   return (
     <div className="relative w-full" ref={searchRef}>
       <div className="flex items-center bg-white backdrop-blur-md border border-red-300 rounded-full shadow-lg hover:shadow-xl transition-all duration-300 relative">
-        <IoSearch className="absolute left-4 text-red-500 text-xl" />
+        <IoSearch className="absolute left-4 text-[#ff1818] text-xl" />
         <input
           type="text"
           placeholder={text}
@@ -200,12 +200,12 @@ const Search = ({ searchQuery, setSearchQuery }) => {
           }}
           onFocus={handleFocus}
           onBlur={handleBlur}
-          className="w-[240px] lg:w-[500px] pl-12 pr-10 py-2 border-2 border-[#ff0000d8] rounded-full bg-white text-red-500 placeholder-red-400 font-medium text-lg outline-none  transition-all duration-300"
+          className="w-[240px] lg:w-[500px] pl-12 pr-10 py-2 border-2 border-[#ff1818] rounded-full bg-white text-[#ff1818] placeholder-[#ff1818] font-medium text-[16px] outline-none  transition-all duration-300"
         />
         {searchQuery && (
           <button
             onClick={handleClear}
-            className="absolute right-3 text-gray-400 hover:text-red-500 transition"
+            className="absolute right-3 text-gray-400 hover:text-[#ff1818] transition"
           >
             <IoClose size={20} />
           </button>
@@ -232,7 +232,7 @@ const Search = ({ searchQuery, setSearchQuery }) => {
                     <span className="text-gray-700">{term}</span>
                   </div>
                   <button
-                    className="text-gray-400 hover:text-red-500 p-1 rounded-full"
+                    className="text-gray-400 hover:text-[#ff1818] p-1 rounded-full"
                     onClick={(e) => handleDeleteRecent(term, e)}
                   >
                     <IoClose size={16} />
@@ -246,7 +246,7 @@ const Search = ({ searchQuery, setSearchQuery }) => {
                 <div className="flex border-b border-red-200">
                   <button
                     className={`flex-1 py-2 text-center text-[10px] lg:text-[20px] font-semibold ${activeTab === "restaurants"
-                      ? "border-b-2 border-red-500 text-red-600"
+                      ? "border-b-2 border-[#ff1818] text-[#ff1818]"
                       : "text-gray-500"
                       } transition-colors duration-300`}
                     onClick={() => setActiveTab("restaurants")}
@@ -255,7 +255,7 @@ const Search = ({ searchQuery, setSearchQuery }) => {
                   </button>
                   <button
                     className={`flex-1 py-2 text-center font-semibold text-[10px] lg:text-[20px]  ${activeTab === "foods"
-                      ? "border-b-2 border-red-500 text-red-600"
+                      ? "border-b-2 border-[#ff1818] text-[#ff1818]"
                       : "text-gray-500"
                       } transition-colors duration-300`}
                     onClick={() => setActiveTab("foods")}
@@ -281,8 +281,8 @@ const Search = ({ searchQuery, setSearchQuery }) => {
                             />
                             <div className="flex-1">
                               <div className="flex justify-between items-start">
-                                <p className="font-bold text-red-600 text-[10px] lg:text-[20px] ">{highlight(r.restaurantName)}</p>
-                                <span className="text-xs bg-red-100 text-red-600 px-2 py-1 rounded-full">
+                                <p className="font-bold text-[#ff1818] text-[10px] lg:text-[20px] ">{highlight(r.restaurantName)}</p>
+                                <span className="text-xs bg-red-100 text-[#ff1818] px-2 py-1 rounded-full">
                                   {r.foodCount} foods
                                 </span>
                               </div>
@@ -315,11 +315,11 @@ const Search = ({ searchQuery, setSearchQuery }) => {
                               className="w-12 h-12 rounded-full sm:block hidden object-cover mr-3"
                             />
                             <div className="flex-1">
-                              <p className="font-bold text-red-600 text-[10px] lg:text-[20px] ">{highlight(r.foodName)}</p>
+                              <p className="font-bold text-[#ff1818] text-[10px] lg:text-[20px] ">{highlight(r.foodName)}</p>
                               <p className="text-gray-700 text-sm">{r.foodCategory}</p>
                               <div className="flex items-center mt-1">
                                 <span className="text-xs text-gray-500 mr-1">from</span>
-                                <span className="text-xs font-medium text-red-500">{r.restaurantName}</span>
+                                <span className="text-xs font-medium text-[#ff1818]">{r.restaurantName}</span>
                               </div>
                               {r.fromMatchedRestaurant && (
                                 <p className="text-xs text-green-600 mt-1">

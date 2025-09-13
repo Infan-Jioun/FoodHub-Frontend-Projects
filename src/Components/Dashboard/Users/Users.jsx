@@ -95,7 +95,7 @@ const Users = () => {
       text: "User will be permanently deleted.",
       icon: "warning",
       showCancelButton: true,
-      confirmButtonColor: "#ff0000d8",
+      confirmButtonColor: "#ff1818",
       cancelButtonColor: "#d33",
       confirmButtonText: "Yes, delete it!",
     }).then((result) => {
@@ -150,20 +150,20 @@ const Users = () => {
     <div className="p-4 font-Kanit">
       {/* Header */}
       <div className="mb-6 flex flex-col md:flex-row items-center justify-between gap-4">
-        <h2 className="text-2xl font-bold text-[#ff0000d8] flex items-center gap-2">
+        <h2 className="text-2xl font-bold text-[#ff1818] flex items-center gap-2">
           Manage Users{" "}
           <CountUp from={0} to={users.length} separator="," duration={2} className="text-4xl" />
         </h2>
         <div className="w-full md:w-60 relative">
           <Input
             type="text"
-            className="pl-5 text-[#ff0000d8] font-semibold"
+            className="pl-5 text-[#ff1818] font-semibold"
             label="Search Users"
             color="red"
             value={searchInput}
             onChange={(e) => setSearchInput(e.target.value)}
           />
-          <MagnifyingGlassIcon className="absolute h-4 w-4 text-[#ff0000d8] top-3 right-4" />
+          <MagnifyingGlassIcon className="absolute h-4 w-4 text-[#ff1818] top-3 right-4" />
         </div>
       </div>
 
@@ -174,8 +174,8 @@ const Users = () => {
             key={tab}
             className={`px-4 py-1 rounded-full text-sm font-medium transition ${
               activeTab === tab
-                ? "bg-[#ff0000d8] text-white shadow-sm"
-                : "bg-gray-100 text-[#ff0000d8] hover:bg-[#ffecec]"
+                ? "bg-[#ff1818] text-white shadow-sm"
+                : "bg-gray-100 text-[#ff1818] hover:bg-[#ffecec]"
             }`}
             onClick={() => setActiveTab(tab)}
           >
@@ -204,10 +204,10 @@ const Users = () => {
                   <img
                     src={user.photo || "https://i.ibb.co/PGwHS087/profile-Imagw.jpg"}
                     alt="profile"
-                    className="w-14 h-14 rounded-full object-cover border-2 border-[#ff0000d8]"
+                    className="w-14 h-14 rounded-full object-cover border-2 border-[#ff1818]"
                   />
                   <div className="flex-1 space-y-1">
-                    <p className="font-semibold text-[#ff0000d8] hover:underline text-lg">
+                    <p className="font-semibold text-[#ff1818] hover:underline text-lg">
                       {user.name}
                     </p>
                     <p className="text-sm text-gray-600">{user.email}</p>
@@ -231,13 +231,13 @@ const Users = () => {
                 </div>
                 <div className="mt-4 flex justify-between items-center">
                   <button
-                    className="btn btn-sm bg-red-100 text-red-500 hover:bg-red-200"
+                    className="btn btn-sm bg-red-100 text-[#ff1818] hover:bg-red-200"
                     onClick={() => handleDelete(user._id)}
                   >
                     <AiOutlineUserDelete size={18} />
                   </button>
                   <button
-                    className="btn btn-sm bg-gray-100 text-[#ff0000d8] hover:bg-[#ffecec] "
+                    className="btn btn-sm bg-gray-100 text-[#ff1818] hover:bg-[#ffecec] "
                     onClick={() => openRoleModal(user)}
                   >
                     {user.role ? user.role.charAt(0).toUpperCase() + user.role.slice(1) : "User"}
@@ -251,14 +251,14 @@ const Users = () => {
           <div className="flex flex-col items-center mt-6 gap-2">
             <div className="join grid grid-cols-2">
               <button
-                className="join-item btn btn-outline bg-[#ff0000d8] hover:bg-[#ff0000d8] text-white"
+                className="join-item btn btn-outline bg-[#ff1818] hover:bg-[#ff1818] text-white"
                 onClick={() => setCurrentPage((prev) => Math.max(prev - 1, 1))}
                 disabled={currentPage === 1}
               >
                 Previous
               </button>
               <button
-                className="join-item btn btn-outline bg-[#ff0000d8] hover:bg-[#ff0000d8] text-white"
+                className="join-item btn btn-outline bg-[#ff1818] hover:bg-[#ff1818] text-white"
                 onClick={() => setCurrentPage((prev) => Math.min(prev + 1, totalPages))}
                 disabled={currentPage === totalPages}
               >
@@ -274,11 +274,11 @@ const Users = () => {
 
       {/* Role Modal */}
       <dialog id="role_modal" className="modal">
-        <div className="modal-box rounded-xl shadow-lg bg-white text-[#ff0000d8]">
+        <div className="modal-box rounded-xl shadow-lg bg-white text-[#ff1818]">
           <form method="dialog">
             <button className="btn btn-sm btn-circle btn-ghost absolute right-2 top-2">✕</button>
           </form>
-          <h3 className="font-bold text-lg mb-4 text-[#ff0000d8]">Change User Role</h3>
+          <h3 className="font-bold text-lg mb-4 text-[#ff1818]">Change User Role</h3>
           <div className="grid gap-3">
             {["user", "admin", "moderator", "owner"].map((roleOption) => {
               const isAllowed =
@@ -295,8 +295,8 @@ const Users = () => {
                   }}
                   className={`btn capitalize ${
                     selectedUserRole === roleOption
-                      ? "bg-[#ff0000d8] text-[#ff0000d8] "
-                      : "text-[#ff0000d8] btn-outline"
+                      ? "bg-[#ff1818] text-[#ff1818] "
+                      : "text-[#ff1818] btn-outline"
                   }`}
                 >
                   {selectedUserRole === roleOption ? "✓ " : ""} Make{" "}

@@ -51,7 +51,7 @@ const FoodReviewModal = ({ open, onClose, payment }) => {
   return (
     <Dialog open={open} handler={onClose} size="md" className="rounded-xl shadow-xl">
       <DialogHeader className="flex flex-col items-center border-b border-gray-200 pb-4 bg-gray-50 rounded-t-xl">
-        <div className="text-2xl font-bold text-[#ff0000d8]">Food Review</div>
+        <div className="text-2xl font-bold text-[#ff1818]">Food Review</div>
         <div className="text-sm text-gray-500 mt-1">Rate your ordered items</div>
       </DialogHeader>
       
@@ -73,7 +73,7 @@ const FoodReviewModal = ({ open, onClose, payment }) => {
                   <p className="text-sm text-gray-500 flex items-center mt-1">
                     <svg 
                       xmlns="http://www.w3.org/2000/svg" 
-                      className="h-4 w-4 mr-1 text-[#ff0000d8]" 
+                      className="h-4 w-4 mr-1 text-[#ff1818]" 
                       viewBox="0 0 20 20" 
                       fill="currentColor"
                     >
@@ -97,7 +97,7 @@ const FoodReviewModal = ({ open, onClose, payment }) => {
                   value={ratings[item.foodName] || 0}
                   onChange={(value) => setRatings({ ...ratings, [item.foodName]: value })}
                   readonly={alreadyReviewed}
-                  ratedColor="#ff0000d8"
+                  ratedColor="#ff1818"
                   className="flex gap-1"
                 />
                 {ratings[item.foodName] ? (
@@ -108,10 +108,10 @@ const FoodReviewModal = ({ open, onClose, payment }) => {
               </div>
               
               <textarea
-                className={`w-full border rounded-lg p-3 text-sm focus:ring-2 focus:ring-[#ff0000d8] focus:border-transparent transition-all ${
+                className={`w-full border rounded-lg p-3 text-sm focus:ring-2 focus:ring-[#ff1818] focus:border-transparent transition-all ${
                   alreadyReviewed 
                     ? "bg-gray-100 border-gray-200 text-gray-500 cursor-not-allowed" 
-                    : "bg-white border-gray-300 text-gray-700 hover:border-[#ff0000d8]"
+                    : "bg-white border-gray-300 text-gray-700 hover:border-[#ff1818]"
                 }`}
                 rows="3"
                 placeholder={alreadyReviewed ? "Your review has been submitted" : "Share your honest feedback about this dish..."}
@@ -134,7 +134,7 @@ const FoodReviewModal = ({ open, onClose, payment }) => {
         </Button>
         <Button
           onClick={handleSubmit}
-          className={`bg-[#ff0000d8] hover:bg-[#e60000] text-white shadow-md hover:shadow-lg transition-all ${
+          className={`bg-[#ff1818] hover:bg-[#e60000] text-white shadow-md hover:shadow-lg transition-all ${
             Object.keys(ratings).length === 0 ? "opacity-70 cursor-not-allowed" : ""
           }`}
           disabled={Object.keys(ratings).length === 0}

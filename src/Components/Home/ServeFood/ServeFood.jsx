@@ -29,7 +29,7 @@ const ServeFood = () => {
         {/* Overlay Content */}
         <div className="absolute inset-0 bg-black bg-opacity-50 flex justify-center items-center text-center px-4">
           <motion.div
-            className="w-full max-w-[400px] md:max-w-3xl rounded-3xl bg-[#ff0000d8] p-6 md:p-10"
+            className="w-full max-w-[400px] md:max-w-3xl rounded-3xl bg-[#ff1818] p-6 md:p-10"
             initial={{ opacity: 0, y: 30 }}
             animate={{ opacity: 1, y: 0 }}
             transition={{ duration: 0.8, ease: "easeOut" }}

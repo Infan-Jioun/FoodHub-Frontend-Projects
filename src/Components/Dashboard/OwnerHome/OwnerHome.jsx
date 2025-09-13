@@ -18,7 +18,7 @@ const OwnerHome = () => {
   const { user } = useAuth();
   const axiosSecure = useAxiosSecure();
   const location = useLocation();
-  const red = '#ff0000d8';
+  const red = '#ff1818';
 
   const isOwnerHome = location.pathname === '/dashboard/ownerHome';
 
@@ -184,7 +184,7 @@ const OwnerHome = () => {
         <div className="mt-10 text-center">
           <Link
             to="/"
-            className="bg-[#ff0000d8] hover:bg-[#ff0000] text-white font-semibold px-6 py-2 rounded-lg shadow transition duration-300"
+            className="bg-[#ff1818] hover:bg-[#ff0000] text-white font-semibold px-6 py-2 rounded-lg shadow transition duration-300"
           >
             Go to Home Page
           </Link>

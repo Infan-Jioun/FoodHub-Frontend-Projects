@@ -74,7 +74,7 @@ const RestaurantReviewModal = ({ open, onClose, payment }) => {
     className="rounded-lg"
   >
     <DialogHeader className="flex flex-col items-center border-b border-gray-200 pb-4">
-      <div className="text-xl font-bold text-[#ff0000d8]">Rate Your Experience</div>
+      <div className="text-xl font-bold text-[#ff1818]">Rate Your Experience</div>
       <div className="text-xs text-gray-500 mt-1">How was your visit to this restaurant?</div>
     </DialogHeader>
     
@@ -84,7 +84,7 @@ const RestaurantReviewModal = ({ open, onClose, payment }) => {
         <div className="flex items-center justify-center mt-1">
           <svg 
             xmlns="http://www.w3.org/2000/svg" 
-            className="h-4 w-4 text-[#ff0000d8] mr-1" 
+            className="h-4 w-4 text-[#ff1818] mr-1" 
             viewBox="0 0 20 20" 
             fill="currentColor"
           >
@@ -103,7 +103,7 @@ const RestaurantReviewModal = ({ open, onClose, payment }) => {
           value={rating}
           onChange={(val) => setRating(val)}
           readonly={alreadyReviewed}
-          ratedColor="#ff0000d8"
+          ratedColor="#ff1818"
           className="flex gap-1 text-2xl"
         />
         {rating > 0 && (
@@ -114,7 +114,7 @@ const RestaurantReviewModal = ({ open, onClose, payment }) => {
       </div>
   
       <textarea
-        className={`w-full border rounded-lg p-3 text-sm focus:ring-2 focus:ring-[#ff0000d8] focus:border-transparent ${
+        className={`w-full border rounded-lg p-3 text-sm focus:ring-2 focus:ring-[#ff1818] focus:border-transparent ${
           alreadyReviewed 
             ? "bg-gray-100 border-gray-200 text-gray-500" 
             : "bg-white border-gray-300 text-gray-700"
@@ -162,7 +162,7 @@ const RestaurantReviewModal = ({ open, onClose, payment }) => {
       {!alreadyReviewed && (
         <Button 
           onClick={handleSubmit}
-          className={`bg-[#ff0000d8] hover:bg-[#e60000] text-white shadow-md ${
+          className={`bg-[#ff1818] hover:bg-[#e60000] text-white shadow-md ${
             rating === 0 ? "opacity-70 cursor-not-allowed" : ""
           }`}
           disabled={rating === 0}

@@ -72,11 +72,12 @@ const Login = () => {
                 <Input
                   size="lg"
                   type="email"
+                  color="red"
                   label="Email"
                   {...register("email", { required: true })}
                 />
                 {errors.email && (
-                  <span className="text-red-600 text-sm font-medium">Email is required</span>
+                  <span className="text-[#ff1818] text-sm font-medium">Email is required</span>
                 )}
               </div>
 

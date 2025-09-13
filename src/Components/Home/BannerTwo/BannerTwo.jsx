@@ -43,7 +43,7 @@ const BannerTwo = () => {
             </p>
             <div className="w-60">
               <Link to="https://foodhub-d3e1e.web.app/restaurantUpload/7dayz">
-                <button className="rounded mt-5 border-2 p-3 px-3 border-red-500 bg-[#ff0000d8] text-white font-semibold hover:transition-colors hover:bg-white hover:text-red-600">
+                <button className="rounded mt-5 border-2 p-3 px-3 border-[#ff1818] bg-[#ff1818] text-white font-semibold hover:transition-colors hover:bg-white hover:text-[#ff1818]">
                   BOOK A FOOD
                 </button>
               </Link>

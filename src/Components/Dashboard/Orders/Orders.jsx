@@ -1,7 +1,7 @@
 import React from 'react';
 import useRestaurantOrders from '../../Hooks/useRestaurantOrders';
 
-const red = '#ff0000d8';
+const red = '#ff1818';
 
 const Orders = () => {
   const { data: orders = [], isLoading } = useRestaurantOrders();
@@ -26,7 +26,7 @@ const Orders = () => {
         ) : (
           <div className="overflow-x-auto">
             <table className="min-w-full border rounded-lg overflow-hidden text-sm">
-              <thead className="bg-[#ff0000d8] text-white">
+              <thead className="bg-[#ff1818] text-white">
                 <tr>
                   <th className="py-3 px-4 text-left">#</th>
                   <th className="py-3 px-4 text-left">Customer</th>
@@ -55,7 +55,7 @@ const Orders = () => {
                       </td>
                       <td className="py-3 px-4">{totalQty}</td>
                       <td className="py-3 px-4 capitalize font-medium text-gray-700">
-                        <span className="inline-block px-2 py-1 rounded-full bg-red-100 text-red-700 text-xs">
+                        <span className="inline-block px-2 py-1 rounded-full bg-red-100 text-[#ff1818] text-xs">
                           {order.status}
                         </span>
                       </td>

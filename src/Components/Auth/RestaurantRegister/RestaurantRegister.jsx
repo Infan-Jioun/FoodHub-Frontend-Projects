@@ -91,7 +91,7 @@ import {
                     {...register("displayName", { required: true })}
                   />
                   {errors.displayName && (
-                    <span className="text-red-500 text-sm">This field is required</span>
+                    <span className="text-[#ff1818] text-sm">This field is required</span>
                   )}
                 </div>
   
@@ -104,7 +104,7 @@ import {
                     {...register("email", { required: true })}
                   />
                   {errors.email && (
-                    <span className="text-red-500 text-sm">This field is required</span>
+                    <span className="text-[#ff1818] text-sm">This field is required</span>
                   )}
                 </div>
   
@@ -116,7 +116,7 @@ import {
                     {...register("restaurantAddress", { required: true })}
                   />
                   {errors.restaurantAddress && (
-                    <span className="text-red-500 text-sm">This field is required</span>
+                    <span className="text-[#ff1818] text-sm">This field is required</span>
                   )}
                 </div>
   
@@ -129,7 +129,7 @@ import {
                     {...register("phoneNumber", { required: true })}
                   />
                   {errors.phoneNumber && (
-                    <span className="text-red-500 text-sm">This field is required</span>
+                    <span className="text-[#ff1818] text-sm">This field is required</span>
                   )}
                 </div>
   
@@ -162,25 +162,25 @@ import {
   
                 {/* File Upload (optional section) */}
                 {/* <div>
-                  <label className="block text-sm font-bold text-red-500">Logo (300×300)</label>
+                  <label className="block text-sm font-bold text-[#ff1818]">Logo (300×300)</label>
                   <input
                     type="file"
                     accept="image/*"
                     {...register("photo", { required: true })}
                     className="file-input file-input-ghost w-full"
                   />
-                  {errors.photo && <span className="text-red-500 text-sm">Logo is required</span>}
+                  {errors.photo && <span className="text-[#ff1818] text-sm">Logo is required</span>}
                 </div>
   
                 <div>
-                  <label className="block text-sm font-bold text-red-500">Banner (1080×1080)</label>
+                  <label className="block text-sm font-bold text-[#ff1818]">Banner (1080×1080)</label>
                   <input
                     type="file"
                     accept="image/*"
                     {...register("banner", { required: true })}
                     className="file-input file-input-ghost w-full"
                   />
-                  {errors.banner && <span className="text-red-500 text-sm">Banner is required</span>}
+                  {errors.banner && <span className="text-[#ff1818] text-sm">Banner is required</span>}
                 </div> */}
   
                 {/* Submit */}

@@ -2,7 +2,7 @@ import facebook from '../../assets/facebook-1-svgrepo-com.svg';
 
 const Footer = () => {
   return (
-    <footer className="bg-[#ff0000d8] text-white p-10">
+    <footer className="bg-[#ff1818] text-white p-10">
       <div className="max-w-7xl mx-auto grid grid-cols-1 md:grid-cols-4 gap-8">
         
         {/* Branding & About */}

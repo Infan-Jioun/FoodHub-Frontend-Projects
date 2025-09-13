@@ -45,8 +45,8 @@ const Dashboard = () => {
         <div className="flex justify-between items-center px-6 py-4">
           {/* Role-Based Dashboard Title */}
           <Link to={getDashboardRoute()} className="flex items-center gap-2">
-            <RiHome9Line size={28} className="text-red-500" />
-            <Typography className="text-[15px] lg:text-2xl font-extrabold text-red-600 font-Kanit uppercase">
+            <RiHome9Line size={28} className="text-[#ff1818]" />
+            <Typography className="text-[15px] lg:text-2xl font-extrabold text-[#ff1818] font-Kanit uppercase">
               {getDashboardRoleLabel()}
             </Typography>
           </Link>

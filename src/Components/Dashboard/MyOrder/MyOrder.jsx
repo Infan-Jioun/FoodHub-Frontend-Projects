@@ -66,7 +66,7 @@ const MyOrder = () => {
         text: "You won't be able to revert this!",
         icon: "warning",
         showCancelButton: true,
-        confirmButtonColor: "#ff0000d8",
+        confirmButtonColor: "#ff1818",
         cancelButtonColor: "#d33",
         confirmButtonText: "Yes, delete it!",
       }).then((result) => {
@@ -78,7 +78,7 @@ const MyOrder = () => {
                 title: "Deleted!",
                 text: "Your item has been removed.",
                 icon: "success",
-                confirmButtonColor: "#ff0000d8",
+                confirmButtonColor: "#ff1818",
               });
             }
           });
@@ -103,7 +103,7 @@ const MyOrder = () => {
           <div className="hidden md:block overflow-x-auto">
             <table className="w-full table-auto border-collapse text-sm md:text-base">
               <thead>
-                <tr className="bg-[#ff0000d8] text-white rounded-t-lg">
+                <tr className="bg-[#ff1818] text-white rounded-t-lg">
                   <th className="py-3 px-4 text-left rounded-tl-lg">Product</th>
                   <th className="py-3 px-4 text-center">Quantity</th>
                   <th className="py-3 px-4 text-right rounded-tr-lg">Subtotal</th>
@@ -124,7 +124,7 @@ const MyOrder = () => {
                         />
                       </div>
                       <div>
-                        <p className="font-semibold text-[#ff0000d8] text-lg">
+                        <p className="font-semibold text-[#ff1818] text-lg">
                           {item.foodName}
                         </p>
                         <p className="text-gray-600 mt-1">
@@ -132,7 +132,7 @@ const MyOrder = () => {
                         </p>
                         <button
                           onClick={() => handleRemove(item._id)}
-                          className="flex items-center text-[#ff0000d8] mt-2 hover:underline text-sm font-medium"
+                          className="flex items-center text-[#ff1818] mt-2 hover:underline text-sm font-medium"
                         >
                           <MdDeleteOutline size={20} />
                           <span className="ml-1">Remove</span>
@@ -145,7 +145,7 @@ const MyOrder = () => {
                           type="button"
                           onClick={() => handleDecrement(item._id)}
                           disabled={isUpdating}
-                          className={`px-3 py-1 text-xl font-bold text-[#ff0000d8] hover:bg-[#ff0000d8] hover:text-white transition ${
+                          className={`px-3 py-1 text-xl font-bold text-[#ff1818] hover:bg-[#ff1818] hover:text-white transition ${
                             isUpdating ? "opacity-50 cursor-not-allowed" : ""
                           }`}
                         >
@@ -159,14 +159,14 @@ const MyOrder = () => {
                           onChange={(e) =>
                             handleQuantityChange(item._id, e.target.value)
                           }
-                          className="w-10  text-center font-semibold bg-white text-[#ff0000d8] focus:outline-none"
+                          className="w-10  text-center font-semibold bg-white text-[#ff1818] focus:outline-none"
                           disabled={isUpdating}
                         />
                         <button
                           type="button"
                           onClick={() => handleIncrement(item._id)}
                           disabled={isUpdating}
-                          className={`px-3 py-1 text-xl font-bold text-[#ff0000d8] hover:bg-[#ff0000d8] hover:text-white transition ${
+                          className={`px-3 py-1 text-xl font-bold text-[#ff1818] hover:bg-[#ff1818] hover:text-white transition ${
                             isUpdating ? "opacity-50 cursor-not-allowed" : ""
                           }`}
                         >
@@ -174,7 +174,7 @@ const MyOrder = () => {
                         </button>
                       </div>
                     </td>
-                    <td className="text-right font-semibold text-[#ff0000d8] py-4 px-4">
+                    <td className="text-right font-semibold text-[#ff1818] py-4 px-4">
                       ${(item.foodPrice * (quantities[item._id] || 1)).toFixed(2)}
                     </td>
                   </tr>
@@ -199,7 +199,7 @@ const MyOrder = () => {
                     />
                   </div>
                   <div className="flex-grow">
-                    <p className="font-semibold text-[#ff0000d8] text-lg truncate">
+                    <p className="font-semibold text-[#ff1818] text-lg truncate">
                       {item.foodName}
                     </p>
                     <p className="text-gray-600 mt-1">
@@ -208,7 +208,7 @@ const MyOrder = () => {
                   </div>
                   <button
                     onClick={() => handleRemove(item._id)}
-                    className="text-[#ff0000d8] hover:text-red-700 transition"
+                    className="text-[#ff1818] hover:text-[#ff1818] transition"
                     aria-label={`Remove ${item.foodName}`}
                   >
                     <MdDeleteOutline size={24} />
@@ -220,7 +220,7 @@ const MyOrder = () => {
                       type="button"
                       onClick={() => handleDecrement(item._id)}
                       disabled={isUpdating}
-                      className={`px-3 py-1 text-xl font-bold text-[#ff0000d8] hover:bg-[#ff0000d8] hover:text-white transition ${
+                      className={`px-3 py-1 text-xl font-bold text-[#ff1818] hover:bg-[#ff1818] hover:text-white transition ${
                         isUpdating ? "opacity-50 cursor-not-allowed" : ""
                       }`}
                     >
@@ -234,21 +234,21 @@ const MyOrder = () => {
                       onChange={(e) =>
                         handleQuantityChange(item._id, e.target.value)
                       }
-                      className="w-16 text-center font-semibold text-[#ff0000d8] focus:outline-none"
+                      className="w-16 text-center font-semibold text-[#ff1818] focus:outline-none"
                       disabled={isUpdating}
                     />
                     <button
                       type="button"
                       onClick={() => handleIncrement(item._id)}
                       disabled={isUpdating}
-                      className={`px-3 py-1 text-xl font-bold text-[#ff0000d8] hover:bg-[#ff0000d8] hover:text-white transition ${
+                      className={`px-3 py-1 text-xl font-bold text-[#ff1818] hover:bg-[#ff1818] hover:text-white transition ${
                         isUpdating ? "opacity-50 cursor-not-allowed" : ""
                       }`}
                     >
                       +
                     </button>
                   </div>
-                  <div className="font-semibold text-[#ff0000d8] text-lg">
+                  <div className="font-semibold text-[#ff1818] text-lg">
                     ${(item.foodPrice * (quantities[item._id] || 1)).toFixed(2)}
                   </div>
                 </div>
@@ -258,17 +258,17 @@ const MyOrder = () => {
 
           {/* Order Summary */}
           <div className="max-w-md mx-auto mt-10 p-6 bg-[#fff0f0] rounded-lg shadow-md text-gray-800">
-            <h3 className="text-xl font-semibold mb-4 text-[#ff0000d8]">Order Summary</h3>
+            <h3 className="text-xl font-semibold mb-4 text-[#ff1818]">Order Summary</h3>
             <div className="flex justify-between mb-2">
               <span>Subtotal</span>
               <span>${subtotal.toFixed(2)}</span>
             </div>
-            <div className="flex justify-between mb-2 text-red-600">
+            <div className="flex justify-between mb-2 text-[#ff1818]">
               <span>Discount (15%)</span>
               <span>- ${discount.toFixed(2)}</span>
             </div>
             <hr className="border-red-300 mb-3" />
-            <div className="flex justify-between font-bold text-[#ff0000d8] text-lg">
+            <div className="flex justify-between font-bold text-[#ff1818] text-lg">
               <span>Total</span>
               <span>${total.toFixed(2)}</span>
             </div>
@@ -277,7 +277,7 @@ const MyOrder = () => {
           {/* Checkout Button */}
           <div className="max-w-md mx-auto mt-6 px-4">
             <Link to={"/dashboard/checkOutForm"}>
-              <button className="w-full bg-[#ff0000d8] hover:bg-[#e60000] text-white font-semibold py-3 rounded-lg transition">
+              <button className="w-full bg-[#ff1818] hover:bg-[#e60000] text-white font-semibold py-3 rounded-lg transition">
                 Confirm Order
               </button>
             </Link>
@@ -290,10 +290,10 @@ const MyOrder = () => {
             src="https://i.ibb.co/88JDM0z/remove-from-cart-12316609.png"
             alt="Empty cart"
           />
-          <p className="text-xl font-bold text-[#ff0000d8] mb-2">Your cart is empty</p>
+          <p className="text-xl font-bold text-[#ff1818] mb-2">Your cart is empty</p>
           <p className="mb-4">Continue shopping to add delicious foods!</p>
           <Link to={"/"}>
-            <button className="border-2 border-[#ff0000d8] text-[#ff0000d8] px-6 py-2 rounded-lg hover:bg-[#ff0000d8] hover:text-white transition">
+            <button className="border-2 border-[#ff1818] text-[#ff1818] px-6 py-2 rounded-lg hover:bg-[#ff1818] hover:text-white transition">
               EXPLORE
             </button>
           </Link>

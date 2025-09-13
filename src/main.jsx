@@ -37,8 +37,8 @@ class ErrorBoundary extends React.Component {
     if (this.state.hasError) {
       return (
         <div className="flex flex-col items-center justify-center min-h-screen bg-red-50 p-4 text-center">
-          <FiAlertCircle className="text-red-500 text-5xl mb-4" />
-          <Typography variant="h4" className="text-red-600 mb-2">
+          <FiAlertCircle className="text-[#ff1818] text-5xl mb-4" />
+          <Typography variant="h4" className="text-[#ff1818] mb-2">
             Oops! Something went wrong.
           </Typography>
           <Typography className="text-gray-700 mb-6">
@@ -73,9 +73,9 @@ const OfflineDetector = () => {
       <motion.div
         initial={{ y: 50, opacity: 0 }}
         animate={{ y: 0, opacity: 1 }}
-        className=" bg-red-100 border-l-4 border-red-500 text-red-700 p-4 rounded-lg shadow-lg flex items-start"
+        className=" bg-red-100 border-l-4 border-[#ff1818] text-[#ff1818] p-4 rounded-lg shadow-lg flex items-start"
       >
-        <FiWifiOff className="text-red-500 text-xl  mr-3 mt-0.5" />
+        <FiWifiOff className="text-[#ff1818] text-xl  mr-3 mt-0.5" />
         <div>
           <p className="font-bold">You're offline</p>
           <p className="text-sm">Some features may not work</p>
@@ -100,7 +100,7 @@ const Loader = () => (
       transition={{ duration: 1.5, repeat: Infinity }}
     />
     <motion.div
-      className="mt-6 text-lg font-semibold text-red-600"
+      className="mt-6 text-lg font-semibold text-[#ff1818]"
       animate={{ opacity: [0.5, 1, 0.5] }}
       transition={{ duration: 1.5, repeat: Infinity }}
     >
@@ -160,22 +160,22 @@ const AppWithLoader = () => {
                 </Typography>
               </div>
               <div className="bg-red-50 rounded-lg p-4 mb-2">
-                <Typography variant="h6" className="text-red-600">Admin</Typography>
+                <Typography variant="h6" className="text-[#ff1818]">Admin</Typography>
                 <Typography className="text-sm">Email: foodhub@admin.com | Pass: 12345678</Typography>
               </div>
               <div className="bg-red-50 rounded-lg p-4 mb-2">
-                <Typography variant="h6" className="text-red-600">Moderator</Typography>
+                <Typography variant="h6" className="text-[#ff1818]">Moderator</Typography>
                 <Typography className="text-sm">Email: foodhub@moderator.com | Pass: 12345678</Typography>
               </div>
               <div className="bg-red-50 rounded-lg p-4">
-                <Typography variant="h6" className="text-red-600">Restaurant</Typography>
+                <Typography variant="h6" className="text-[#ff1818]">Restaurant</Typography>
                 <Typography className="text-sm">Email: 7dayz@restaurant.com | Pass: 12345678</Typography>
               </div>
             </DialogBody>
             <DialogFooter>
               <Button
                 onClick={() => setShowModal(false)}
-                className="bg-red-500 hover:bg-red-600 text-white w-full flex justify-center items-center gap-2"
+                className="bg-[#ff1818] hover:bg-red-600 text-white w-full flex justify-center items-center gap-2"
               >
                 Get Started <FiArrowRight />
               </Button>

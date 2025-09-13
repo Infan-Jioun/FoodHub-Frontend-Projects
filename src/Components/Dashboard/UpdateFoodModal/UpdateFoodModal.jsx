@@ -137,7 +137,7 @@ const UpdateFoodModal = ({ restaurantName, food, refetch, onClose }) => {
             <h3 className="text-2xl font-bold text-gray-800">Update Food Item</h3>
             <button 
               onClick={onClose} 
-              className="text-gray-500 hover:text-red-600 transition-colors"
+              className="text-gray-500 hover:text-[#ff1818] transition-colors"
               disabled={loading}
             >
               <svg className="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
@@ -155,7 +155,7 @@ const UpdateFoodModal = ({ restaurantName, food, refetch, onClose }) => {
                 name="foodName"
                 value={formData.foodName}
                 onChange={handleChange}
-                className="w-full px-4 py-2 border border-gray-300 rounded-lg bg-white focus:outline-none focus:ring-2 focus:ring-red-500 focus:border-red-500 transition"
+                className="w-full px-4 py-2 border border-gray-300 rounded-lg bg-white focus:outline-none focus:ring-2 focus:ring-red-500 focus:border-[#ff1818] transition"
                 required
                 disabled={loading}
               />
@@ -167,8 +167,8 @@ const UpdateFoodModal = ({ restaurantName, food, refetch, onClose }) => {
               <div className="flex flex-col items-center">
                 <div 
                   className={`relative w-full h-48 rounded-xl border-2 border-dashed ${
-                    isDragging ? 'border-red-500 bg-red-50' : 
-                    imageError ? 'border-red-500' : 
+                    isDragging ? 'border-[#ff1818] bg-red-50' : 
+                    imageError ? 'border-[#ff1818]' : 
                     'border-gray-300 hover:border-red-400'
                   } transition-all duration-300 flex items-center justify-center cursor-pointer overflow-hidden`}
                   onDragOver={handleDragOver}
@@ -201,14 +201,14 @@ const UpdateFoodModal = ({ restaurantName, food, refetch, onClose }) => {
                           className="opacity-0 group-hover:opacity-100 bg-white rounded-full p-2 shadow-lg hover:bg-red-100 transition transform hover:scale-110"
                           aria-label="Remove image"
                         >
-                          <MdCancel className="text-red-500 text-xl" />
+                          <MdCancel className="text-[#ff1818] text-xl" />
                         </button>
                       </div>
                     </div>
                   ) : (
                     <div className="text-center p-4">
                       <div className="mx-auto mb-3 flex items-center justify-center w-12 h-12 bg-red-100 rounded-full">
-                        <MdCloudUpload className="text-2xl text-red-500" />
+                        <MdCloudUpload className="text-2xl text-[#ff1818]" />
                       </div>
                       <h4 className="text-sm font-medium text-gray-700 mb-1">
                         {isDragging ? 'Drop your image here' : 'Click to upload or drag and drop'}
@@ -219,7 +219,7 @@ const UpdateFoodModal = ({ restaurantName, food, refetch, onClose }) => {
                     </div>
                   )}
                 </div>
-                {imageError && <p className="mt-2 text-sm text-red-600 text-center">{imageError}</p>}
+                {imageError && <p className="mt-2 text-sm text-[#ff1818] text-center">{imageError}</p>}
               </div>
             </div>
 
@@ -230,7 +230,7 @@ const UpdateFoodModal = ({ restaurantName, food, refetch, onClose }) => {
                 name="category"
                 value={formData.category}
                 onChange={handleChange}
-                className="w-full px-4 py-2 border border-gray-300 rounded-lg bg-white focus:outline-none focus:ring-2 focus:ring-red-500 focus:border-red-500 transition"
+                className="w-full px-4 py-2 border border-gray-300 rounded-lg bg-white focus:outline-none focus:ring-2 focus:ring-red-500 focus:border-[#ff1818] transition"
                 disabled={loading}
               >
                 <option value="">Select a category</option>
@@ -252,7 +252,7 @@ const UpdateFoodModal = ({ restaurantName, food, refetch, onClose }) => {
                   step="0.01"
                   value={formData.price}
                   onChange={handleChange}
-                  className="block w-full pl-10 pr-4 py-2 border border-gray-300 rounded-lg bg-white focus:outline-none focus:ring-2 focus:ring-red-500 focus:border-red-500 transition"
+                  className="block w-full pl-10 pr-4 py-2 border border-gray-300 rounded-lg bg-white focus:outline-none focus:ring-2 focus:ring-red-500 focus:border-[#ff1818] transition"
                   placeholder="0.00"
                   required
                   disabled={loading}
@@ -268,7 +268,7 @@ const UpdateFoodModal = ({ restaurantName, food, refetch, onClose }) => {
                 rows={3}
                 value={formData.description}
                 onChange={handleChange}
-                className="w-full px-4 py-2 border border-gray-300 rounded-lg bg-white focus:outline-none focus:ring-2 focus:ring-red-500 focus:border-red-500 transition"
+                className="w-full px-4 py-2 border border-gray-300 rounded-lg bg-white focus:outline-none focus:ring-2 focus:ring-red-500 focus:border-[#ff1818] transition"
                 disabled={loading}
               />
             </div>

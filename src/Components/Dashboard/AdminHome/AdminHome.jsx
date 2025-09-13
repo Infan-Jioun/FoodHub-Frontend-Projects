@@ -18,7 +18,7 @@ import { CiSquarePlus } from "react-icons/ci";
 
 const AdminHome = () => {
   const { user } = useAuth();
-  const red = "#ff0000d8";
+  const red = "#ff1818";
 
   const actions = [
     {
@@ -128,7 +128,7 @@ const AdminHome = () => {
         <div className="mt-10 text-center text-sm text-gray-600">
           <div className="mt-10 mb-5 text-center">
             <Link to={"/"}
-              className="bg-[#ff0000d8] hover:bg-[#ff0000] text-white font-semibold px-6 py-2 rounded-lg shadow transition duration-300"
+              className="bg-[#ff1818] hover:bg-[#ff0000] text-white font-semibold px-6 py-2 rounded-lg shadow transition duration-300"
             >
               Go to Home Page
             </Link>

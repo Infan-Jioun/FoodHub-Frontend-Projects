@@ -106,7 +106,7 @@ const FoodModal = ({ food, open, handleOpen, handleAddFood }) => {
                     8 Inch
                   </Typography>
                   <Typography color="blue-gray" className="text-sm">
-                    <span className="text-red-500 font-bold">$ {(food.price * 1).toFixed(0)}</span>
+                    <span className="text-[#ff1818] font-bold">$ {(food.price * 1).toFixed(0)}</span>
                   </Typography>
                 </div>
               }
@@ -124,7 +124,7 @@ const FoodModal = ({ food, open, handleOpen, handleAddFood }) => {
                     12 Inch
                   </Typography>
                   <Typography color="blue-gray" className="text-sm">
-                    <span className="text-red-500 font-bold">$ {(food.price * 1.5).toFixed(0)}</span>
+                    <span className="text-[#ff1818] font-bold">$ {(food.price * 1.5).toFixed(0)}</span>
                   </Typography>
                 </div>
               }
@@ -148,7 +148,7 @@ const FoodModal = ({ food, open, handleOpen, handleAddFood }) => {
                     Full Portion
                   </Typography>
                   <Typography color="blue-gray" className="text-sm">
-                    <span className="text-red-500 font-bold">$ {food.price}</span>
+                    <span className="text-[#ff1818] font-bold">$ {food.price}</span>
                   </Typography>
                 </div>
               }
@@ -166,7 +166,7 @@ const FoodModal = ({ food, open, handleOpen, handleAddFood }) => {
                     Half Portion
                   </Typography>
                   <Typography color="blue-gray" className="text-sm">
-                    <span className="text-red-500 font-bold">$ {(food.price * 0.6).toFixed(0)}</span>
+                    <span className="text-[#ff1818] font-bold">$ {(food.price * 0.6).toFixed(0)}</span>
                   </Typography>
                 </div>
               }
@@ -392,9 +392,9 @@ const Chicken = () => {
                 <div className="p-4 flex flex-col flex-grow">
                   <div className="flex justify-between items-start mb-2">
                     <h3 className="text-lg font-semibold text-gray-800">{food.foodName}</h3>
-                    <span className="text-lg font-bold text-red-600">$ {food.price}</span>
+                    <span className="text-lg font-bold text-[#ff1818]">$ {food.price}</span>
                   </div>
-                   <p className="text-red-500 text-sm">
+                   <p className="text-[#ff1818] text-sm">
                       Delicious {food.foodName} from{" "}
                       <Link to={`/restaurantUpload/${food.restaurantName}`}>
                         <span className="font-bold">{food.restaurantName}</span>
@@ -405,14 +405,14 @@ const Chicken = () => {
                     {existingItem[food.foodName] ? (
                       <button
                         onClick={() => navigate("/dashboard/myOrder")}
-                        className="bg-[#ff0000d8] text-white px-4 py-2 rounded-lg hover:bg-red-700 transition-colors"
+                        className="bg-[#ff1818] text-white px-4 py-2 rounded-lg hover:bg-red-700 transition-colors"
                       >
                         View Cart
                       </button>
                     ) : (
                       <motion.button
                         onClick={() => showFoodOptions(food)}
-                        className="text-xl font-bold bg-[#ff0000d8] text-white rounded-full shadow-lg p-2 ml-auto hover:bg-red-700"
+                        className="text-xl font-bold bg-[#ff1818] text-white rounded-full shadow-lg p-2 ml-auto hover:bg-red-700"
                         whileHover={{ scale: 1.1 }}
                         whileTap={{ scale: 0.9 }}
                         aria-label={`Add ${food.foodName} to cart`}
@@ -430,7 +430,7 @@ const Chicken = () => {
             <p className="text-gray-500 text-lg">No Chicken items available.</p>
             <Link
               to="/restaurants"
-              className="mt-4 inline-block bg-[#ff0000d8] text-white px-6 py-2 rounded-lg hover:bg-red-700 transition-colors"
+              className="mt-4 inline-block bg-[#ff1818] text-white px-6 py-2 rounded-lg hover:bg-red-700 transition-colors"
             >
               Browse Other Restaurants
             </Link>

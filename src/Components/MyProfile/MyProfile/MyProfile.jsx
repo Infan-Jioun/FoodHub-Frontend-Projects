@@ -300,7 +300,7 @@ const MyProfile = () => {
                 setIsFormVisible(!isFormVisible);
                 localStorage.setItem("isFormVisible", !isFormVisible);
               }}
-              className="px-6 py-2 bg-[#ff1818] text-white rounded-md hover:bg-red-600 transition w-full flex items-center justify-center space-x-2"
+              className="px-6 py-2 bg-[#ff1818] text-white rounded-md hover:bg-[#ff1818] transition w-full flex items-center justify-center space-x-2"
             >
               <FaEdit />
               <span>{isFormVisible ? "View Profile" : "Edit Profile"}</span>
@@ -417,7 +417,7 @@ const MyProfile = () => {
                     type="submit"
                     disabled={isUpdating || !nameAvailable}
                     className={`flex-1 py-3 bg-[#ff1818] text-white font-semibold rounded-md shadow transition duration-300 ${
-                      isUpdating || !nameAvailable ? "opacity-70 cursor-not-allowed" : "hover:bg-red-600"
+                      isUpdating || !nameAvailable ? "opacity-70 cursor-not-allowed" : "hover:bg-[#ff1818]"
                     } flex items-center justify-center space-x-2`}
                   >
                     {isUpdating ? (

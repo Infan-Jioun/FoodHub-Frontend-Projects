@@ -2,6 +2,7 @@ import React from 'react';
 import RestaurantBanner from '../RestaurantBanner/RestaurantBanner';
 import RestaurentBannerTwo from '../RestaurentBannerTwo/RestaurentBannerTwo';
 import RestaurantsCard from '../RestaurantsCard/RestaurantsCard';
+import RatingSlider from '../../Home/RatingSlider/RatingSlider';
 
 const Restaurants = () => {
     return (
@@ -16,6 +17,7 @@ const Restaurants = () => {
             />
          </div>
             <RestaurantsCard />
+            <RatingSlider/>
         </div>
     );
 };

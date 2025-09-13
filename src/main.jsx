@@ -142,8 +142,8 @@ const AppWithLoader = () => {
           <OfflineDetector />
           <RouterProvider router={router} />
           <Dialog open={showModal} className=''>
-            <DialogHeader className="bg-gradient-to-r from-red-600 to-red-500 text-white rounded-lg drop-shadow-2xl">
-              <div className="flex justify-between items-center w-full">
+            <DialogHeader className="bg-[#ff1818] text-white rounded-lg drop-shadow-2xl">
+              <div className="flex justify-between items-center w-full font-Poppins">
                 <Typography variant="h4">Welcome to FOODHUB!</Typography>
                 <FiX onClick={() => setShowModal(false)} className="cursor-pointer" />
               </div>
@@ -175,7 +175,7 @@ const AppWithLoader = () => {
             <DialogFooter>
               <Button
                 onClick={() => setShowModal(false)}
-                className="bg-[#ff1818] hover:bg-red-600 text-white w-full flex justify-center items-center gap-2"
+                className="bg-[#ff1818] hover:bg-[#ff1818] text-white w-full flex justify-center items-center gap-2"
               >
                 Get Started <FiArrowRight />
               </Button>

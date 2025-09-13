@@ -48,7 +48,7 @@ const AvailableItem = () => {
                   }`}
                   onLoad={() => setLoadedImages(prev => ({ ...prev, [index]: true }))}
                 />
-                <p className="mt-2 font-Caveat font-extrabold text-[#ff1818] text-center">
+                <p className="mt-2 font-Caveat font-extrabold text-red-500 text-center">
                   {item.name}
                 </p>
               </motion.div>

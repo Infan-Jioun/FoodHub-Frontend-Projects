@@ -117,7 +117,7 @@ const UserHome = () => {
             </p>
             <button
               aria-label="Login Now"
-              className="bg-[#ff1818] hover:bg-red-600 text-white px-6 py-2 rounded-lg transition focus:outline-none focus:ring-2 focus:ring-red-600"
+              className="bg-[#ff1818] hover:bg-[#ff1818] text-white px-6 py-2 rounded-lg transition focus:outline-none focus:ring-2 focus:ring-red-600"
               onClick={() => alert("Redirect to login page")}
             >
               Login Now

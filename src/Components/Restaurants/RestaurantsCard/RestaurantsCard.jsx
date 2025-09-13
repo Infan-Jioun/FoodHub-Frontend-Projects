@@ -1,4 +1,3 @@
-
 import {
   Card,
   CardHeader,
@@ -14,8 +13,8 @@ import useAxiosSecure from "../../Hooks/useAxiosSecure";
 import Swal from "sweetalert2";
 import toast from "react-hot-toast";
 import { AiOutlineDelete } from "react-icons/ai";
+import { HiLocationMarker } from "react-icons/hi";
 import { motion } from "framer-motion";
-import { FaStar } from "react-icons/fa";
 import { useState } from "react";
 import Skeleton from "react-loading-skeleton";
 import "react-loading-skeleton/dist/skeleton.css";
@@ -30,10 +29,10 @@ const RestaurantsCard = () => {
 
   const getRestaurantRating = (restaurant) => {
     if (!restaurant.foods) return { average: 0, total: 0 };
-    
+
     let totalRating = 0;
     let totalReviews = 0;
-    
+
     restaurant.foods.forEach(food => {
       if (food.reviews?.length) {
         const foodTotal = food.reviews.reduce((sum, review) => sum + review.rating, 0);
@@ -41,7 +40,7 @@ const RestaurantsCard = () => {
         totalReviews += food.reviews.length;
       }
     });
-    
+
     const average = totalReviews > 0 ? (totalRating / totalReviews).toFixed(1) : 0;
     return { average, total: totalReviews };
   };
@@ -81,84 +80,76 @@ const RestaurantsCard = () => {
       {[...isRestaurantData]
         .sort((a, b) => getRestaurantRating(b).total - getRestaurantRating(a).total)
         .map((restaurant, index) => {
-          const { average, total } = getRestaurantRating(restaurant);
-          
           return (
-            <Card
+            <motion.div
               key={restaurant._id}
-              shadow={false}
-              className="relative w-full max-w-[400px] h-[400px] border-2 bg-red-50 border-red-600 mx-auto rounded-xl overflow-hidden group transition-transform duration-300 hover:scale-105"
+              whileHover={{ scale: 1.05, y: -5 }}
+              className="relative w-full max-w-[400px] mx-auto"
             >
-              <CardHeader
-                floated={false}
+              <Card
                 shadow={false}
-                className="relative h-[250px] bg-cover bg-center"
+                className="relative h-[400px] border-2 bg-red-50 border-red-600 rounded-xl overflow-hidden transition-transform duration-300"
               >
-                {!loadedBanners[index] && (
-                  <Skeleton height="100%" width="100%" className="absolute top-0 left-0" />
-                )}
-                <img
-                  src={restaurant.banner}
-                  alt={`${restaurant.restaurantName} banner`}
-                  className={`w-full h-full object-cover transition-opacity duration-500 ${
-                    loadedBanners[index] ? "opacity-100" : "opacity-0"
-                  }`}
-                  onLoad={() =>
-                    setLoadedBanners(prev => ({ ...prev, [index]: true }))
-                  }
-                />
-              </CardHeader>
-
-              <CardBody className="text-center p-6">
-                <Typography className="text-[18px] font-bold font-Caveat text-gray-900">
-                  {restaurant?.restaurantName}
-                </Typography>
-                <Typography className="mb-2 font-bold drop-shadow-xl text-[#ff1818] font-Kanit">
-                  {restaurant?.restaurantAddress}
-                </Typography>
-
-                <div className="mt-4 flex justify-center">
-                  {!loadedAvatars[index] && (
-                    <Skeleton height={80} width={80} circle className="absolute" />
-                  )}
-                  <Link to={`/restaurantUpload/${restaurant.restaurantName}`}>
-                    <Avatar
-                      size="xl"
-                      variant="circular"
-                      alt={restaurant?.restaurantName}
-                      className={`border-2 border-gray-300 shadow-lg transition-transform duration-300 hover:scale-110 ${
-                        loadedAvatars[index] ? "opacity-100" : "opacity-0"
+                <CardHeader
+                  floated={false}
+                  shadow={false}
+                  className="relative h-[250px] bg-cover bg-center"
+                >
+                  {!loadedBanners[index] && <Skeleton className="w-full h-full" />}
+                  <img
+                    src={restaurant.banner}
+                    alt={`${restaurant.restaurantName} banner`}
+                    className={`w-full h-full object-cover transition-opacity duration-500 ${loadedBanners[index] ? "opacity-100" : "opacity-0"
                       }`}
-                      src={restaurant?.photo}
-                      onLoad={() =>
-                        setLoadedAvatars(prev => ({ ...prev, [index]: true }))
-                      }
-                    />
-                  </Link>
-                </div>
+                    onLoad={() =>
+                      setLoadedBanners(prev => ({ ...prev, [index]: true }))
+                    }
+                  />
+                </CardHeader>
 
-                {average > 0 && (
-                  <motion.div 
-                    className="absolute top-4 left-4 bg-white/90 backdrop-blur-sm px-3 py-1 rounded-full shadow-md flex items-center"
-                    whileHover={{ scale: 1.05 }}
-                  >
-                    <FaStar className="text-[#ff1818] mr-1" />
-                    <span className="font-bold text-gray-800">{average}</span>
-                  </motion.div>
-                )}
+                <CardBody className="text-center p-6">
+                  {!loadedAvatars[index] && <Skeleton className="w-24 h-24 mx-auto rounded-full mb-4" />}
 
-                {(isAdmin || isModerator) && (
-                  <motion.button
-                    onClick={() => handleDeleted(restaurant.restaurantName)}
-                    className="absolute top-4 right-4 bg-red-600 text-white p-3 rounded-full shadow-md hover:bg-red-700 transition-all"
-                    whileHover={{ scale: 1.1 }}
-                    whileTap={{ scale: 0.9 }}
-                  >
-                    <AiOutlineDelete size={20} />
-                  </motion.button>
-                )}
-              </CardBody>
-            </Card>
+                  <Typography className="text-[18px] font-bold font-Caveat text-gray-900 mb-2">
+                    {restaurant?.restaurantName || <Skeleton width={150} />}
+                  </Typography>
+
+                  <div className="mb-4 flex items-center justify-center space-x-1">
+                    <HiLocationMarker className="text-red-600 w-5 h-5" />
+                    <Typography className="font-semibold  drop-shadow-xl text-[#ff1818] font-Kanit">
+                      {restaurant?.restaurantAddress || <Skeleton width={120} />}
+                    </Typography>
+                  </div>
+
+                  <div className="mt-4 flex justify-center">
+                    <Link to={`/restaurantUpload/${restaurant.restaurantName}`}>
+                      <Avatar
+                        size="xl"
+                        variant="circular"
+                        alt={restaurant?.restaurantName}
+                        className={`border-2 border-gray-300 shadow-lg transition-transform duration-300 ${loadedAvatars[index] ? "opacity-100" : "opacity-0"
+                          }`}
+                        src={restaurant?.photo}
+                        onLoad={() =>
+                          setLoadedAvatars(prev => ({ ...prev, [index]: true }))
+                        }
+                      />
+                    </Link>
+                  </div>
+
+                  {(isAdmin || isModerator) && (
+                    <motion.button
+                      onClick={() => handleDeleted(restaurant.restaurantName)}
+                      className="absolute top-4 right-4 bg-red-600 text-white p-3 rounded-full shadow-md hover:bg-red-700 transition-all"
+                      whileHover={{ scale: 1.1 }}
+                      whileTap={{ scale: 0.9 }}
+                    >
+                      <AiOutlineDelete size={20} />
+                    </motion.button>
+                  )}
+                </CardBody>
+              </Card>
+            </motion.div>
           );
         })}
     </div>

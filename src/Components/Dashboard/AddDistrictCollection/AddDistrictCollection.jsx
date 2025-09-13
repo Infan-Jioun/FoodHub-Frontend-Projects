@@ -127,7 +127,7 @@ const AddDistrictCollection = () => {
           {/* Submit Button */}
           <button
             type="submit"
-            className="w-full bg-[#ff1818] hover:bg-red-600 text-white font-semibold py-2 rounded-md transition shadow"
+            className="w-full bg-[#ff1818] hover:bg-[#ff1818] text-white font-semibold py-2 rounded-md transition shadow"
           >
             Upload District
           </button>

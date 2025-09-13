@@ -142,7 +142,7 @@ const Reviews = () => {
                                                         <div className="flex space-x-2">
                                                             <button
                                                                 onClick={() => handleReply(review.foodName, review._id)}
-                                                                className="bg-[#ff1818] hover:bg-red-600 text-white px-3 py-2 rounded-md flex items-center"
+                                                                className="bg-[#ff1818] hover:bg-[#ff1818] text-white px-3 py-2 rounded-md flex items-center"
                                                             >
                                                                 <FaReply className="mr-1" />
                                                                 Send Reply

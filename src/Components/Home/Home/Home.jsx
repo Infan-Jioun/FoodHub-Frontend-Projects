@@ -8,6 +8,7 @@ import BannerFour from "../bannerFour/BannerFour";
 import DistrictAvailable from "../DistrictAvailable/DistrictAvailable/DistrictAvailable";
 import Delivery from "../Delivery/Delivery";
 import RatingSlider from "../RatingSlider/RatingSlider";
+import WebsiteReviewFeed from "../WebsiteReviewFeed/WebsiteReviewFeed";
 
 const Home = () => {
     return (
@@ -15,16 +16,16 @@ const Home = () => {
             <Helmet>
                 <title>FOODHUB</title>
             </Helmet>
-         <Banner/>
-         <BannerTwo/>
-         <BannerFour/>
-         <br />
-         <AvailableItem/>
-         <br />
-         <ServeFood/>
-         <DistrictAvailable/>
-         <Delivery/>
-         <RatingSlider/>
+            <Banner />
+            <BannerTwo />
+            <BannerFour />
+            <br />
+            <AvailableItem />
+            <br />
+            <ServeFood />
+            <DistrictAvailable />
+            <Delivery />
+            <WebsiteReviewFeed />
         </div>
     );
 };

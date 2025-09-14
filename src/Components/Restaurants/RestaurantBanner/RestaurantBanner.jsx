@@ -20,10 +20,9 @@ const RestaurantBanner = () => {
   return (
     <div className='relative'>
       <Swiper
-        autoplay={{ delay: 3000 }}
+        autoplay={{ delay: 1000 }}
         loop={true}
-        pagination={{ clickable: true }}
-        modules={[Pagination]}
+
         className="mySwiper"
       >
         {images.map((imgSrc, index) => (

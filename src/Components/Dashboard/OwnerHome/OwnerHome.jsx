@@ -129,7 +129,7 @@ const OwnerHome = () => {
               style={{ borderColor: red }}
             />
           ) : (
-            <FaUserCircle className="w-20 h-20 text-red-400" />
+            <FaUserCircle className="w-20 h-20 bg-[#ff1818]" />
           )}
           <div className="text-center sm:text-left">
             <h2 className="text-3xl font-bold text-gray-800">

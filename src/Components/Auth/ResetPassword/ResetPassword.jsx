@@ -5,47 +5,58 @@ import toast from "react-hot-toast";
 import emailjs from "@emailjs/browser";
 import { FiMail, FiArrowRight } from "react-icons/fi";
 import { motion } from "framer-motion";
+import { useState } from "react";
 
 const ResetPassword = () => {
   const { resetPassword } = useAuth();
+  const [timer, setTimer] = useState(0);
   const {
     register,
     handleSubmit,
     formState: { errors },
+    reset,
   } = useForm();
+
+  // EmailJS setup
+  const sendConfirmationEmail = async (email) => {
+    try {
+      await emailjs.send(
+        import.meta.env.VITE_SERVICE_KEY_EMAILJS,
+        import.meta.env.VITE_TEMPLATE_KEY_EMAILJS,
+        { user_email: email },
+        import.meta.env.VITE_API_KEY_EMAILJS
+      );
+    } catch (err) {
+      console.error("EmailJS Error:", err);
+    }
+  };
 
   const onSubmit = async (data) => {
     const email = data.email;
 
     try {
+
       await resetPassword(email);
       toast.success("Password reset email sent! Please check your inbox.");
 
       await sendConfirmationEmail(email);
 
-      setTimeout(() => {
-        window.location.href = "https://mail.google.com/mail/u/0/?hl=en-GB#inbox";
-      }, 700);
+      reset();
+
+      setTimer(5);
+      const interval = setInterval(() => {
+        setTimer((prev) => {
+          if (prev <= 1) {
+            clearInterval(interval);
+            return 0;
+          }
+          return prev - 1;
+        });
+      }, 1000);
+
     } catch (error) {
       console.error("Error:", error.message);
       toast.error("Error: " + error.message);
-    }
-  };
-
-  const sendConfirmationEmail = async (email) => {
-    try {
-      await emailjs.send(
-        import.meta.env.VITE_SERVICEID,
-        import.meta.env.VITE_TEMPLATECODE,
-        {
-          user_email: email,
-        },
-        import.meta.env.VITE_USERID
-      );
-      console.log("Notification email sent successfully");
-    } catch (error) {
-      console.error("Error sending email:", error.message);
-      toast.error("Failed to send confirmation email");
     }
   };
 
@@ -55,7 +66,6 @@ const ResetPassword = () => {
         <title>Reset Your Password</title>
       </Helmet>
 
-      {/* 👇 Animate blob keyframes embedded directly */}
       <style>
         {`
           @keyframes blob {
@@ -85,7 +95,9 @@ const ResetPassword = () => {
         <div className="bg-white rounded-2xl shadow-xl overflow-hidden">
           <div className="bg-gradient-to-r from-red-500 to-red-600 p-6 text-center">
             <h2 className="text-3xl font-bold text-white">Reset Your Password</h2>
-            <p className="text-red-100 mt-2">Enter your email to receive a reset link</p>
+            <p className="text-red-100 mt-2">
+              Enter your email to receive a reset link
+            </p>
           </div>
 
           <div className="p-8">
@@ -117,9 +129,13 @@ const ResetPassword = () => {
                 whileHover={{ scale: 1.02 }}
                 whileTap={{ scale: 0.98 }}
                 type="submit"
-                className="w-full flex items-center justify-center py-3 px-4 bg-gradient-to-r from-red-500 to-red-600 hover:from-red-600 hover:to-red-700 text-white  font-semibold rounded-lg shadow-md transition duration-200"
+                disabled={timer > 0}
+                className={`w-full flex items-center justify-center py-3 px-4 ${timer > 0
+                  ? "bg-gray-400 cursor-not-allowed"
+                  : "bg-gradient-to-r from-red-500 to-red-600 hover:from-red-600 hover:to-red-700"
+                  } text-white font-semibold rounded-lg shadow-md transition duration-200`}
               >
-                Send Reset Link
+                {timer > 0 ? `Wait ${timer}s` : "Send Reset Link"}
                 <FiArrowRight className="ml-2" />
               </motion.button>
             </form>
@@ -127,7 +143,10 @@ const ResetPassword = () => {
             <div className="mt-6 text-center">
               <p className="text-sm text-gray-600">
                 Remember your password?{" "}
-                <a href="/login" className="font-medium text-[#ff1818] hover:text-[#ff1818]">
+                <a
+                  href="/login"
+                  className="font-medium text-[#ff1818] hover:text-[#ff1818]"
+                >
                   Sign in
                 </a>
               </p>
@@ -136,7 +155,7 @@ const ResetPassword = () => {
         </div>
       </motion.div>
 
-     
+      {/* Background blobs */}
       <div className="hidden md:block absolute top-0 left-0 w-32 h-32 bg-red-200 rounded-full mix-blend-multiply filter blur-xl opacity-70 animate-blob"></div>
       <div className="hidden md:block absolute top-0 right-0 w-32 h-32 bg-orange-200 rounded-full mix-blend-multiply filter blur-xl opacity-70 animate-blob animation-delay-2000"></div>
       <div className="hidden md:block absolute bottom-0 left-0 w-32 h-32 bg-pink-200 rounded-full mix-blend-multiply filter blur-xl opacity-70 animate-blob animation-delay-4000"></div>

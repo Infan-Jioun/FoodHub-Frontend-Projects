@@ -209,6 +209,7 @@ const Navbar = () => {
       {/* Second Navbar */}
       <div className={`navbar  px-3 md:px-6 lg:px-8 bg-[#ff1818] ${scrolled ? "fixed top-0 left-0 w-full  shadow z-10 " : ""}`}>
         <div className="navbar-start">
+          
           <div className="dropdown lg:hidden">
             <div tabIndex={0} role="button" className="btn btn-ghost btn-circle text-white  font-extrabold">
 
@@ -225,8 +226,8 @@ const Navbar = () => {
                       to="/"
                       className={({ isActive }) =>
                         isActive
-                          ? "font-extrabold text-[#ff1818] border-b-2 border-[#ff1818] relative inline-block transition-colors duration-300 before:content-[''] before:absolute before:bottom-[-2px] before:left-0 before:w-full before:h-[2px] before:bg-red-600 before:scale-100 before:transition-transform before:duration-300 hover:before:scale-100"
-                          : "font-extrabold text-[#ff1818] relative inline-block transition-colors duration-300 before:content-[''] before:absolute before:bottom-[-2px] before:left-0 before:w-full before:h-[2px] before:bg-red-600 before:scale-0 before:transition-transform before:duration-300 hover:before:scale-100 rounded"
+                          ? "font-extrabold text-[#ff1818] border-b-2 border-[#ff1818] relative inline-block transition-colors duration-300 before:content-[''] before:absolute before:bottom-[-2px] before:left-0 before:w-full before:h-[2px] before:bg-[#ff1818] before:scale-100 before:transition-transform before:duration-300 hover:before:scale-100"
+                          : "font-extrabold text-[#ff1818] relative inline-block transition-colors duration-300 before:content-[''] before:absolute before:bottom-[-2px] before:left-0 before:w-full before:h-[2px] before:bg-[#ff1818] before:scale-0 before:transition-transform before:duration-300 hover:before:scale-100 rounded"
                       }
                     >
                       HOME
@@ -247,8 +248,8 @@ const Navbar = () => {
                     to="/restaurants"
                     className={({ isActive }) =>
                       isActive
-                        ? "font-extrabold text-[#ff1818] border-b-2 border-[#ff1818] relative inline-block transition-colors duration-300 before:content-[''] before:absolute before:bottom-[-2px] before:left-0 before:w-full before:h-[2px] before:bg-red-600 before:scale-100 before:transition-transform before:duration-300 hover:before:scale-100"
-                        : "font-extrabold text-[#ff1818] relative inline-block transition-colors duration-300 before:content-[''] before:absolute before:bottom-[-2px] before:left-0 before:w-full before:h-[2px] before:bg-red-600 before:scale-0 before:transition-transform before:duration-300 hover:before:scale-100 rounded"
+                        ? "font-extrabold text-[#ff1818] border-b-2 border-[#ff1818] relative inline-block transition-colors duration-300 before:content-[''] before:absolute before:bottom-[-2px] before:left-0 before:w-full before:h-[2px] before:bg-[#ff1818] before:scale-100 before:transition-transform before:duration-300 hover:before:scale-100"
+                        : "font-extrabold text-[#ff1818] relative inline-block transition-colors duration-300 before:content-[''] before:absolute before:bottom-[-2px] before:left-0 before:w-full before:h-[2px] before:bg-[#ff1818] before:scale-0 before:transition-transform before:duration-300 hover:before:scale-100 rounded"
                     }
                   >
                     RESTAURANTS
@@ -259,8 +260,8 @@ const Navbar = () => {
                       to="/about"
                       className={({ isActive }) =>
                         isActive
-                          ? "font-extrabold text-[#ff1818] border-b-2 border-[#ff1818] relative inline-block transition-colors duration-300 before:content-[''] before:absolute before:bottom-[-2px] before:left-0 before:w-full before:h-[2px] before:bg-red-600 before:scale-100 before:transition-transform before:duration-300 hover:before:scale-100"
-                          : "font-extrabold text-[#ff1818] relative inline-block transition-colors duration-300 before:content-[''] before:absolute before:bottom-[-2px] before:left-0 before:w-full before:h-[2px] before:bg-red-600 before:scale-0 before:transition-transform before:duration-300 hover:before:scale-100 rounded"
+                          ? "font-extrabold text-[#ff1818] border-b-2 border-[#ff1818] relative inline-block transition-colors duration-300 before:content-[''] before:absolute before:bottom-[-2px] before:left-0 before:w-full before:h-[2px] before:bg-[#ff1818] before:scale-100 before:transition-transform before:duration-300 hover:before:scale-100"
+                          : "font-extrabold text-[#ff1818] relative inline-block transition-colors duration-300 before:content-[''] before:absolute before:bottom-[-2px] before:left-0 before:w-full before:h-[2px] before:bg-[#ff1818] before:scale-0 before:transition-transform before:duration-300 hover:before:scale-100 rounded"
                       }
                     >
                       ABOUT

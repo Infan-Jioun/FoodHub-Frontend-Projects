@@ -107,7 +107,7 @@ const Reviews = () => {
                                                     </span>
                                                 </div>
                                             </div>
-                                            <span className="text-xs bg-red-100 text-red-800 px-2 py-1 rounded">
+                                            <span className="text-xs bg-red-100 bg-[#ff1818] px-2 py-1 rounded">
                                                 {review.foodName}
                                             </span>
                                         </div>

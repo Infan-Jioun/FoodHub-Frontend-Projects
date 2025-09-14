@@ -455,14 +455,14 @@ const Pizza = () => {
                         {existingItem[food.foodName] ? (
                           <button
                             onClick={() => navigate("/dashboard/myOrder")}
-                            className="bg-[#ff1818] text-white px-4 py-2 rounded-lg hover:bg-red-700 transition-colors"
+                            className="bg-[#ff1818] text-white px-4 py-2 rounded-lg hover:bg-[#ff1818] transition-colors"
                           >
                             View Cart
                           </button>
                         ) : (
                           <motion.button
                             onClick={() => showFoodOptions(food)}
-                            className="text-xl font-bold bg-[#ff1818] text-white rounded-full shadow-lg p-2 ml-auto hover:bg-red-700"
+                            className="text-xl font-bold bg-[#ff1818] text-white rounded-full shadow-lg p-2 ml-auto hover:bg-[#ff1818]"
                             whileHover={{ scale: 1.1 }}
                             whileTap={{ scale: 0.9 }}
                             aria-label={`Add ${food.foodName} to cart`}
@@ -481,7 +481,7 @@ const Pizza = () => {
             <p className="text-gray-500 text-lg">No Pizza items available.</p>
             <Link
               to="/restaurants"
-              className="mt-4 inline-block bg-[#ff1818] text-white px-6 py-2 rounded-lg hover:bg-red-700 transition-colors"
+              className="mt-4 inline-block bg-[#ff1818] text-white px-6 py-2 rounded-lg hover:bg-[#ff1818] transition-colors"
             >
               Browse Other Restaurants
             </Link>

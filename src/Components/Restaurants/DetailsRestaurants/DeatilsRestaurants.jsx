@@ -1,15 +1,15 @@
 import { useEffect, useState } from "react";
 import useAxiosSecure from "../../Hooks/useAxiosSecure";
 import { Link, useNavigate, useParams } from "react-router-dom";
-import { MdOutlineAddCircleOutline } from "react-icons/md";
-import { motion } from "framer-motion";
+import { MdOutlineAddCircleOutline, MdOutlineReviews } from "react-icons/md";
+import { motion, AnimatePresence } from "framer-motion";
 import useAuth from "../../Hooks/useAuth";
 import Swal from "sweetalert2";
 import useAddFood from "../../Hooks/useAddFood";
 import useAdmin from "../../Hooks/useAdmin";
 import useModerator from "../../Hooks/useModerator";
 import useRestaurantOwner from "../../Hooks/useRestaurantOwner";
-import { AiOutlineDelete } from "react-icons/ai";
+import { AiOutlineDelete, AiOutlineClose } from "react-icons/ai";
 import useRestaurantData from "../../Hooks/useRestaurantData";
 import { RxUpdate } from "react-icons/rx";
 import ReactGA from 'react-ga4';
@@ -26,6 +26,124 @@ import {
   IconButton
 } from "@material-tailwind/react";
 
+// Review Modal Component
+const ReviewModal = ({ food, open, handleOpen }) => {
+  if (!food) return null;
+
+  return (
+    <Dialog open={open} handler={handleOpen} size="lg" className="bg-red-50">
+      <DialogHeader className="flex justify-between items-center">
+        <div>
+          <Typography variant="h4" color="blue-gray">
+            Reviews for {food.foodName}
+          </Typography>
+          <Typography color="gray" className="font-normal">
+            What customers are saying about this dish
+          </Typography>
+        </div>
+        <IconButton
+          color="blue-gray"
+          variant="text"
+          onClick={handleOpen}
+        >
+          <AiOutlineClose className="h-5 w-5" />
+        </IconButton>
+      </DialogHeader>
+      <DialogBody className="overflow-y-auto max-h-96">
+        {food.reviews && food.reviews.length > 0 ? (
+          <motion.div 
+            className="space-y-4"
+            initial={{ opacity: 0 }}
+            animate={{ opacity: 1 }}
+            transition={{ duration: 0.5 }}
+          >
+            {food.reviews.map((review, index) => (
+              <motion.div
+                key={index}
+                initial={{ opacity: 0, y: 20 }}
+                animate={{ opacity: 1, y: 0 }}
+                transition={{ duration: 0.3, delay: index * 0.1 }}
+                className="bg-white p-4 rounded-lg shadow-sm border border-gray-100"
+              >
+                <div className="flex justify-between items-start">
+                  <div>
+                    <p className="font-medium text-gray-800">
+                      {review.customerName || review.user || "Anonymous"}
+                    </p>
+                    <div className="flex items-center mt-1">
+                      {[...Array(5)].map((_, i) => (
+                        <svg
+                          key={i}
+                          xmlns="http://www.w3.org/2000/svg"
+                          className={`h-5 w-5 ${
+                            i < parseInt(review.rating?.$numberInt || review.rating || 0)
+                              ? "text-yellow-400"
+                              : "text-gray-300"
+                          }`}
+                          viewBox="0 0 20 20"
+                          fill="currentColor"
+                        >
+                          <path d="M9.049 2.927c.3-.921 1.603-.921 1.902 0l1.07 3.292a1 1 0 00.95.69h3.462c.969 0 1.371 1.24.588 1.81l-2.8 2.034a1 1 0 00-.364 1.118l1.07 3.292c.3.921-.755 1.688-1.54 1.118l-2.8-2.034a1 1 0 00-1.175 0l-2.8 2.034c-.784.57-1.838-.197-1.539-1.118l1.07-3.292a1 1 0 00-.364-1.118L2.98 8.72c-.783-.57-.38-1.81.588-1.81h3.461a1 1 0 00.951-.69l1.07-3.292z" />
+                        </svg>
+                      ))}
+                      <span className="text-sm text-gray-600 ml-2">
+                        {review.date ? new Date(review.date?.$date?.$numberLong || review.date).toLocaleDateString() : ""}
+                      </span>
+                    </div>
+                  </div>
+                </div>
+                <p className="text-gray-700 mt-2">{review.comment}</p>
+                {review.reply && (
+                  <motion.div 
+                    initial={{ opacity: 0, height: 0 }}
+                    animate={{ opacity: 1, height: "auto" }}
+                    transition={{ duration: 0.3, delay: 0.2 }}
+                    className="mt-3 pl-3 border-l-2 border-red-200 bg-red-50 p-2 rounded"
+                  >
+                    <p className="text-sm font-medium text-gray-700">Owner's Reply:</p>
+                    <p className="text-gray-600">{review.reply}</p>
+                    {review.replyDate && (
+                      <p className="text-xs text-gray-500 mt-1">
+                        {new Date(review.replyDate?.$numberLong || review.replyDate).toLocaleDateString()}
+                      </p>
+                    )}
+                  </motion.div>
+                )}
+              </motion.div>
+            ))}
+          </motion.div>
+        ) : (
+          <motion.div 
+            initial={{ opacity: 0 }}
+            animate={{ opacity: 1 }}
+            transition={{ duration: 0.5 }}
+            className="text-center py-10"
+          >
+            <MdOutlineReviews className="h-16 w-16 text-gray-300 mx-auto mb-4" />
+            <Typography variant="h5" color="gray" className="mb-2">
+              No Reviews Yet
+            </Typography>
+            <Typography color="gray" className="font-normal">
+              Be the first to review this food item!
+            </Typography>
+          </motion.div>
+        )}
+      </DialogBody>
+      <DialogFooter>
+        <Button
+          variant="filled"
+          color="red"
+          onClick={handleOpen}
+          className="mr-1"
+        >
+          Close
+        </Button>
+      </DialogFooter>
+    </Dialog>
+  );
+};
+
+// Food Modal Component
 const FoodModal = ({ food, open, handleOpen, handleAddFood }) => {
   if (!food) return null;
 
@@ -63,33 +181,30 @@ const FoodModal = ({ food, open, handleOpen, handleAddFood }) => {
           variant="text"
           onClick={handleOpen}
         >
-          <svg
-            xmlns="http://www.w3.org/2000/svg"
-            viewBox="0 0 24 24"
-            fill="currentColor"
-            className="h-5 w-5"
-          >
-            <path
-              fillRule="evenodd"
-              d="M5.47 5.47a.75.75 0 011.06 0L12 10.94l5.47-5.47a.75.75 0 111.06 1.06L13.06 12l5.47 5.47a.75.75 0 11-1.06 1.06L12 13.06l-5.47 5.47a.75.75 0 01-1.06-1.06L10.94 12 5.47 6.53a.75.75 0 010-1.06z"
-              clipRule="evenodd"
-            />
-          </svg>
+          <AiOutlineClose className="h-5 w-5" />
         </IconButton>
       </DialogHeader>
       <DialogBody className="overflow-y-auto">
         <Card className="mb-4">
           <CardBody className="p-4">
-            <img
+            <motion.img
               src={food.foodImage}
               alt={food.foodName}
               className="w-64 h-64 mx-auto drop-shadow-2xl rounded-lg"
+              initial={{ scale: 0.9 }}
+              animate={{ scale: 1 }}
+              transition={{ duration: 0.3 }}
             />
           </CardBody>
         </Card>
 
         {food?.category?.toLowerCase() === "pizza" ? (
-          <div className="space-y-4">
+          <motion.div 
+            className="space-y-4"
+            initial={{ opacity: 0, y: 20 }}
+            animate={{ opacity: 1, y: 0 }}
+            transition={{ duration: 0.3, delay: 0.1 }}
+          >
             <Typography variant="h6" color="blue-gray">
               Select Pizza Size
             </Typography>
@@ -127,9 +242,14 @@ const FoodModal = ({ food, open, handleOpen, handleAddFood }) => {
               checked={selectedOption === "12"}
               onChange={() => setSelectedOption("12")}
             />
-          </div>
+          </motion.div>
         ) : (
-          <div className="space-y-4">
+          <motion.div 
+            className="space-y-4"
+            initial={{ opacity: 0, y: 20 }}
+            animate={{ opacity: 1, y: 0 }}
+            transition={{ duration: 0.3, delay: 0.1 }}
+          >
             <Typography variant="h6" color="blue-gray">
               Select Portion
             </Typography>
@@ -167,15 +287,20 @@ const FoodModal = ({ food, open, handleOpen, handleAddFood }) => {
               checked={selectedOption === "half"}
               onChange={() => setSelectedOption("half")}
             />
-          </div>
+          </motion.div>
         )}
 
-        <div className="mt-6">
+        <motion.div 
+          className="mt-6"
+          initial={{ opacity: 0 }}
+          animate={{ opacity: 1 }}
+          transition={{ duration: 0.3, delay: 0.2 }}
+        >
           <Typography variant="small" color="gray" className="font-normal">
             <span className="font-semibold">Popular:</span> Topped with mozzarella cheese,
             secret sauce, chicken, tomato, and special spices
           </Typography>
-        </div>
+        </motion.div>
       </DialogBody>
       <DialogFooter className="space-x-2">
         <Button
@@ -238,6 +363,7 @@ const DetailsRestaurants = () => {
   const [, refetchTwo] = useRestaurantData();
   const [existingItem, setExistingItem] = useState({});
   const [modalOpen, setModalOpen] = useState(false);
+  const [reviewModalOpen, setReviewModalOpen] = useState(false);
   const [selectedFood, setSelectedFood] = useState(null);
 
   useEffect(() => {
@@ -416,6 +542,11 @@ const DetailsRestaurants = () => {
     setModalOpen(true);
   };
 
+  const showReviews = (food) => {
+    setSelectedFood(food);
+    setReviewModalOpen(true);
+  };
+
   return (
     <div className="max-w-7xl mx-auto min-h-screen mb-5">
       <br />
@@ -423,7 +554,7 @@ const DetailsRestaurants = () => {
         <Link to={"/dashboard/addFoods"}>
           <div className="flex justify-end items-end mr-4">
             <button
-              className="text-xl font-bold bg-[#ff1818] text-white rounded-full shadow-lg p-3 hover:bg-red-700 transition-colors"
+              className="text-xl font-bold bg-[#ff1818] text-white rounded-full shadow-lg p-3 hover:bg-[#ff1818] transition-colors"
               aria-label="Add new food item"
             >
               <MdOutlineAddCircleOutline />
@@ -467,13 +598,23 @@ const DetailsRestaurants = () => {
                         transition={{ duration: 0.3 }}
                       />
                       {hasReviews && (
+                        <motion.button 
+                          onClick={() => showReviews(food)}
+                          className="absolute top-2 right-2 bg-white/90 backdrop-blur-sm px-2 py-1 rounded-full flex items-center shadow-sm hover:bg-white transition-colors"
+                          whileHover={{ scale: 1.05 }}
+                          whileTap={{ scale: 0.95 }}
+                        >
+                          <MdOutlineReviews className="h-4 w-4 text-[#ff1818] mr-1" />
+                          <span className="text-sm font-bold text-gray-800">
+                            {food.reviews.length}
+                          </span>
+                        </motion.button>
+                      )}
+                      {hasReviews && (
                         <div className="absolute top-2 left-2 bg-white/90 backdrop-blur-sm px-2 py-1 rounded-full flex items-center shadow-sm">
                           {renderSingleRatingStar(averageRating)}
                           <span className="text-sm font-bold text-gray-800 ml-1">
                             {averageRating}
-                            <span className="text-xs text-gray-500 ml-1">
-                              ({food.reviews.length})
-                            </span>
                           </span>
                         </div>
                       )}
@@ -487,17 +628,28 @@ const DetailsRestaurants = () => {
                         {food.description || `Delicious ${food.foodName} from ${restaurantName}`}
                       </p>
                       <div className="flex justify-between items-center">
+                        {/* {hasReviews && (
+                          <motion.button
+                            onClick={() => showReviews(food)}
+                            className="flex items-center text-sm text-gray-600 hover:text-[#ff1818] transition-colors"
+                            whileHover={{ scale: 1.05 }}
+                            whileTap={{ scale: 0.95 }}
+                          >
+                            <MdOutlineReviews className="h-4 w-4 mr-1" />
+                            {food.reviews.length} review{food.reviews.length !== 1 ? 's' : ''}
+                          </motion.button>
+                        )} */}
                         {existingItem[food.foodName] ? (
                           <button
                             onClick={() => navigate("/dashboard/myOrder")}
-                            className="bg-[#ff1818] text-white px-4 py-2 rounded-lg hover:bg-red-700 transition-colors"
+                            className="bg-[#ff1818] text-white px-4 py-2 rounded-lg hover:bg-[#ff1818] transition-colors ml-auto"
                           >
                             View Cart
                           </button>
                         ) : (
                           <motion.button
                             onClick={() => showFoodOptions(food)}
-                            className="text-xl font-bold bg-[#ff1818] text-white rounded-full shadow-lg p-2 ml-auto hover:bg-red-700"
+                            className="text-xl font-bold bg-[#ff1818] text-white rounded-full shadow-lg p-2 ml-auto hover:bg-[#ff1818]"
                             whileHover={{ scale: 1.1 }}
                             whileTap={{ scale: 0.9 }}
                             aria-label={`Add ${food.foodName} to cart`}
@@ -516,7 +668,7 @@ const DetailsRestaurants = () => {
             <p className="text-gray-500 text-lg">No food items available in this restaurant.</p>
             <Link
               to="/restaurants"
-              className="mt-4 inline-block bg-[#ff1818] text-white px-6 py-2 rounded-lg hover:bg-red-700 transition-colors"
+              className="mt-4 inline-block bg-[#ff1818] text-white px-6 py-2 rounded-lg hover:bg-[#ff1818] transition-colors"
             >
               Browse Other Restaurants
             </Link>
@@ -524,16 +676,25 @@ const DetailsRestaurants = () => {
         )}
       </div>
 
-      {selectedFood && (
-        <FoodModal
-          open={modalOpen}
-          handleOpen={() => setModalOpen(!modalOpen)}
-          food={selectedFood}
-          handleAddFood={handleAddFood}
-        />
-      )}
+      <AnimatePresence>
+        {selectedFood && (
+          <>
+            <FoodModal
+              open={modalOpen}
+              handleOpen={() => setModalOpen(!modalOpen)}
+              food={selectedFood}
+              handleAddFood={handleAddFood}
+            />
+            <ReviewModal
+              open={reviewModalOpen}
+              handleOpen={() => setReviewModalOpen(!reviewModalOpen)}
+              food={selectedFood}
+            />
+          </>
+        )}
+      </AnimatePresence>
     </div>
   );
 };
 
-export default DetailsRestaurants;
+export default DetailsRestaurants; 

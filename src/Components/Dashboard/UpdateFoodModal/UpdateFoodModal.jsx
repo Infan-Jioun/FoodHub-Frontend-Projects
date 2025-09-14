@@ -287,7 +287,7 @@ const UpdateFoodModal = ({ restaurantName, food, refetch, onClose }) => {
                 type="submit" 
                 disabled={loading} 
                 className={`px-5 py-2.5 rounded-lg text-white flex items-center ${
-                  loading ? 'bg-red-400' : 'bg-red-600 hover:bg-red-700'
+                  loading ? 'bg-red-400' : 'bg-[#ff1818] hover:bg-[#ff1818]'
                 } transition`}
               >
                 {loading ? (

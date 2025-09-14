@@ -44,7 +44,7 @@ class ErrorBoundary extends React.Component {
           <Typography className="text-gray-700 mb-6">
             Please refresh the page to continue.
           </Typography>
-          <Button onClick={() => window.location.reload()} className="bg-red-600 text-white">
+          <Button onClick={() => window.location.reload()} className="bg-[#ff1818] text-white">
             Refresh
           </Button>
         </div>

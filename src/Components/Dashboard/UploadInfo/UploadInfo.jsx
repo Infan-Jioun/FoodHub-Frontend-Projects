@@ -239,7 +239,7 @@ const UploadInfo = () => {
                         type="submit"
                         disabled={isSubmitting}
                         className={`w-full mt-6 py-3 text-white font-semibold rounded-lg transition-all duration-300 ${
-                            isSubmitting ? "bg-red-400 cursor-not-allowed" : "bg-red-600 hover:bg-red-700"
+                            isSubmitting ? "bg-red-400 cursor-not-allowed" : "bg-[#ff1818] hover:bg-[#ff1818]"
                         }`}
                     >
                         {isSubmitting ? "Submitting..." : "Add Restaurant"}

@@ -89,7 +89,7 @@ const Revenue = () => {
           <p className="mb-3">{error}</p>
           <button 
             onClick={() => window.location.reload()}
-            className="bg-[#ff1818] hover:bg-red-700 text-white font-bold py-2 px-4 rounded"
+            className="bg-[#ff1818] hover:bg-[#ff1818] text-white font-bold py-2 px-4 rounded"
           >
             Retry
           </button>
@@ -312,7 +312,7 @@ const Revenue = () => {
                         From: {item?.restaurantName || "Unknown Restaurant"}
                       </p>
                     </div>
-                    <span className="bg-red-100 text-red-800 text-xs font-medium px-2.5 py-0.5 rounded">
+                    <span className="bg-red-100 bg-[#ff1818] text-xs font-medium px-2.5 py-0.5 rounded">
                       #{i + 1}
                     </span>
                   </div>
@@ -353,7 +353,7 @@ const Revenue = () => {
       <div className="mt-8 mb-4 text-center">
         <Link 
           to="/dashboard/adminHome"
-          className="inline-flex items-center justify-center gap-2 bg-red-600 hover:bg-red-700 text-white font-medium px-6 py-3 rounded-lg shadow transition-all hover:scale-[1.02]"
+          className="inline-flex items-center justify-center gap-2 bg-[#ff1818] hover:bg-[#ff1818] text-white font-medium px-6 py-3 rounded-lg shadow transition-all hover:scale-[1.02]"
         >
           <FaStore />
           Back to Dashboard

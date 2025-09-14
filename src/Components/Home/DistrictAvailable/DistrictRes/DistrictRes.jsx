@@ -78,7 +78,7 @@ const DistrictRes = () => {
                                 {(isAdmin || isModerator) && (
                                     <motion.button
                                         onClick={() => handleDeleted(restaurant.restaurantName)}
-                                        className="absolute top-4 right-4 bg-red-600 text-white p-3 rounded-full shadow-md hover:bg-red-700 transition-all"
+                                        className="absolute top-4 right-4 bg-[#ff1818] text-white p-3 rounded-full shadow-md hover:bg-[#ff1818] transition-all"
                                         whileHover={{ scale: 1.1 }}
                                         whileTap={{ scale: 0.9 }}
                                     >

@@ -26,6 +26,7 @@ const Register = () => {
   const [pageLoaded, setPageLoaded] = useState(false);
   const from = location.state?.from?.pathname || "/";
   const axiosSecure = useAxiosSecure();
+
   const {
     register,
     handleSubmit,
@@ -95,20 +96,24 @@ const Register = () => {
     }
   };
 
+
+  const fieldVariants = {
+    hidden: { opacity: 0, y: 25 },
+    visible: (i) => ({
+      opacity: 1,
+      y: 0,
+      transition: { delay: i * 0.15, duration: 0.5, ease: "easeOut" },
+    }),
+  };
+
   return (
     <div className="bg-red-50">
       <div className="min-h-screen max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 flex items-center justify-center">
         <div className="grid lg:grid-cols-2 gap-6 w-full bg-white rounded-2xl shadow-2xl overflow-hidden">
-
           {/* Image Section */}
           <div className="hidden lg:flex items-center justify-center bg-gray-100 relative">
             {!imgLoaded && (
-              <Skeleton
-                height="100%"
-                width="100%"
-                baseColor="#e0e0e0"
-                highlightColor="#f5f5f5"
-              />
+              <Skeleton height="100%" width="100%" baseColor="#e0e0e0" highlightColor="#f5f5f5" />
             )}
             <motion.img
               src="https://i.ibb.co/27rbkWLC/Register.png"
@@ -117,9 +122,8 @@ const Register = () => {
               animate={imgLoaded ? { opacity: 1, scale: 1 } : {}}
               transition={{ duration: 0.6, ease: "easeOut" }}
               onLoad={() => setImgLoaded(true)}
-              className={`object-cover h-full w-full absolute top-0 left-0 ${
-                imgLoaded ? "relative" : "hidden"
-              }`}
+              className={`object-cover h-full w-full absolute top-0 left-0 ${imgLoaded ? "relative" : "hidden"
+                }`}
             />
           </div>
 
@@ -139,11 +143,7 @@ const Register = () => {
             ) : (
               <Card color="transparent" shadow={false}>
                 <div className="text-center mb-6">
-                  <Typography
-                    variant="h4"
-                    color="red"
-                    className="uppercase font-bold"
-                  >
+                  <Typography variant="h4" color="red" className="uppercase font-bold">
                     Sign Up
                   </Typography>
                 </div>
@@ -160,12 +160,11 @@ const Register = () => {
                   <motion.form
                     onSubmit={handleSubmit(onSubmit)}
                     className="space-y-5"
-                    initial={{ opacity: 0, y: 20 }}
-                    animate={{ opacity: 1, y: 0 }}
-                    transition={{ duration: 0.6, ease: "easeOut" }}
+                    initial="hidden"
+                    animate="visible"
                   >
                     {/* Name */}
-                    <div>
+                    <motion.div custom={0} variants={fieldVariants}>
                       <Input
                         size="lg"
                         type="text"
@@ -174,14 +173,12 @@ const Register = () => {
                         {...register("displayName", { required: true })}
                       />
                       {errors.displayName && (
-                        <span className="text-[#ff1818] text-sm">
-                          This field is required
-                        </span>
+                        <span className="text-[#ff1818] text-sm">This field is required</span>
                       )}
-                    </div>
+                    </motion.div>
 
                     {/* Email */}
-                    <div>
+                    <motion.div custom={1} variants={fieldVariants}>
                       <Input
                         size="lg"
                         type="email"
@@ -190,14 +187,12 @@ const Register = () => {
                         {...register("email", { required: true })}
                       />
                       {errors.email && (
-                        <span className="text-[#ff1818] text-sm">
-                          This field is required
-                        </span>
+                        <span className="text-[#ff1818] text-sm">This field is required</span>
                       )}
-                    </div>
+                    </motion.div>
 
                     {/* Password */}
-                    <div className="relative">
+                    <motion.div custom={2} variants={fieldVariants} className="relative">
                       <Input
                         type={showPassword ? "text" : "password"}
                         label="Password"
@@ -221,48 +216,46 @@ const Register = () => {
                         )}
                       </button>
                       {errors.password?.type === "required" && (
-                        <span className="text-[#ff1818] text-sm">
-                          This field is required
-                        </span>
+                        <span className="text-[#ff1818] text-sm">This field is required</span>
                       )}
                       {errors.password?.type === "minLength" && (
-                        <span className="text-[#ff1818] text-sm">
-                          Password must be at least 6 characters
-                        </span>
+                        <span className="text-[#ff1818] text-sm">Password must be 6–8 characters</span>
                       )}
                       {errors.password?.type === "maxLength" && (
-                        <span className="text-[#ff1818] text-sm">
-                          Password must be at most 8 characters
-                        </span>
+                        <span className="text-[#ff1818] text-sm">Password must be 6–8 characters</span>
                       )}
-                    </div>
+                    </motion.div>
 
                     {/* Terms */}
-                    <Checkbox
-                      color="red"
-                      label={
-                        <Typography
-                          variant="small"
-                          className="flex items-center text-[12px] font-normal"
-                        >
-                          I agree to the
-                          <a
-                            href="#"
-                            className="ml-1 text-[#ff1818] font-semibold hover:underline"
+                    <motion.div custom={3} variants={fieldVariants}>
+                      <Checkbox
+                        color="red"
+                        label={
+                          <Typography
+                            variant="small"
+                            className="flex items-center text-[12px] font-normal"
                           >
-                            Terms and Conditions
-                          </a>
-                        </Typography>
-                      }
-                    />
+                            I agree to the
+                            <a
+                              href="#"
+                              className="ml-1 text-[#ff1818] font-semibold hover:underline"
+                            >
+                              Terms and Conditions
+                            </a>
+                          </Typography>
+                        }
+                      />
+                    </motion.div>
 
                     {/* Submit */}
-                    <button
-                      type="submit"
-                      className="w-full bg-[#ff1818] hover:bg-[#e61616] text-white py-3 rounded-lg font-semibold transition duration-300"
-                    >
-                      Sign Up
-                    </button>
+                    <motion.div custom={4} variants={fieldVariants}>
+                      <button
+                        type="submit"
+                        className="w-full bg-[#ff1818] hover:bg-[#e61616] text-white py-3 rounded-lg font-semibold transition duration-300"
+                      >
+                        Sign Up
+                      </button>
+                    </motion.div>
                   </motion.form>
                 )}
 
@@ -274,22 +267,21 @@ const Register = () => {
                 </div>
 
                 {/* Google Button */}
-                <button
+                <motion.button
+                  whileHover={{ scale: 1.03 }}
+                  whileTap={{ scale: 0.97 }}
                   onClick={handleGoogle}
                   className="w-full flex items-center justify-center gap-2 py-2 border border-gray-300 rounded-full hover:bg-gray-100 transition duration-300"
                 >
                   <FcGoogle className="w-5 h-5" />
                   Continue with Google
-                </button>
+                </motion.button>
 
                 {/* Login Link */}
                 <div className="mt-6 text-center">
                   <Typography color="gray" className="text-sm">
                     Already have an account?{" "}
-                    <a
-                      href="/login"
-                      className="text-[#ff1818] font-semibold hover:underline"
-                    >
+                    <a href="/login" className="text-[#ff1818] font-semibold hover:underline">
                       Sign In
                     </a>
                   </Typography>

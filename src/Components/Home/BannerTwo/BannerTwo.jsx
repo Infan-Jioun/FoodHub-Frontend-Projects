@@ -8,10 +8,11 @@ const BannerTwo = () => {
   const [loaded, setLoaded] = useState(false);
 
   return (
-    <div className="mt-20 relative mb-20 ">
+    <div className="mt-20 relative mb-20">
       <div className="max-w-7xl mx-auto grid sm:grid-cols-2 px-4 justify-center items-center md:gap-6 lg:gap-10 md:px-10 lg:px-16">
+
         {/* Image Section */}
-        <div className="sm:px-4 relative w-full h-80 sm:h-96 md:h-[400px] lg:h-[450px] rounded-lg overflow-hidden shadow-lg">
+        <div className="sm:px-4 relative w-full h-80 sm:h-96 md:h-[400px] lg:h-[450px] rounded-lg overflow-hidden ">
           {!loaded && (
             <Skeleton
               height="100%"
@@ -19,15 +20,21 @@ const BannerTwo = () => {
               className="absolute top-0 left-0"
             />
           )}
-          <motion.img
-            src="https://i.ibb.co.com/4H336w4/ivan-torres-MQUqbmsz-GGM-unsplash.jpg"
-            alt="Welcome"
-            className="w-full h-full object-cover rounded-lg"
+          <motion.div
             initial={{ opacity: 0, scale: 0.95 }}
             animate={loaded ? { opacity: 1, scale: 1 } : {}}
             transition={{ duration: 1 }}
-            onLoad={() => setLoaded(true)}
-          />
+            className="relative w-full h-full group"
+          >
+            <motion.img
+              src="https://i.ibb.co.com/4H336w4/ivan-torres-MQUqbmsz-GGM-unsplash.jpg"
+              alt="Welcome"
+              className="w-full h-full rounded-2xl object-cover transform transition-transform duration-700 group-hover:scale-110 clip-diagonal"
+              onLoad={() => setLoaded(true)}
+            />
+            {/* Overlay gradient */}
+            <div className="absolute inset-0 bg-gradient-to-tr from-black/40 via-transparent to-[#ff1818]/30"></div>
+          </motion.div>
         </div>
 
         {/* Text Section */}

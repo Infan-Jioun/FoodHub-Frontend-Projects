@@ -52,6 +52,7 @@ import Search from "../../Navbar/Search/Search";
 
 
 
+
 export const router = createBrowserRouter([
   {
     path: "/",
@@ -102,6 +103,7 @@ export const router = createBrowserRouter([
         path: "/restaurants",
         element: <Restaurants />,
       },
+     
       {
         path: "/about",
         element: <About />,

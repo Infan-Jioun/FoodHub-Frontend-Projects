@@ -10,6 +10,9 @@ import { FiClock, FiCheckCircle, FiXCircle } from 'react-icons/fi';
 import { motion } from 'framer-motion';
 import FoodReviewModal from '../Review/FoodReviewModal';
 import RestaurantReviewModal from '../Review/RestaurantReviewModal';
+import { MdRestaurant } from "react-icons/md";
+import WebsiteReviewModal from '../Review/WebsiteReviewModal.JSX';
+import { CgWebsite } from "react-icons/cg";
 
 const PaymentHistory = () => {
   const { user } = useAuth();
@@ -22,7 +25,7 @@ const PaymentHistory = () => {
   const [selectedPayment, setSelectedPayment] = useState(null);
   const [isFoodReviewOpen, setIsFoodReviewOpen] = useState(false);
   const [isRestaurantReviewOpen, setIsRestaurantReviewOpen] = useState(false);
-
+  const [isWebsiteReviewOpen, setIsWebsiteReviewOpen] = useState(false);
   useEffect(() => {
     if (!user?.email) return;
 
@@ -80,7 +83,7 @@ const PaymentHistory = () => {
       case 'failed':
       case 'cancelled':
         return (
-          <span className="inline-flex items-center px-2 py-0.5 rounded-full text-xs font-medium bg-red-100 text-red-800">
+          <span className="inline-flex items-center px-2 py-0.5 rounded-full text-xs font-medium  bg-[#ff1818]">
             <FiXCircle className="mr-1" /> {status}
           </span>
         );
@@ -92,6 +95,12 @@ const PaymentHistory = () => {
         );
     }
   };
+  // Website Review open handler
+  const handleOpenWebsiteReview = (payment) => {
+    setSelectedPayment(payment);
+    setIsWebsiteReviewOpen(true);
+  };
+
 
   // Review handlers
   const handleOpenFoodReview = (payment) => {
@@ -108,6 +117,7 @@ const PaymentHistory = () => {
     setIsFoodReviewOpen(false);
     setIsRestaurantReviewOpen(false);
     setSelectedPayment(null);
+    setIsWebsiteReviewOpen(false);
   };
 
   return (
@@ -221,20 +231,34 @@ const PaymentHistory = () => {
                   </div>
 
                   {/* Review buttons */}
-                  <div className="mt-4 flex gap-4">
+                  {/* Website Review button */}
+                  <div className=" mt-4 grid md:grid-cols-3 gap-4">
                     <button
                       onClick={() => handleOpenFoodReview(payment)}
-                      className="text-sm text-[#ff1818] underline hover:text-red-600"
+                      className="px-4 py-2 text-sm font-medium rounded-lg border border-[#ff1818] text-[#ff1818] 
+       hover:bg-[#ff1818] hover:text-white transition-all shadow-sm"
                     >
-                      Review Food
+                      🍔 Review Food
                     </button>
+
                     <button
                       onClick={() => handleOpenRestaurantReview(payment)}
-                      className="text-sm text-[#ff1818] underline hover:text-red-600"
+                      className="flex gap-3 justify-center items-center px-4 py-2 text-sm font-medium rounded-lg border border-[#ff1818] text-[#ff1818] 
+       hover:bg-[#ff1818] hover:text-white transition-all shadow-sm"
                     >
-                      Review Restaurant
+                      <MdRestaurant /> Review Restaurant
+                    </button>
+
+                    {/* FoodHub Website Review */}
+                    <button
+                      onClick={() => handleOpenWebsiteReview(payment)}
+                      className="flex gap-2 justify-center items-center px-4 py-2 text-sm font-medium rounded-lg border border-[#ff1818] text-[#ff1818] 
+       hover:bg-[#ff1818] hover:text-white transition-all shadow-sm"
+                    >
+                      <CgWebsite /> Review Website
                     </button>
                   </div>
+
                 </div>
               </div>
             ))}
@@ -253,6 +277,13 @@ const PaymentHistory = () => {
       {isRestaurantReviewOpen && (
         <RestaurantReviewModal
           open={isRestaurantReviewOpen}
+          onClose={handleCloseModals}
+          payment={selectedPayment}
+        />
+      )}
+      {isWebsiteReviewOpen && (
+        <WebsiteReviewModal
+          open={isWebsiteReviewOpen}
           onClose={handleCloseModals}
           payment={selectedPayment}
         />

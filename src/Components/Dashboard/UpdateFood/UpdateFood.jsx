@@ -142,7 +142,7 @@ const UpdateFood = () => {
 
             {/* Submit Button */}
             <div className="text-center">
-              <button type="submit" className="bg-red-600 text-white px-6 py-2 rounded-full hover:bg-red-700 transition">
+              <button type="submit" className="bg-[#ff1818] text-white px-6 py-2 rounded-full hover:bg-[#ff1818] transition">
                 Update Food
               </button>
             </div>

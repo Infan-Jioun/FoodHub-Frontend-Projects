@@ -1,112 +1,183 @@
-import { Swiper, SwiperSlide } from 'swiper/react';
-import { FaStar } from 'react-icons/fa';
-import 'swiper/css';
-import 'swiper/css/pagination';
-import { Pagination, Autoplay } from 'swiper/modules';
-
-const people = [
-  {
-    name: "Rahim Uddin",
-    comment: "Loved the biryani! Will order again.",
-    rating: 4,
-    image: "https://randomuser.me/api/portraits/men/11.jpg",
-  },
-  {
-    name: "Jake Patel",
-    comment: "Could improve packaging but food was excellent.",
-    rating: 4,
-    image: "https://randomuser.me/api/portraits/men/12.jpg",
-  },
-  {
-    name: "Thomas Lee",
-    comment: "Customer service was very helpful.",
-    rating: 4,
-    image: "https://randomuser.me/api/portraits/men/13.jpg",
-  },
-  {
-    name: "David Kim",
-    comment: "Nice user experience on the app.",
-    rating: 4,
-    image: "https://randomuser.me/api/portraits/men/14.jpg",
-  },
-  {
-    name: "Rohan Singh",
-    comment: "I wish the drinks came colder, but still a great meal.",
-    rating: 4,
-    image: "https://randomuser.me/api/portraits/men/15.jpg",
-  },
-  {
-    name: "Ahmed Khan",
-    comment: "Tandoori chicken was mouth-watering!",
-    rating: 5,
-    image: "https://randomuser.me/api/portraits/men/16.jpg",
-  },
-  {
-    name: "John Doe",
-    comment: "Delivery was right on time and hassle-free.",
-    rating: 5,
-    image: "https://randomuser.me/api/portraits/men/17.jpg",
-  },
-  {
-    name: "Imran Sheikh",
-    comment: "Great portions and flavors!",
-    rating: 5,
-    image: "https://randomuser.me/api/portraits/men/18.jpg",
-  },
-  {
-    name: "Hasan Chowdhury",
-    comment: "Food was hot and fresh as always.",
-    rating: 4,
-    image: "https://randomuser.me/api/portraits/men/19.jpg",
-  },
-  {
-    name: "Omar Faruq",
-    comment: "Superb service and taste.",
-    rating: 5,
-    image: "https://randomuser.me/api/portraits/men/20.jpg",
-  },
-];
+import React, { useState } from "react";
+import { Swiper, SwiperSlide } from "swiper/react";
+import { FaStar } from "react-icons/fa";
+import "swiper/css";
+import "swiper/css/pagination";
+import { Pagination, Autoplay } from "swiper/modules";
+import Skeleton from "react-loading-skeleton";
+import "react-loading-skeleton/dist/skeleton.css";
+import { motion } from "framer-motion";
+import useRestaurantData from "../../Hooks/useRestaurantData";
 
 const RatingSlider = () => {
-  return (
-    <div className="bg-white py-12 px-4 md:px-20">
-      <h2 className="text-3xl font-bold font-Caveat text-center text-[#ff1818] mb-10">
-        What Our Customers Say
-      </h2>
+  const [restaurantData] = useRestaurantData();
+  const [activeIndex, setActiveIndex] = useState(0);
 
+  const reviews = restaurantData
+    .flatMap((restaurant) => {
+      const restaurantReviews = (restaurant.reviews || []).map((review) => ({
+        restaurantName: restaurant.restaurantName,
+        foodName: null,
+        name: review.name || review.customerName || review.user || "Anonymous",
+        comment: review.comment || "",
+        rating: review.rating?.$numberInt
+          ? parseInt(review.rating.$numberInt)
+          : 0,
+        image: review.userImage || null,
+        date:
+          review.date?.$date?.$numberLong ||
+          review.date ||
+          new Date().getTime(),
+      }));
+
+      const foodReviews = (restaurant.foods || []).flatMap((food) =>
+        (food.reviews || []).map((review) => ({
+          restaurantName: restaurant.restaurantName,
+          foodName: food.foodName,
+          name: review.user || review.customerName || "Anonymous",
+          comment: review.comment || "",
+          rating: review.rating?.$numberInt
+            ? parseInt(review.rating.$numberInt)
+            : 0,
+          image: review.userImage || null,
+          date:
+            review.date?.$date?.$numberLong ||
+            review.date ||
+            new Date().getTime(),
+        }))
+      );
+
+      return [...restaurantReviews, ...foodReviews];
+    })
+    .sort((a, b) => b.date - a.date);
+
+  const isLoading = restaurantData.length === 0;
+
+  return (
+    <div className="bg-gray-50 py-12 px-4 md:px-20">
+      {/* Header */}
+      <motion.div
+        initial={{ opacity: 0, y: -20 }}
+        animate={{ opacity: 1, y: 0 }}
+        transition={{ duration: 0.5 }}
+        className="text-center mb-12"
+      >
+        <h2 className="text-3xl font-bold font-Caveat text-[#ff1818] mb-4">
+          What Our Customers Say
+        </h2>
+        <p className="text-lg text-gray-600 max-w-2xl mx-auto">
+          Discover why thousands of customers love our food delivery service
+        </p>
+      </motion.div>
+
+      {/* Slider */}
       <Swiper
-        spaceBetween={20}
+        spaceBetween={30}
         slidesPerView={1}
         breakpoints={{
           640: { slidesPerView: 1 },
           768: { slidesPerView: 2 },
           1024: { slidesPerView: 3 },
         }}
-        pagination={{ clickable: true }}
-        autoplay={{ delay: 3000 }}
+        autoplay={{ delay: 4000 }}
         loop={true}
         modules={[Pagination, Autoplay]}
+        onSlideChange={(swiper) => setActiveIndex(swiper.realIndex)}
+        className="pb-12"
       >
-        {people.map((person, index) => (
-          <SwiperSlide key={index}>
-            <div className="bg-red-50 p-6 rounded-xl shadow hover:shadow-lg transition duration-300 h-full flex flex-col justify-between">
-              <div className="flex flex-col items-center text-center">
-                <img
-                  src={person.image}
-                  alt={person.name}
-                  className="w-24 h-24 rounded-full mb-4 object-cover border-4 border-[#ff1818]"
-                />
-                <p className="text-gray-800 mb-3 text-sm">"{person.comment}"</p>
-                <div className="flex items-center justify-center text-[#ff1818] mb-2">
-                  {Array.from({ length: person.rating }, (_, i) => (
-                    <FaStar key={i} />
-                  ))}
+        {/* Loading Skeleton */}
+        {isLoading
+          ? Array.from({ length: 3 }).map((_, idx) => (
+              <SwiperSlide key={idx}>
+                <div className="bg-white p-5 rounded-3xl shadow-md w-full h-56 flex flex-col">
+                  <div className="flex items-center gap-4 mb-3">
+                    <Skeleton circle width={64} height={64} />
+                    <div className="flex-1">
+                      <Skeleton height={15} width="60%" className="mb-1" />
+                      <Skeleton height={12} width="40%" />
+                    </div>
+                  </div>
+                  <Skeleton count={3} />
+                  <Skeleton width={100} height={20} className="mt-auto" />
                 </div>
-                <p className="font-semibold text-gray-700 mt-2">{person.name}</p>
-              </div>
-            </div>
-          </SwiperSlide>
-        ))}
+              </SwiperSlide>
+            ))
+          : reviews.map((review, index) => (
+              <SwiperSlide key={index}>
+                <motion.div
+                  initial={{ opacity: 0, scale: 0.9 }}
+                  animate={{ opacity: 1, scale: 1 }}
+                  transition={{ duration: 0.5 }}
+                  className={`bg-white p-5 rounded-3xl shadow-md hover:shadow-xl transition-all duration-300 w-full h-full flex flex-col ${
+                    index === activeIndex
+                      ? "ring-2 ring-[#ff1818] ring-opacity-50"
+                      : ""
+                  }`}
+                >
+                  {/* Header */}
+                  <div className="flex items-center gap-4 mb-3">
+                    {review.image ? (
+                      <div className="relative w-16 h-16 rounded-full p-[2px] bg-gradient-to-r from-[#ff1818] to-[#ff5e5e]">
+                        <img
+                          src={review.image}
+                          alt={review.name}
+                          className="w-full h-full rounded-full object-cover"
+                        />
+                      </div>
+                    ) : (
+                      <div className="w-16 h-16 rounded-full flex items-center justify-center text-white font-bold text-xl bg-gradient-to-r from-[#ff1818] to-[#ff5e5e]">
+                        {review.name.charAt(0).toUpperCase()}
+                      </div>
+                    )}
+                    <div>
+                      <p className="font-semibold text-gray-800 text-sm">
+                        {review.name}
+                      </p>
+                      <p className="text-gray-500 text-xs">
+                        {review.foodName
+                          ? `${review.restaurantName} - ${review.foodName}`
+                          : review.restaurantName}
+                      </p>
+                    </div>
+                  </div>
+
+                  {/* Comment */}
+                  <motion.p
+                    initial={{ opacity: 0 }}
+                    animate={{ opacity: 1 }}
+                    transition={{ delay: 0.3 }}
+                    className="text-gray-700 text-sm mb-3 line-clamp-3"
+                  >
+                    "{review.comment}"
+                  </motion.p>
+
+                  {/* Rating */}
+                  <motion.div
+                    initial={{ opacity: 0 }}
+                    animate={{ opacity: 1 }}
+                    transition={{ delay: 0.4 }}
+                    className="flex items-center mt-auto"
+                  >
+                    {Array.from({ length: 5 }, (_, i) => (
+                      <motion.div
+                        key={i}
+                        whileHover={{ scale: 1.2, rotate: 10 }}
+                        whileTap={{ scale: 0.9 }}
+                        transition={{ type: "spring", stiffness: 300 }}
+                      >
+                        <FaStar
+                          className={`mr-1 ${
+                            i < review.rating
+                              ? "text-[#ff1818]"
+                              : "text-[#ff1818]"
+                          }`}
+                        />
+                      </motion.div>
+                    ))}
+                  </motion.div>
+                </motion.div>
+              </SwiperSlide>
+            ))}
       </Swiper>
     </div>
   );

@@ -285,7 +285,7 @@ const AddFoods = () => {
               <button
                 type="submit"
                 disabled={isSubmitting}
-                className={`w-full py-3 px-6 bg-red-600 hover:bg-red-700 text-white font-medium rounded-lg transition focus:outline-none focus:ring-2 focus:ring-red-400 focus:ring-offset-2 ${
+                className={`w-full py-3 px-6 bg-[#ff1818] hover:bg-[#ff1818] text-white font-medium rounded-lg transition focus:outline-none focus:ring-2 focus:ring-red-400 focus:ring-offset-2 ${
                   isSubmitting ? "opacity-70 cursor-not-allowed" : ""
                 }`}
               >

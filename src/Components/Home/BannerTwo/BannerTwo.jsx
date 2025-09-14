@@ -20,7 +20,7 @@ const BannerTwo = () => {
             />
           )}
           <motion.img
-            src="https://images.unsplash.com/photo-1600891964599-f61ba0e24092?auto=format&fit=crop&w=800&q=80"
+            src="https://i.ibb.co.com/4H336w4/ivan-torres-MQUqbmsz-GGM-unsplash.jpg"
             alt="Welcome"
             className="w-full h-full object-cover rounded-lg"
             initial={{ opacity: 0, scale: 0.95 }}
@@ -63,7 +63,7 @@ const BannerTwo = () => {
                   whileTap={{ scale: 0.95 }}
                   className="inline-block"
                 >
-                  <Link to="https://foodhub-d3e1e.web.app/restaurantUpload/7dayz">
+                  <Link to="https://foodhub-d3e1e.web.app/restaurantUpload/pizzza%20Hut">
                     <button className="w-full sm:w-auto rounded-lg border-2 p-3 px-5 border-[#ff1818] bg-[#ff1818] text-white font-semibold hover:bg-white hover:text-[#ff1818] transition duration-300 shadow-lg">
                       BOOK A FOOD
                     </button>

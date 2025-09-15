@@ -8,7 +8,11 @@ const BannerTwo = () => {
   const [loaded, setLoaded] = useState(false);
 
   return (
-    <div className="mt-20 relative mb-20">
+    <div className="mt-28 relative mb-28">
+          <div className="text-center mb-8">
+        <h2 className="text-3xl font-bold font-Caveat text-[#ff1818]">Yummy Yummy 😋😋</h2>
+        <p className="text-gray-500 mt-2">Explore our delicious menu items below</p>
+      </div>
       <div className="max-w-7xl mx-auto grid sm:grid-cols-2 px-4 justify-center items-center md:gap-6 lg:gap-10 md:px-10 lg:px-16">
 
         {/* Image Section */}

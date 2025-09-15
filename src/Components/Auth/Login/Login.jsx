@@ -1,15 +1,10 @@
-import {
-  Card,
-  Input,
-  Checkbox,
-  Typography,
-} from "@material-tailwind/react";
+import { useEffect, useState } from "react";
+import { Card, Input, Checkbox, Typography } from "@material-tailwind/react";
 import { useForm } from "react-hook-form";
 import { FcGoogle } from "react-icons/fc";
 import useAuth from "../../Hooks/useAuth";
 import { Link, useLocation, useNavigate } from "react-router-dom";
 import toast from "react-hot-toast";
-import { useState } from "react";
 import { Eye, EyeOff } from "lucide-react";
 import Skeleton from "react-loading-skeleton";
 import "react-loading-skeleton/dist/skeleton.css";
@@ -20,7 +15,7 @@ const Login = () => {
   const location = useLocation();
   const navigate = useNavigate();
   const [showPassword, setShowPassword] = useState(false);
-  const [loading, setLoading] = useState(false); // skeleton toggle
+  const [loading, setLoading] = useState(true); 
   const from = location.state?.from?.pathname || "/";
 
   const {
@@ -28,6 +23,12 @@ const Login = () => {
     handleSubmit,
     formState: { errors },
   } = useForm();
+
+
+  useEffect(() => {
+    const timer = setTimeout(() => setLoading(false), 1500); 
+    return () => clearTimeout(timer);
+  }, []);
 
   const onSubmit = (data) => {
     setLoading(true);
@@ -81,6 +82,7 @@ const Login = () => {
             shadow={false}
             className="w-full max-w-sm mx-auto"
           >
+            {/* Title */}
             {loading ? (
               <Skeleton height={40} width={120} className="mx-auto mb-6" />
             ) : (
@@ -224,6 +226,7 @@ const Login = () => {
                 </motion.button>
               )}
 
+              {/* Divider */}
               {loading ? (
                 <Skeleton height={20} />
               ) : (

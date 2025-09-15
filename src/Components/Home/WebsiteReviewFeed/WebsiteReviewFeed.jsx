@@ -45,9 +45,8 @@ const WebsiteReviewSlider = () => {
             transition={{ delay: i * 0.1 }}
           >
             <FiStar
-              className={`w-5 h-5 ${
-                i < rating ? 'text-[#ff1818] fill-[#ff1818]' : 'text-gray-300'
-              }`}
+              className={`w-5 h-5 ${i < rating ? 'text-[#ff1818] fill-[#ff1818]' : 'text-gray-300'
+                }`}
             />
           </motion.div>
         ))}
@@ -97,7 +96,7 @@ const WebsiteReviewSlider = () => {
 
   if (error) {
     return (
-      <motion.div 
+      <motion.div
         initial={{ opacity: 0 }}
         animate={{ opacity: 1 }}
         className="max-w-7xl mx-auto px-4 py-16 text-center"
@@ -111,7 +110,7 @@ const WebsiteReviewSlider = () => {
 
   if (reviews.length === 0) {
     return (
-      <motion.div 
+      <motion.div
         initial={{ opacity: 0 }}
         animate={{ opacity: 1 }}
         className="max-w-7xl mx-auto px-4 py-16 text-center"
@@ -126,14 +125,14 @@ const WebsiteReviewSlider = () => {
   return (
     <div className="max-w-7xl mx-auto px-4 py-16  my-8">
       {/* Header */}
-      <motion.div 
+      <motion.div
         initial={{ opacity: 0, y: -20 }}
         animate={{ opacity: 1, y: 0 }}
         transition={{ duration: 0.5 }}
         className="text-center mb-12"
       >
-        <h2 className="text-3xl font-Caveat font-bold text-[#ff1818] mb-4">
-          What Our Customers Say
+        <h2 className="text-2xl font-Caveat font-bold text-[#ff1818] mb-4">
+          What Our Customers Say FOR Web
         </h2>
         <p className="text-lg text-gray-600 max-w-2xl mx-auto">
           Discover why thousands of customers love our food delivery service
@@ -147,12 +146,12 @@ const WebsiteReviewSlider = () => {
           spaceBetween={30}
           slidesPerView={1}
           loop={true}
-          autoplay={{ 
-            delay: 5000, 
+          autoplay={{
+            delay: 5000,
             disableOnInteraction: false,
-            pauseOnMouseEnter: true 
+            pauseOnMouseEnter: true
           }}
-          pagination={{ 
+          pagination={{
             clickable: true,
             el: '.review-pagination',
             bulletClass: 'review-bullet',
@@ -177,9 +176,8 @@ const WebsiteReviewSlider = () => {
                 animate={{ opacity: 1, scale: 1 }}
                 exit={{ opacity: 0, scale: 0.9 }}
                 transition={{ duration: 0.5 }}
-                className={`bg-white p-6 rounded-2xl shadow-lg border hover:shadow-xl transition-all duration-300 flex flex-col h-full ${
-                  index === activeIndex ? 'ring-2 ring-[#ff1818] ring-opacity-50' : ''
-                }`}
+                className={`bg-white p-6 rounded-2xl shadow-lg border hover:shadow-xl transition-all duration-300 flex flex-col h-full ${index === activeIndex ? 'ring-2 ring-[#ff1818] ring-opacity-50' : ''
+                  }`}
               >
                 {/* Review Header */}
                 <div className="flex items-center gap-4 mb-4">
@@ -193,7 +191,7 @@ const WebsiteReviewSlider = () => {
                       className="w-14 h-14 rounded-full object-cover border-2 border-white shadow-md"
                     />
                   ) : (
-                    <motion.div 
+                    <motion.div
                       initial={{ scale: 0 }}
                       animate={{ scale: 1 }}
                       transition={{ delay: 0.2 }}
@@ -205,7 +203,7 @@ const WebsiteReviewSlider = () => {
                   <div>
                     <h4 className="font-semibold text-gray-800">{review.name}</h4>
                     <span className="text-sm text-gray-500 flex items-center gap-1">
-                      <FiClock className="w-4 h-4" /> 
+                      <FiClock className="w-4 h-4" />
                       {new Date(review.date).toLocaleDateString('en-US', {
                         year: 'numeric',
                         month: 'short',
@@ -216,7 +214,7 @@ const WebsiteReviewSlider = () => {
                 </div>
 
                 {/* Rating */}
-                <motion.div 
+                <motion.div
                   initial={{ opacity: 0 }}
                   animate={{ opacity: 1 }}
                   transition={{ delay: 0.3 }}
@@ -226,7 +224,7 @@ const WebsiteReviewSlider = () => {
                 </motion.div>
 
                 {/* Review Content */}
-                <motion.p 
+                <motion.p
                   initial={{ opacity: 0 }}
                   animate={{ opacity: 1 }}
                   transition={{ delay: 0.4 }}
@@ -245,18 +243,20 @@ const WebsiteReviewSlider = () => {
         </Swiper>
 
         {/* Custom Navigation */}
-        <div className="flex justify-center items-center gap-4 mt-6">
+
+        <div className="flex justify-center px-16 items-center gap-4 mt-6">
           <button className="review-prev bg-white p-3 rounded-full shadow-md hover:shadow-lg transition-shadow focus:outline-none hover:bg-[#ff1818] hover:text-white group">
             <FiChevronLeft className="w-5 h-5 text-gray-700 group-hover:text-white" />
           </button>
-          
+
           {/* Custom Pagination */}
           <div className="review-pagination flex justify-center gap-2 mx-4" />
-          
+
           <button className="review-next bg-white p-3 rounded-full shadow-md hover:shadow-lg transition-shadow focus:outline-none hover:bg-[#ff1818] hover:text-white group">
             <FiChevronRight className="w-5 h-5 text-gray-700 group-hover:text-white" />
           </button>
         </div>
+
       </div>
 
       {/* Style for custom pagination */}

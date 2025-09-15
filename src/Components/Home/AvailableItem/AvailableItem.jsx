@@ -57,7 +57,7 @@ const AvailableItem = () => {
   const [loadedImages, setLoadedImages] = useState({});
 
   return (
-    <div className="mt-16 mb-16 px-4">
+    <div className="mt-16 mb-16 px-1">
       {/* Title & Subtitle */}
       <div className="text-center mb-8">
         <h2 className="text-3xl font-bold font-Caveat text-[#ff1818]">Available Foods</h2>

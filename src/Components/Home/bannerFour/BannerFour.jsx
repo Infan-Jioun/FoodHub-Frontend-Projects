@@ -9,15 +9,16 @@ const BannerFour = () => {
 
   return (
     <div>
-      <p className='text-center font-bold text-xl text-[#ff1818] font-Caveat'>
-        You prepare the food, we handle the rest
-      </p>
+      <div className="text-center mb-8">
+        <h2 className="text-3xl font-bold font-Caveat text-[#ff1818]">   You prepare the food, we handle the rest</h2>
+        <p className="text-gray-500 mt-2">Get Started</p>
+      </div>
       <div className="relative w-full mt-5 mb-24 h-[440px]">
         {/* Skeleton for loading */}
         {!loaded && (
-          <Skeleton 
-            height="100%" 
-            width="100%" 
+          <Skeleton
+            height="100%"
+            width="100%"
             className="absolute top-0 left-0"
           />
         )}
@@ -26,7 +27,7 @@ const BannerFour = () => {
         <img
           src="https://i.ibb.co/xKqhCHzc/home-vendor-pk.webp"
           alt="Restaurant Banner"
-          className={`w-full h-full object-cover transition-opacity duration-500 ${loaded ? 'opacity-100' : 'opacity-0'}`}
+          className={`w-full h-full bg-fixed object-cover transition-opacity duration-500 ${loaded ? 'opacity-100' : 'opacity-0'}`}
           onLoad={() => setLoaded(true)}
         />
 

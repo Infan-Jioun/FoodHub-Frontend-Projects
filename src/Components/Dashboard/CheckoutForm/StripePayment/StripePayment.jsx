@@ -65,6 +65,7 @@ const StripePayment = ({ formData }) => {
         payment_id: paymentData.transactionId,
         total_amount: paymentData.foodPrice.toFixed(2),
         address: paymentData.address,
+        union: paymentData.union,
         upazila: paymentData.upazila,
         district: paymentData.district,
         division: paymentData.division,
@@ -122,6 +123,7 @@ const StripePayment = ({ formData }) => {
         division: formData?.division,
         district: formData?.district,
         upazila: formData?.upazila,
+        union: formData?.union,
         address: formData?.address,
         contactNumber: formData?.contactNumber,
         items: cartFood?.map(item => ({

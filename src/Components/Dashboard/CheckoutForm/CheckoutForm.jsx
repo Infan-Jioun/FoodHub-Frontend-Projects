@@ -35,7 +35,8 @@ const CheckoutForm = () => {
     const [loadingGeo, setLoadingGeo] = useState({
         division: false,
         district: false,
-        upazila: false
+        upazila: false,
+        unions: false
     });
 
     const [query, setQuery] = useState("")
@@ -60,7 +61,8 @@ const CheckoutForm = () => {
             country: '',
             division: '',
             district: '',
-            upazila: ''
+            upazila: '',
+            unions: ''
         }
     });
 
@@ -86,7 +88,6 @@ const CheckoutForm = () => {
     }, [watchFields]);
 
 
-
     const handleSearch = (e) => {
         const value = e.target.value
         setQuery(value)
@@ -104,17 +105,29 @@ const CheckoutForm = () => {
         const matches = []
 
         bangladeshGeoData.forEach((division) => {
+            // Search divisions
             if (division.division.toLowerCase().includes(searchValue)) {
                 matches.push(division.division)
             }
+
+            // Search districts
             division.districts.forEach((district) => {
                 if (district.district.toLowerCase().includes(searchValue)) {
                     matches.push(`${district.district}, ${division.division}`)
                 }
+
+                // Search upazilas
                 district.upazilas.forEach((upazila) => {
-                    if (upazila.toLowerCase().includes(searchValue)) {
-                        matches.push(`${upazila}, ${district.district}, ${division.division}`)
+                    if (upazila.upazila.toLowerCase().includes(searchValue)) {
+                        matches.push(`${upazila.upazila}, ${district.district}, ${division.division}`)
                     }
+
+                    // Search unions within upazilas
+                    upazila.unions.forEach((union) => {
+                        if (union.toLowerCase().includes(searchValue)) {
+                            matches.push(`${union}, ${upazila.upazila}, ${district.district}, ${division.division}`)
+                        }
+                    })
                 })
             })
         })

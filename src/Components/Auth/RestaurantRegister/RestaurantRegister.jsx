@@ -9,7 +9,7 @@ import { useLocation, useNavigate } from "react-router-dom";
 import useAuth from "../../Hooks/useAuth";
 import useAxiosSecure from "../../Hooks/useAxiosSecure";
 import { useState, useEffect } from "react";
-import { Eye, EyeOff } from "lucide-react";
+import { Eye, EyeOff, Loader2 } from "lucide-react";
 import { motion } from "framer-motion";
 import Skeleton from "react-loading-skeleton";
 import "react-loading-skeleton/dist/skeleton.css";
@@ -20,6 +20,7 @@ const RestaurantRegister = () => {
   const location = useLocation();
   const [showPassword, setShowPassword] = useState(false);
   const [loading, setLoading] = useState(true);
+  const [submitLoading, setSubmitLoading] = useState(false);
   const from = location.state?.from?.pathname || "/";
   const axiosSecure = useAxiosSecure();
 
@@ -37,6 +38,7 @@ const RestaurantRegister = () => {
   }, []);
 
   const onSubmit = async (data) => {
+    setSubmitLoading(true);
     try {
       const response = await axiosSecure.get(
         `/users/check-name?name=${encodeURIComponent(data.displayName)}`
@@ -60,15 +62,18 @@ const RestaurantRegister = () => {
         restaurantAddress: data.restaurantAddress,
         restaurantNumber: parseFloat(data.phoneNumber),
         date: new Date(),
+        role: "owner",
       };
 
       await axiosSecure.put("/users", usersInfo);
 
-      toast.success("Successfully Registered!");
+      toast.success("Successfully Partner!");
       navigate(from, { replace: true });
     } catch (error) {
       console.error("Error during registration:", error);
       toast.error(error.response?.data?.message || "Something went wrong.");
+    } finally {
+      setSubmitLoading(false);
     }
   };
 
@@ -235,7 +240,7 @@ const RestaurantRegister = () => {
                     )}
                   </motion.div>
 
-                  {/* Submit */}
+                  {/* Submit Button with Loader */}
                   <motion.div
                     initial={{ opacity: 0, y: 20 }}
                     animate={{ opacity: 1, y: 0 }}
@@ -243,9 +248,17 @@ const RestaurantRegister = () => {
                   >
                     <button
                       type="submit"
-                      className="w-full bg-[#ff1818] text-white py-3 rounded-lg font-semibold uppercase hover:bg-[#e41616] transition"
+                      disabled={submitLoading}
+                      className="w-full bg-[#ff1818] text-white py-3 rounded-lg font-semibold uppercase hover:bg-[#e41616] transition disabled:opacity-70 disabled:cursor-not-allowed flex items-center justify-center gap-2"
                     >
-                      Submit Request
+                      {submitLoading ? (
+                        <>
+                          <Loader2 className="w-4 h-4 animate-spin" />
+                          Processing Request...
+                        </>
+                      ) : (
+                        "Submit Request"
+                      )}
                     </button>
                   </motion.div>
                 </form>

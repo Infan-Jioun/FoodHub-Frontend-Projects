@@ -49,6 +49,7 @@ import Orders from "../../Dashboard/Orders/Orders";
 import Reviews from "../../Dashboard/Reviews/Reviews";
 import Coffee from "../../Home/Home/Coffee/Coffee";
 import Search from "../../Navbar/Search/Search";
+import Authentication from "../../Auth/Authentication/Authentication";
 
 
 
@@ -107,6 +108,10 @@ export const router = createBrowserRouter([
       {
         path: "/about",
         element: <About />,
+      },
+      {
+       path : "/authentication",
+       element: <Authentication/>
       },
       {
         path: "/login",

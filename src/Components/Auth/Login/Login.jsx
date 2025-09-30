@@ -5,7 +5,7 @@ import { FcGoogle } from "react-icons/fc";
 import useAuth from "../../Hooks/useAuth";
 import { Link, useLocation, useNavigate } from "react-router-dom";
 import toast from "react-hot-toast";
-import { Eye, EyeOff } from "lucide-react";
+import { Eye, EyeOff, Loader2 } from "lucide-react";
 import Skeleton from "react-loading-skeleton";
 import "react-loading-skeleton/dist/skeleton.css";
 import { motion } from "framer-motion";
@@ -15,7 +15,9 @@ const Login = () => {
   const location = useLocation();
   const navigate = useNavigate();
   const [showPassword, setShowPassword] = useState(false);
-  const [loading, setLoading] = useState(true); 
+  const [loading, setLoading] = useState(true);
+  const [loginLoading, setLoginLoading] = useState(false);
+  const [googleLoading, setGoogleLoading] = useState(false);
   const from = location.state?.from?.pathname || "/";
 
   const {
@@ -24,14 +26,13 @@ const Login = () => {
     formState: { errors },
   } = useForm();
 
-
   useEffect(() => {
-    const timer = setTimeout(() => setLoading(false), 1500); 
+    const timer = setTimeout(() => setLoading(false), 1500);
     return () => clearTimeout(timer);
   }, []);
 
   const onSubmit = (data) => {
-    setLoading(true);
+    setLoginLoading(true);
     login(data.email, data.password)
       .then(() => {
         toast.success("Successfully Logged In");
@@ -40,11 +41,11 @@ const Login = () => {
       .catch(() => {
         toast.error("Login failed. Please check credentials.");
       })
-      .finally(() => setLoading(false));
+      .finally(() => setLoginLoading(false));
   };
 
   const handleGoogle = () => {
-    setLoading(true);
+    setGoogleLoading(true);
     googleAuth()
       .then(() => {
         toast.success("Successfully Logged in with Google");
@@ -53,7 +54,7 @@ const Login = () => {
       .catch(() => {
         toast.error("Google authentication failed.");
       })
-      .finally(() => setLoading(false));
+      .finally(() => setGoogleLoading(false));
   };
 
   return (
@@ -211,7 +212,7 @@ const Login = () => {
                 </motion.div>
               )}
 
-              {/* Submit */}
+              {/* Submit Button with Loader */}
               {loading ? (
                 <Skeleton height={40} />
               ) : (
@@ -220,9 +221,17 @@ const Login = () => {
                   animate={{ opacity: 1, scale: 1 }}
                   transition={{ duration: 0.5, delay: 0.6 }}
                   type="submit"
-                  className="w-full py-2 bg-[#ff1818] text-white font-bold rounded-lg hover:bg-[#e01515] transition"
+                  disabled={loginLoading}
+                  className="w-full py-2 bg-[#ff1818] text-white font-bold rounded-lg hover:bg-[#e01515] transition disabled:opacity-70 disabled:cursor-not-allowed flex items-center justify-center gap-2"
                 >
-                  Login
+                  {loginLoading ? (
+                    <>
+                      <Loader2 className="w-4 h-4 animate-spin" />
+                      Logging in...
+                    </>
+                  ) : (
+                    "Login"
+                  )}
                 </motion.button>
               )}
 
@@ -240,7 +249,7 @@ const Login = () => {
                 </motion.div>
               )}
 
-              {/* Google */}
+              {/* Google Button with Loader */}
               {loading ? (
                 <Skeleton height={40} />
               ) : (
@@ -250,11 +259,16 @@ const Login = () => {
                   transition={{ duration: 0.5, delay: 0.8 }}
                   type="button"
                   onClick={handleGoogle}
-                  className="flex items-center justify-center gap-2 border border-gray-300 py-2 rounded-full hover:bg-gray-100 transition w-full"
+                  disabled={googleLoading}
+                  className="flex items-center justify-center gap-2 border border-gray-300 py-2 rounded-full hover:bg-gray-100 transition w-full disabled:opacity-70 disabled:cursor-not-allowed"
                 >
-                  <FcGoogle size={20} />
+                  {googleLoading ? (
+                    <Loader2 className="w-4 h-4 animate-spin text-gray-600" />
+                  ) : (
+                    <FcGoogle size={20} />
+                  )}
                   <span className="font-medium text-sm">
-                    Continue with Google
+                    {googleLoading ? "Connecting..." : "Continue with Google"}
                   </span>
                 </motion.button>
               )}
@@ -272,9 +286,9 @@ const Login = () => {
                     color="gray"
                     className="text-center font-normal mt-4"
                   >
-                    Don’t have an account?
+                    Don't have an account?
                     <Link
-                      to="/register"
+                      to="/authentication"
                       className="text-[#ff1818] font-medium ml-1 hover:underline"
                     >
                       Sign Up

@@ -6,12 +6,12 @@ import Footer from "../Footer/Footer";
 
 const Main = () => {
     const location = useLocation();
-    const noNavbarFooter = ["/login" , "/register" , "/resetPassword" ,"/restaurantRegister" , "/dashboard/paymentSuccess" , "/search"].includes(location.pathname);
+    const noNavbarFooter = ["/authentication", "/login", "/register", "/resetPassword", "/restaurantRegister", "/dashboard/paymentSuccess", "/search"].includes(location.pathname);
     return (
         <div>
-          { noNavbarFooter || <Navbar/>  }
-            <Outlet/>
-            {noNavbarFooter || <Footer/>}
+            {noNavbarFooter || <Navbar />}
+            <Outlet />
+            {noNavbarFooter || <Footer />}
         </div>
     );
 };

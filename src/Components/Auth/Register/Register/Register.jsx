@@ -5,7 +5,7 @@ import {
   Typography,
 } from "@material-tailwind/react";
 import { useForm } from "react-hook-form";
-import { Eye, EyeOff } from "lucide-react";
+import { Eye, EyeOff, Loader2 } from "lucide-react";
 import { FcGoogle } from "react-icons/fc";
 import useAuth from "../../../Hooks/useAuth";
 import toast from "react-hot-toast";
@@ -24,6 +24,8 @@ const Register = () => {
   const [imgLoaded, setImgLoaded] = useState(false);
   const [formLoaded, setFormLoaded] = useState(false);
   const [pageLoaded, setPageLoaded] = useState(false);
+  const [registerLoading, setRegisterLoading] = useState(false);
+  const [googleLoading, setGoogleLoading] = useState(false);
   const from = location.state?.from?.pathname || "/";
   const axiosSecure = useAxiosSecure();
 
@@ -33,7 +35,6 @@ const Register = () => {
     formState: { errors },
   } = useForm();
 
-  // simulate form loading (e.g. API init)
   useEffect(() => {
     const timer = setTimeout(() => {
       setFormLoaded(true);
@@ -43,6 +44,7 @@ const Register = () => {
   }, []);
 
   const onSubmit = async (data) => {
+    setRegisterLoading(true);
     try {
       const res = await createUser(data.email, data.password);
       if (!res || !res.user) throw new Error("User creation failed");
@@ -67,10 +69,13 @@ const Register = () => {
     } catch (error) {
       console.error("Registration error:", error);
       toast.error("Registration failed. Try again.");
+    } finally {
+      setRegisterLoading(false);
     }
   };
 
   const handleGoogle = async () => {
+    setGoogleLoading(true);
     try {
       const res = await googleAuth();
       if (!res || !res.user) throw new Error("Google sign-in failed");
@@ -93,9 +98,10 @@ const Register = () => {
     } catch (error) {
       console.error("Google sign-in error:", error);
       toast.error("Google sign-in failed.");
+    } finally {
+      setGoogleLoading(false);
     }
   };
-
 
   const fieldVariants = {
     hidden: { opacity: 0, y: 25 },
@@ -247,13 +253,21 @@ const Register = () => {
                       />
                     </motion.div>
 
-                    {/* Submit */}
+                    {/* Submit Button with Loader */}
                     <motion.div custom={4} variants={fieldVariants}>
                       <button
                         type="submit"
-                        className="w-full bg-[#ff1818] hover:bg-[#e61616] text-white py-3 rounded-lg font-semibold transition duration-300"
+                        disabled={registerLoading}
+                        className="w-full bg-[#ff1818] hover:bg-[#e61616] text-white py-3 rounded-lg font-semibold transition duration-300 disabled:opacity-70 disabled:cursor-not-allowed flex items-center justify-center gap-2"
                       >
-                        Sign Up
+                        {registerLoading ? (
+                          <>
+                            <Loader2 className="w-4 h-4 animate-spin" />
+                            Creating Account...
+                          </>
+                        ) : (
+                          "Sign Up"
+                        )}
                       </button>
                     </motion.div>
                   </motion.form>
@@ -266,15 +280,20 @@ const Register = () => {
                   <div className="flex-grow border-t" />
                 </div>
 
-                {/* Google Button */}
+                {/* Google Button with Loader */}
                 <motion.button
-                  whileHover={{ scale: 1.03 }}
-                  whileTap={{ scale: 0.97 }}
+                  whileHover={{ scale: googleLoading ? 1 : 1.03 }}
+                  whileTap={{ scale: googleLoading ? 1 : 0.97 }}
                   onClick={handleGoogle}
-                  className="w-full flex items-center justify-center gap-2 py-2 border border-gray-300 rounded-full hover:bg-gray-100 transition duration-300"
+                  disabled={googleLoading}
+                  className="w-full flex items-center justify-center gap-2 py-2 border border-gray-300 rounded-full hover:bg-gray-100 transition duration-300 disabled:opacity-70 disabled:cursor-not-allowed"
                 >
-                  <FcGoogle className="w-5 h-5" />
-                  Continue with Google
+                  {googleLoading ? (
+                    <Loader2 className="w-4 h-4 animate-spin text-gray-600" />
+                  ) : (
+                    <FcGoogle className="w-5 h-5" />
+                  )}
+                  {googleLoading ? "Connecting..." : "Continue with Google"}
                 </motion.button>
 
                 {/* Login Link */}

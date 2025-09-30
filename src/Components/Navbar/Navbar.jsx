@@ -128,7 +128,7 @@ const Navbar = () => {
           <a className=" w-10 text-xl   lg:w-14 drop-shadow-md  rounded-full "><img src="https://i.ibb.co.com/F57mtch/logo2.png" alt="" /></a>
         </div>
         <div className="navbar-center " >
-        <Search searchQuery={searchQuery} setSearchQuery={setSearchQuery} />
+          <Search searchQuery={searchQuery} setSearchQuery={setSearchQuery} />
 
         </div>
         <div className="navbar-end gap-2">
@@ -209,7 +209,7 @@ const Navbar = () => {
       {/* Second Navbar */}
       <div className={`navbar  px-3 md:px-6 lg:px-8 bg-[#ff1818] ${scrolled ? "fixed top-0 left-0 w-full  shadow z-10 " : ""}`}>
         <div className="navbar-start">
-          
+
           <div className="dropdown lg:hidden">
             <div tabIndex={0} role="button" className="btn btn-ghost btn-circle text-white  font-extrabold">
 

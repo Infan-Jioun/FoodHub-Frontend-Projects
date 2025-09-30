@@ -105,27 +105,58 @@ const CheckoutForm = () => {
         const matches = []
 
         bangladeshGeoData.forEach((division) => {
-            // Search divisions
+
             if (division.division.toLowerCase().includes(searchValue)) {
-                matches.push(division.division)
+                matches.push({
+                    display: division.division,
+                    data: {
+                        division: division.division,
+                        district: '',
+                        upazila: '',
+                        union: ''
+                    }
+                })
             }
 
-            // Search districts
+
             division.districts.forEach((district) => {
                 if (district.district.toLowerCase().includes(searchValue)) {
-                    matches.push(`${district.district}, ${division.division}`)
+                    matches.push({
+                        display: `${district.district}, ${division.division}`,
+                        data: {
+                            division: division.division,
+                            district: district.district,
+                            upazila: '',
+                            union: ''
+                        }
+                    })
                 }
 
-                // Search upazilas
                 district.upazilas.forEach((upazila) => {
                     if (upazila.upazila.toLowerCase().includes(searchValue)) {
-                        matches.push(`${upazila.upazila}, ${district.district}, ${division.division}`)
+                        matches.push({
+                            display: `${upazila.upazila}, ${district.district}, ${division.division}`,
+                            data: {
+                                division: division.division,
+                                district: district.district,
+                                upazila: upazila.upazila,
+                                union: ''
+                            }
+                        })
                     }
 
-                    // Search unions within upazilas
+
                     upazila.unions.forEach((union) => {
                         if (union.toLowerCase().includes(searchValue)) {
-                            matches.push(`${union}, ${upazila.upazila}, ${district.district}, ${division.division}`)
+                            matches.push({
+                                display: `${union}, ${upazila.upazila}, ${district.district}, ${division.division}`,
+                                data: {
+                                    division: division.division,
+                                    district: district.district,
+                                    upazila: upazila.upazila,
+                                    union: union
+                                }
+                            })
                         }
                     })
                 })
@@ -139,9 +170,19 @@ const CheckoutForm = () => {
     }
 
     const handleSelect = (item) => {
-        setQuery(item)
+        setQuery(item.display)
         setResults([])
         setShowDropdown(false)
+
+
+        setValue('division', item.data.division, { shouldValidate: true })
+        setValue('district', item.data.district, { shouldValidate: true })
+        setValue('upazila', item.data.upazila, { shouldValidate: true })
+        setValue('unions', item.data.union, { shouldValidate: true })
+        setValue('country', 'Bangladesh', { shouldValidate: true })
+
+
+        setValue('location', item.display, { shouldValidate: true })
     }
 
     const subtotal = cartFood.reduce((acc, item) => acc + item.foodPrice * (item.quantity || 1), 0);
@@ -241,6 +282,7 @@ const CheckoutForm = () => {
                             </div>
 
                             {/* Location Search */}
+                         
                             <div className="relative">
                                 <Input
                                     label="Search Location"
@@ -249,7 +291,7 @@ const CheckoutForm = () => {
                                     value={query}
                                     onChange={handleSearch}
                                     error={!!errors.location}
-                                    placeholder="Search by division, district, upazila..."
+                                    placeholder="Search by division, district, upazila, union..."
                                 />
                                 {divisionLoading && (
                                     <div className="absolute right-3 top-3">
@@ -265,7 +307,7 @@ const CheckoutForm = () => {
                                                 className="px-3 py-2 text-sm text-gray-700 hover:bg-red-100 cursor-pointer"
                                                 onClick={() => handleSelect(item)}
                                             >
-                                                {item}
+                                                {item.display}
                                             </li>
                                         )) : (
                                             <li className="px-3 py-2 text-sm text-gray-500 text-center">No location found</li>
@@ -275,6 +317,13 @@ const CheckoutForm = () => {
 
                                 {errors.location && <p className="text-[#ff1818] text-xs mt-1">{errors.location.message}</p>}
                             </div>
+
+                            {/* Hidden fields to store the parsed location data */}
+                            <input type="hidden" {...register("division")} />
+                            <input type="hidden" {...register("district")} />
+                            <input type="hidden" {...register("upazila")} />
+                            <input type="hidden" {...register("unions")} />
+                            <input type="hidden" {...register("country")} />
 
                             <div>
                                 <Textarea

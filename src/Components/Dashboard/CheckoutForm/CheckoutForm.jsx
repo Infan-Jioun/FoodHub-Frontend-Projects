@@ -445,7 +445,7 @@ const CheckoutForm = () => {
                                                 >
                                                     Stripe
                                                 </Button>
-                                                <Button
+                                                {/* <Button
                                                     variant={selectedPaymentMethod === 'sslcommerz' ? 'contained' : 'outlined'}
                                                     onClick={() => handlePaymentMethodSelect('sslcommerz')}
                                                     sx={{
@@ -456,7 +456,7 @@ const CheckoutForm = () => {
                                                     }}
                                                 >
                                                     SSLCommerz
-                                                </Button>
+                                                </Button> */}
                                             </Box>
 
                                             {selectedPaymentMethod === 'stripe' && (
@@ -472,7 +472,7 @@ const CheckoutForm = () => {
                                                 </Elements>
                                             )}
 
-                                            {selectedPaymentMethod === 'sslcommerz' && (
+                                            {/* {selectedPaymentMethod === 'sslcommerz' && (
                                                 <SSLCommerzPayment
                                                     onClose={handleCloseModal}
                                                     total={total}
@@ -481,7 +481,7 @@ const CheckoutForm = () => {
                                                     formData={watchFields}
                                                     restaurantName={restaurantName}
                                                 />
-                                            )}
+                                            )} */}
                                         </DialogContent>
 
                                         <DialogActions sx={{ justifyContent: 'center', pb: 2 }}>

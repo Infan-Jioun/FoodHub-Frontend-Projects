@@ -1,9 +1,15 @@
 import { Navigate, useLocation } from "react-router-dom";
 import useAuth from "../../Hooks/useAuth";
 import { Circles } from "react-loader-spinner";
+import useAdmin from "../../Hooks/useAdmin";
+import useModerator from "../../Hooks/useModerator";
+import useRestaurantOwner from "../../Hooks/useRestaurantOwner";
 
 const PrivateRoutes = ({ children }) => {
     const { user, loading } = useAuth();
+    const [isAdmin] = useAdmin();
+    const [isModerator] = useModerator();
+    const [isOwner] = useRestaurantOwner();
     const location = useLocation();
 
     if (loading) {
@@ -18,7 +24,7 @@ const PrivateRoutes = ({ children }) => {
         );
     }
 
-    if (!user) {
+    if (!isAdmin || !isModerator || !isOwner) {
         return <Navigate to="/login" state={{ from: location }} replace />;
     }
 

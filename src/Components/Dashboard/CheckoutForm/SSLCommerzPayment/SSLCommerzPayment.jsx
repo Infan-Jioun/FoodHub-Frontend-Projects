@@ -1,10 +1,9 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState } from 'react';
 import { Typography, Button, CircularProgress, Box, Paper } from '@mui/material';
 import { styled } from '@mui/material/styles';
 import toast from 'react-hot-toast';
 import useAxiosSecure from '../../../Hooks/useAxiosSecure';
 import useAuth from '../../../Hooks/useAuth';
-import emailjs from '@emailjs/browser';
 
 const PaymentContainer = styled(Paper)(({ theme }) => ({
     padding: theme.spacing(3),
@@ -51,13 +50,8 @@ const SSLCommerzPayment = ({ onClose, total, cartFood, user, formData }) => {
                 upazila: formData.upazila,
                 address: formData.address,
                 contactNumber: formData.contactNumber,
-                items: cartFood.map(item => ({
-                    foodId: item._id,
-                    restaurantName: item.restaurantName,
-                    foodName: item.foodName,
-                    quantity: item.quantity || 1,
-                    price: item.foodPrice,
-                })),
+                cartIds : cartFood.map((item) => item._id),
+                menuItems: cartFood.map((item) => item.foodId),
             };
 
             const res = await axiosSecure.post("/create-ssl-payment", paymentData);
@@ -77,52 +71,6 @@ const SSLCommerzPayment = ({ onClose, total, cartFood, user, formData }) => {
         }
     };
 
-    // EmailJS init
-    useEffect(() => {
-        emailjs.init(import.meta.env.VITE_EMAILJS_PUBLIC_KEY);
-    }, []);
-
-    // After redirect from SSLCommerz
-    useEffect(() => {
-        const params = new URLSearchParams(window.location.search);
-        if (params.get("status") === "success") {
-            toast.success("Payment successful! Sending confirmation email...");
-
-            const paymentData = {
-                to_email: user?.email || authUser?.email,
-                to_name: formData.customerName,
-                payment_id: "TXN" + Date.now(),
-                total_amount: total.toFixed(2),
-                address: formData.address,
-                upazila: formData.upazila,
-                district: formData.district,
-                division: formData.division,
-                country: formData.country,
-                contact_number: formData.contactNumber,
-                items_html: cartFood.map(item => `
-                    <tr>
-                        <td>${item.foodName}</td>
-                        <td>${item.restaurantName}</td>
-                        <td>${item.quantity}</td>
-                        <td>$${(item.foodPrice * item.quantity).toFixed(2)}</td>
-                    </tr>
-                `).join(''),
-            };
-
-            emailjs.send(
-                import.meta.env.VITE_EMAILJS_SERVICE_ID,
-                import.meta.env.VITE_EMAILJS_TEMPLATE_ID,
-                paymentData
-            ).then((response) => {
-                console.log("Email sent successfully:", response);
-                toast.success("Confirmation email sent!");
-            }).catch((err) => {
-                console.error("Failed to send email:", err);
-                toast.error("Failed to send confirmation email.");
-            });
-        }
-    }, []);
-
     if (isRedirecting) {
         return (
             <Box sx={{ display: 'flex', flexDirection: 'column', alignItems: 'center', p: 4 }}>
@@ -131,7 +79,7 @@ const SSLCommerzPayment = ({ onClose, total, cartFood, user, formData }) => {
                     Redirecting to SSLCommerz...
                 </Typography>
                 <Typography variant="body2" sx={{ mt: 1 }} color="text.secondary">
-                    Please complete your payment. A confirmation email will be sent automatically.
+                    Please complete your payment.
                 </Typography>
             </Box>
         );
@@ -149,7 +97,7 @@ const SSLCommerzPayment = ({ onClose, total, cartFood, user, formData }) => {
             </Box>
 
             <Typography variant="body2" color="red" sx={{ mb: 3 }}>
-                You'll be redirected to SSLCommerz secure payment page. Confirmation email will be sent after success.
+                You'll be redirected to SSLCommerz secure payment page.
             </Typography>
 
             <Box sx={{ display: 'flex', gap: 2, mt: 3 }}>

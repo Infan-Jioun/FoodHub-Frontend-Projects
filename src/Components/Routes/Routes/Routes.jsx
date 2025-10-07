@@ -50,15 +50,11 @@ import Reviews from "../../Dashboard/Reviews/Reviews";
 import Coffee from "../../Home/Home/Coffee/Coffee";
 import Search from "../../Navbar/Search/Search";
 import Authentication from "../../Auth/Authentication/Authentication";
-
-
-
-
 export const router = createBrowserRouter([
   {
     path: "/",
     element: <Main />,
-    errorElement :  <ErrorElement/>,
+    errorElement: <ErrorElement />,
     children: [
       {
         path: "/",
@@ -98,20 +94,20 @@ export const router = createBrowserRouter([
       },
       {
         path: "/coffee",
-       element : <Coffee/>
+        element: <Coffee />
       },
       {
         path: "/restaurants",
         element: <Restaurants />,
       },
-     
+
       {
         path: "/about",
         element: <About />,
       },
       {
-       path : "/authentication",
-       element: <Authentication/>
+        path: "/authentication",
+        element: <Authentication />
       },
       {
         path: "/login",
@@ -127,23 +123,23 @@ export const router = createBrowserRouter([
       },
       {
         path: "/myProfile",
-        element:  <PrivateRoutes><MyProfile/></PrivateRoutes>
+        element: <MyProfile />
       },
       {
         path: "/resetPassword",
         element: <ResetPassword />,
       },
       {
-        path : '/restaurantUpload/:restaurantName',
-        element : <DeatilsRestaurants/>
+        path: '/restaurantUpload/:restaurantName',
+        element: <DeatilsRestaurants />
       },
       {
-        path : '/restaurantUpload/district/:districtName',
-        element :  <DistrictRes/>
+        path: '/restaurantUpload/district/:districtName',
+        element: <DistrictRes />
       },
       {
         path: "/search",
-        element : <Search/>
+        element: <Search />
       }
     ],
   },
@@ -161,11 +157,11 @@ export const router = createBrowserRouter([
       },
       {
         path: "/dashboard/adminHome",
-        element: <AdminRoutes><AdminHome/></AdminRoutes>,
+        element: <AdminRoutes><AdminHome /></AdminRoutes>,
       },
       {
         path: "/dashboard/revenue",
-        element: <AdminRoutes><Revenue/></AdminRoutes>,
+        element: <AdminRoutes><Revenue /></AdminRoutes>,
       },
 
       {
@@ -178,31 +174,31 @@ export const router = createBrowserRouter([
       },
       {
         path: "/dashboard/revenueDetails",
-        element: <PrivateRoutes><RevenueDetails/></PrivateRoutes>,
+        element: <PrivateRoutes><RevenueDetails /></PrivateRoutes>,
       },
       {
         path: "/dashboard/reviews",
-        element: <PrivateRoutes><Reviews/></PrivateRoutes>,
+        element: <PrivateRoutes><Reviews /></PrivateRoutes>,
       },
       {
         path: "/dashboard/orders",
-        element: <PrivateRoutes><Orders/></PrivateRoutes>,
+        element: <PrivateRoutes><Orders /></PrivateRoutes>,
       },
       {
         path: "/dashboard/manageMenu",
-        element: <PrivateRoutes><ManageMenu/></PrivateRoutes>,
+        element: <PrivateRoutes><ManageMenu /></PrivateRoutes>,
       },
       {
         path: "/dashboard/uploadInfo",
-        element: <PrivateRoutes><UploadInfo/></PrivateRoutes>,
+        element: <PrivateRoutes><UploadInfo /></PrivateRoutes>,
       },
       {
         path: "/dashboard/userHome",
-        element: <PrivateRoutes><UserHome /></PrivateRoutes>,
+        element: <UserHome />,
       },
       {
         path: "/dashboard/myOrder",
-        element: <PrivateRoutes><MyOrder /></PrivateRoutes>,
+        element: <MyOrder />,
       },
       {
         path: "/dashboard/updateFood/restaurantName/:foods",
@@ -214,7 +210,7 @@ export const router = createBrowserRouter([
       },
       {
         path: "/dashboard/checkOutForm",
-        element: <CheckoutForm/>,
+        element: <CheckoutForm />,
       },
       {
         path: "/dashboard/paymentHistory",
@@ -222,15 +218,15 @@ export const router = createBrowserRouter([
       },
       {
         path: "/dashboard/AddDistrictCollection",
-        element: <PrivateRoutes><AddDistrictCollection/></PrivateRoutes>,
+        element: <PrivateRoutes><AddDistrictCollection /></PrivateRoutes>,
       },
       {
         path: "/dashboard/paymentSuccess",
-        element: <PrivateRoutes><PaymentSuccess/></PrivateRoutes>,
+        element: <PaymentSuccess />,
       },
       {
         path: "/dashboard/paymentPage",
-        element: <PrivateRoutes><PaymentPage/></PrivateRoutes>,
+        element: <PaymentPage />,
       },
     ],
   },

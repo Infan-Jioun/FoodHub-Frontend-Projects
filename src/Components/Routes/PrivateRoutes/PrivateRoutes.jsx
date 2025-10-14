@@ -7,9 +7,6 @@ import useRestaurantOwner from "../../Hooks/useRestaurantOwner";
 
 const PrivateRoutes = ({ children }) => {
     const { user, loading } = useAuth();
-    const [isAdmin] = useAdmin();
-    const [isModerator] = useModerator();
-    const [isOwner] = useRestaurantOwner();
     const location = useLocation();
 
     if (loading) {
@@ -24,7 +21,7 @@ const PrivateRoutes = ({ children }) => {
         );
     }
 
-    if (!isAdmin || !isModerator || !isOwner) {
+    if (!user) {
         return <Navigate to="/login" state={{ from: location }} replace />;
     }
 

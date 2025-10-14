@@ -151,9 +151,9 @@ const MyProfile = () => {
         name: data.name,
         photo: data.photo,
         email: user.email,
-        phoneNumber: data.phoneNumber,
-        address: data.address,
-        bio: data.bio,
+        phoneNumber: data?.phoneNumber,
+        address: data?.address,
+        bio: data?.bio,
       };
 
       const response = await axiosSecure.put(`/users/${user.email}`, userInfo);

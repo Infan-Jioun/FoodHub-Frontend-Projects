@@ -12,20 +12,19 @@ const RestaurantBanner = () => {
   const [loadedImages, setLoadedImages] = useState({});
   const [isLoading, setIsLoading] = useState(true);
   const swiperRef = useRef(null);
-
   const images = [
     {
-      src: "https://images.unsplash.com/photo-1517248135467-4c7edcad34c4?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=2070&q=80",
+      src: "https://images.unsplash.com/photo-1517248135467-4c7edcad34c4?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=2074&q=80",
       title: "Fine Dining Experience",
       subtitle: "Exquisite Cuisine & Ambiance"
     },
     {
-      src: "https://images.unsplash.com/photo-1414235077428-338989a2e8c0?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=2070&q=80",
+      src: "https://images.unsplash.com/photo-1559339352-11d035aa65de?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=2074&q=80",
       title: "Fresh Ingredients",
       subtitle: "Locally Sourced & Organic"
     },
     {
-      src: "https://images.unsplash.com/photo-1559339352-11d035aa65de?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=2074&q=80",
+      src: "https://images.unsplash.com/photo-1517248135467-4c7edcad34c4?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=2074&q=80",
       title: "Elegant Atmosphere",
       subtitle: "Perfect for Every Occasion"
     },
@@ -42,7 +41,7 @@ const RestaurantBanner = () => {
     setLoadedImages(prev => ({ ...prev, [index]: true }));
   };
 
-  // Enhanced Skeleton Loader Component
+
   const BannerSkeleton = () => (
     <div className="w-full h-[400px] md:h-[500px] lg:h-[600px] relative bg-gradient-to-r from-gray-200 to-gray-300 overflow-hidden">
       <div className="absolute inset-0 flex items-center justify-center">
@@ -65,8 +64,7 @@ const RestaurantBanner = () => {
   }
 
   return (
-    <div className="relative group rounded-xl md:rounded-2xl overflow-hidden shadow-2xl bg-white mx-auto w-full">
-      {/* Main Swiper Container */}
+    <div className="relative group  overflow-hidden bg-white mx-auto w-full">
       <Swiper
         ref={swiperRef}
         spaceBetween={0}
@@ -90,13 +88,12 @@ const RestaurantBanner = () => {
         effect={'fade'}
         fadeEffect={{ crossFade: true }}
         modules={[Autoplay, Pagination, Navigation, EffectFade]}
-        className="w-full  md:h-[500px] lg:h-[600px] xl:h-[700px]"
+        className="w-full h-[400px] md:h-[500px] lg:h-[600px]"
         loop={true}
         speed={1000}
       >
         {images.map((image, index) => (
           <SwiperSlide key={index} className="relative w-full h-full">
-            {/* Enhanced Skeleton Loader for individual slide */}
             {!loadedImages[index] && (
               <div className="absolute inset-0 z-10 bg-gradient-to-br from-gray-100 to-gray-200 w-full h-full">
                 <Skeleton
@@ -118,8 +115,6 @@ const RestaurantBanner = () => {
                 </div>
               </div>
             )}
-
-            {/* Main Image Container */}
             <div className="relative w-full h-full">
               <img
                 src={image.src}
@@ -131,40 +126,33 @@ const RestaurantBanner = () => {
                 onLoad={() => handleImageLoad(index)}
               />
 
-              {/* Gradient Overlay */}
               <div className="absolute inset-0 bg-gradient-to-t from-black/50 via-black/20 to-transparent" />
-
-              {/* Content Overlay */}
               <div className={`absolute bottom-0 left-0 right-0 p-4 sm:p-6 md:p-8 lg:p-12 text-white transition-all duration-700 delay-300 ${loadedImages[index] ? "opacity-100 translate-y-0" : "opacity-0 translate-y-8"
                 }`}>
                 <div className="max-w-4xl mx-auto w-full">
-                  <h2 className="text-xl sm:text-2xl md:text-3xl lg:text-4xl xl:text-5xl font-bold mb-2 sm:mb-3 md:mb-4 font-serif leading-tight">
+                  <h2 className="text-xl sm:text-2xl md:text-3xl lg:text-4xl font-bold mb-2 sm:mb-3 md:mb-4 font-serif leading-tight">
                     {image.title}
                   </h2>
-                  <p className="text-sm sm:text-base md:text-lg lg:text-xl xl:text-2xl text-gray-200 mb-3 sm:mb-4 md:mb-6 font-light leading-relaxed">
+                  <p className="text-sm sm:text-base md:text-lg lg:text-xl text-gray-200 mb-3 sm:mb-4 md:mb-6 font-light leading-relaxed">
                     {image.subtitle}
                   </p>
                 </div>
               </div>
             </div>
-
-            {/* Slide Counter */}
             <div className="absolute top-3 right-3 sm:top-4 sm:right-4 bg-black/60 text-white px-2 py-1 sm:px-3 sm:py-1 rounded-full text-xs sm:text-sm font-medium backdrop-blur-sm z-20">
               {index + 1} / {images.length}
             </div>
           </SwiperSlide>
         ))}
       </Swiper>
-
-      {/* Custom Navigation Buttons */}
-      <button className="banner-prev absolute left-2 sm:left-3 md:left-4 top-1/2 transform -translate-y-1/2 z-20 w-8 h-8 sm:w-9 sm:h-9 md:w-10 md:h-10 lg:w-12 lg:h-12 bg-white/90 hover:bg-white rounded-full flex items-center justify-center shadow-xl transition-all duration-300 opacity-0 group-hover:opacity-100 backdrop-blur-sm hover:scale-110">
-        <svg className="w-4 h-4 sm:w-5 sm:h-5 md:w-5 md:h-5 lg:w-6 lg:h-6 text-gray-800" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+      <button className="banner-prev absolute left-2 sm:left-3 md:left-4 top-1/2 transform -translate-y-1/2 z-20 w-8 h-8 sm:w-9 sm:h-9 md:w-10 md:h-10 bg-white/90 hover:bg-white rounded-full flex items-center justify-center shadow-xl transition-all duration-300 opacity-0 group-hover:opacity-100 backdrop-blur-sm hover:scale-110">
+        <svg className="w-4 h-4 sm:w-5 sm:h-5 md:w-5 md:h-5 text-gray-800" fill="none" stroke="currentColor" viewBox="0 0 24 24">
           <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M15 19l-7-7 7-7" />
         </svg>
       </button>
 
-      <button className="banner-next absolute right-2 sm:right-3 md:right-4 top-1/2 transform -translate-y-1/2 z-20 w-8 h-8 sm:w-9 sm:h-9 md:w-10 md:h-10 lg:w-12 lg:h-12 bg-white/90 hover:bg-white rounded-full flex items-center justify-center shadow-xl transition-all duration-300 opacity-0 group-hover:opacity-100 backdrop-blur-sm hover:scale-110">
-        <svg className="w-4 h-4 sm:w-5 sm:h-5 md:w-5 md:h-5 lg:w-6 lg:h-6 text-gray-800" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+      <button className="banner-next absolute right-2 sm:right-3 md:right-4 top-1/2 transform -translate-y-1/2 z-20 w-8 h-8 sm:w-9 sm:h-9 md:w-10 md:h-10 bg-white/90 hover:bg-white rounded-full flex items-center justify-center shadow-xl transition-all duration-300 opacity-0 group-hover:opacity-100 backdrop-blur-sm hover:scale-110">
+        <svg className="w-4 h-4 sm:w-5 sm:h-5 md:w-5 md:h-5 text-gray-800" fill="none" stroke="currentColor" viewBox="0 0 24 24">
           <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 5l7 7-7 7" />
         </svg>
       </button>

@@ -39,7 +39,7 @@ const RestaurantsCard = () => {
     return { average, total: totalReviews };
   };
 
-  const handleDeleted = (restaurantId) => {
+  const handleDeleted = (restaurantName) => {
     if (isAdmin || isModerator) {
       Swal.fire({
         title: "Are you sure?",
@@ -51,7 +51,7 @@ const RestaurantsCard = () => {
         confirmButtonText: "Yes, delete it!",
       }).then((result) => {
         if (result.isConfirmed) {
-          axiosSecure.delete(`/restaurantUpload/${restaurantId}`)
+          axiosSecure.delete(`/restaurantManage/${restaurantName}`)
             .then((res) => {
               if (res.data.deletedCount > 0) {
                 toast.success("Successfully Deleted");
@@ -107,6 +107,7 @@ const RestaurantsCard = () => {
               const { average, total } = getRestaurantRating(restaurant);
 
               return (
+
                 <motion.div
                   key={restaurant._id.$oid || restaurant._id}
                   initial={{ opacity: 0, scale: 0.95 }}
@@ -164,17 +165,20 @@ const RestaurantsCard = () => {
 
                       {(isAdmin || isModerator) && (
                         <motion.button
-                          onClick={() => handleDeleted(restaurant._id.$oid || restaurant._id)}
-                          className="absolute top-4 right-4 bg-red-600 text-white p-3 rounded-full shadow-md hover:bg-red-700 transition-all"
+                          onClick={() => handleDeleted(restaurant.restaurantName)}
+                          className="absolute top-4 right-4 bg-red-600 text-white p-2 rounded-full shadow-lg hover:bg-red-700 transition-all duration-200 z-10"
                           whileHover={{ scale: 1.1 }}
                           whileTap={{ scale: 0.9 }}
+                          title="Delete Restaurant"
                         >
-                          <AiOutlineDelete size={20} />
+                          <AiOutlineDelete size={18} />
                         </motion.button>
                       )}
+                      <Link to={`/restaurantUpload/${restaurant.restaurantName}`}>  <button className="w-full bg-[#ff1818] hover:bg-[#ff1818] mt-2  text-white p-2 rounded-2xl"> View Foods</button></Link>
                     </CardBody>
                   </Card>
                 </motion.div>
+
               );
             })}
       </AnimatePresence>

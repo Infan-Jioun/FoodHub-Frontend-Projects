@@ -1,4 +1,3 @@
-// DistrictAvailable.jsx
 import React, { useState } from "react";
 import useAxiosSecure from "../../../Hooks/useAxiosSecure";
 import { useQuery } from "@tanstack/react-query";
@@ -15,7 +14,7 @@ const DistrictAvailable = () => {
         queryKey: ["districts"],
         queryFn: async () => {
             const res = await axiosSecure.get("/districtAvailable");
-            console.log("Districts API Response:", res.data); // Debugging
+            console.log("Districts API Response:", res.data); 
             return res.data;
         }
     });
@@ -39,7 +38,7 @@ const DistrictAvailable = () => {
                         {/* Skeleton for loading */}
                         {!loadedImages[index] && (
                             <Skeleton
-                                height={176} // h-44 = 44*4 = 176px
+                                height={176}
                                 width="100%"
                                 className="absolute top-0 left-0"
                                 borderRadius={12}
@@ -47,7 +46,7 @@ const DistrictAvailable = () => {
                         )}
 
                         <img
-                            src={district.photo}
+                            src={district.photo || "https://i.ibb.co.com/HL4RKtR3/cox-sbazar.jpg"}
                             alt={district.districtName || "District"}
                             className={`w-full h-44 object-cover rounded-lg transition-opacity duration-500 ${loadedImages[index] ? "opacity-100" : "opacity-0"
                                 }`}

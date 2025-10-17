@@ -309,7 +309,64 @@ const Navbar = () => {
                     </NavLink>
                   </MenuItem>
 
+                  <MenuItem>
+                    {
+                      isAdmin && (
+                        <NavLink
+                          to="/dashboard/adminHome"
+                          className={({ isActive }) =>
+                            isActive
+                              ? "font-extrabold text-[#ff1818] border-b-2 border-[#ff1818] relative inline-block transition-colors duration-300 before:content-[''] before:absolute before:bottom-[-2px] before:left-0 before:w-full before:h-[2px] before:bg-white before:scale-100 before:transition-transform before:duration-300 hover:before:scale-100"
+                              : "font-extrabold text-[#ff1818] relative inline-block transition-colors duration-300 before:content-[''] before:absolute before:bottom-[-2px] before:left-0 before:w-full before:h-[2px] before:bg-white before:scale-0 before:transition-transform before:duration-300 hover:before:scale-100 rounded"
+                          }
+                        >
+                          ADMIN DASHBOARD
+                        </NavLink>
+                      )
+                    }
+                    {
 
+                      isModerator && (
+                        <NavLink
+                          to="/dashboard/moderator"
+                          className={({ isActive }) =>
+                            isActive
+                              ? "font-extrabold text-[#ff1818] border-b-2 border-[#ff1818] relative inline-block transition-colors duration-300 before:content-[''] before:absolute before:bottom-[-2px] before:left-0 before:w-full before:h-[2px] before:bg-white before:scale-100 before:transition-transform before:duration-300 hover:before:scale-100"
+                              : "font-extrabold text-[#ff1818] relative inline-block transition-colors duration-300 before:content-[''] before:absolute before:bottom-[-2px] before:left-0 before:w-full before:h-[2px] before:bg-white before:scale-0 before:transition-transform before:duration-300 hover:before:scale-100 rounded"
+                          }
+                        >
+                          MODERATOR DASHBOARD
+                        </NavLink>
+                      )
+                    }
+                    {isOwner
+                      && (
+                        <NavLink
+                          to="/dashboard/ownerHome"
+                          className={({ isActive }) =>
+                            isActive
+                              ? "font-extrabold text-[#ff1818] border-b-2 border-[#ff1818] relative inline-block transition-colors duration-300 before:content-[''] before:absolute before:bottom-[-2px] before:left-0 before:w-full before:h-[2px] before:bg-white before:scale-100 before:transition-transform before:duration-300 hover:before:scale-100"
+                              : "font-extrabold text-[#ff1818] relative inline-block transition-colors duration-300 before:content-[''] before:absolute before:bottom-[-2px] before:left-0 before:w-full before:h-[2px] before:bg-white before:scale-0 before:transition-transform before:duration-300 hover:before:scale-100 rounded"
+                          }
+                        >
+                          OWNER DASHBOARD
+                        </NavLink>
+                      )
+                    }
+
+                    {!isAdmin && !isModerator && !isOwner && (
+                      <NavLink
+                        to="/dashboard/userHome"
+                        className={({ isActive }) =>
+                          isActive
+                            ? "font-extrabold text-white border-b-2 border-[#ff1818] relative inline-block transition-colors duration-300 before:content-[''] before:absolute before:bottom-[-2px] before:left-0 before:w-full before:h-[2px] before:bg-white before:scale-100 before:transition-transform before:duration-300 hover:before:scale-100"
+                            : "font-extrabold text-white relative inline-block transition-colors duration-300 before:content-[''] before:absolute before:bottom-[-2px] before:left-0 before:w-full before:h-[2px] before:bg-white before:scale-0 before:transition-transform before:duration-300 hover:before:scale-100 rounded"
+                        }
+                      >
+                        YOUR DASHBOARD
+                      </NavLink>
+                    )}
+                  </MenuItem>
                 </MenuList>
               </Menu>
             </div>

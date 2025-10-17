@@ -2,8 +2,6 @@ import React from 'react';
 import useAuth from '../../Hooks/useAuth';
 import { FaUserShield, FaEdit, FaUsers, FaClipboardList } from 'react-icons/fa';
 import { PiContactlessPaymentLight } from 'react-icons/pi';
-import { MdOutlineAddModerator } from 'react-icons/md';
-import { FaRegUser } from 'react-icons/fa6';
 import { Link } from 'react-router-dom';
 import { GoUpload } from 'react-icons/go';
 
@@ -49,7 +47,7 @@ const ModeratorHome = () => {
   ];
 
   return (
-    <div className="min-h-screen bg-gradient-to-br from-red-50 to-white p-6 md:p-10 rounded-2xl drop-shadow-2xl">
+    <div className="min-h-screen bg-red-50 p-6 md:p-10 rounded-2xl drop-shadow-2xl">
       <div className="max-w-7xl mx-auto bg-white shadow-2xl rounded-2xl p-8 border border-red-300">
 
         {/* Moderator Header */}

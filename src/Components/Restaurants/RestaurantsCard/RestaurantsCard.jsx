@@ -1,10 +1,4 @@
-import {
-  Card,
-  CardHeader,
-  CardBody,
-  Typography,
-  Avatar,
-} from "@material-tailwind/react";
+import { Card, CardHeader, CardBody, Typography, Avatar} from "@material-tailwind/react";
 import useRestaurantData from "../../Hooks/useRestaurantData";
 import { Link } from "react-router-dom";
 import useAdmin from "../../Hooks/useAdmin";
@@ -122,7 +116,7 @@ const RestaurantsCard = () => {
                     <CardHeader
                       floated={false}
                       shadow={false}
-                      className="relative h-[250px] bg-cover bg-center"
+                      className="relative h-[270px] bg-cover bg-center"
                       style={{ backgroundImage: `url(${restaurant.banner})` }}
                     >
                       <div className="absolute inset-0 transition-all duration-300" />

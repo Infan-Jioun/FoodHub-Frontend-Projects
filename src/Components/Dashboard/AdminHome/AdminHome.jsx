@@ -68,17 +68,13 @@ const AdminHome = () => {
       link: "/dashboard/myOrder",
       desc: "Oversee and update all restaurant orders.",
     },
-    {
-      icon: <FaUserShield />,
-      title: "Site Settings",
-      desc: "Configure Foodhub's global preferences and security.",
-    },
+   
   ];
 
   return (
-    <div className="min-h-screen flex items-center justify-center px-4 py-10 bg-red-50">
+    <div className="min-h-screen flex items-center justify-center px-4 py-10 bg-red-50 rounded-2xl drop-shadow-2xl">
       <div
-        className="bg-white rounded-2xl shadow-2xl p-8 max-w-4xl w-full text-gray-800"
+        className="bg-white rounded-2xl shadow-2xl p-8 max-w-7xl w-full text-gray-800"
         style={{ border: `2px solid ${red}` }}
       >
         {/* Admin Info */}
@@ -99,11 +95,11 @@ const AdminHome = () => {
         </div>
 
         {/* Admin Actions Grid */}
-        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
+        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6">
           {actions.map(({ icon, title, desc, link }, i) => {
             const card = (
               <div
-                className="bg-red-50 p-6 rounded-xl border border-red-300 hover:shadow-lg transition-shadow duration-300 cursor-pointer h-full"
+                className="bg-red-50 p-6  rounded-xl border border-red-300 hover:shadow-lg transition-shadow duration-300 cursor-pointer h-full"
                 style={{ borderColor: red }}
               >
                 <div className="text-3xl mb-3" style={{ color: red }}>

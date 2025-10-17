@@ -1,14 +1,6 @@
 import React from 'react';
 import { Link, useLocation } from 'react-router-dom';
-import {
-  FaUtensils,
-  FaUserCircle,
-  FaDollarSign,
-  FaStarHalfAlt,
-  FaChartBar,
-  FaRegUser,
-  FaEdit
-} from 'react-icons/fa';
+import { FaUtensils, FaUserCircle, FaDollarSign, FaStarHalfAlt, FaChartBar, FaRegUser, FaEdit } from 'react-icons/fa';
 import { PiContactlessPaymentLight } from 'react-icons/pi';
 import useAuth from '../../Hooks/useAuth';
 import useAxiosSecure from '../../Hooks/useAxiosSecure';
@@ -32,7 +24,7 @@ const OwnerHome = () => {
     }
   });
 
-  // Fetch revenue data specifically for the restaurant
+
   const { data: revenueData = {}, isLoading: revenueLoading } = useQuery({
     enabled: !!user?.email && isOwnerHome,
     queryKey: ['revenueData', user?.email],
@@ -97,7 +89,7 @@ const OwnerHome = () => {
                 <span className="font-semibold">${revenueData?.totalBalance?.toFixed(2) || '0.00'}</span>
               </div>
               <div className="text-xs mt-2 text-center text-gray-600">
-                {revenueData?.lastPayoutDate 
+                {revenueData?.lastPayoutDate
                   ? `Last payout: ${new Date(revenueData.lastPayoutDate).toLocaleDateString()}`
                   : 'No payouts yet'}
               </div>
@@ -116,8 +108,8 @@ const OwnerHome = () => {
   ];
 
   return (
-    <div className="min-h-screen bg-gradient-to-br from-red-50 to-white p-6 md:p-10">
-      <div className="max-w-5xl mx-auto bg-white shadow-2xl rounded-2xl p-8 border border-red-200">
+    <div className="min-h-screen bg-red-50 p-6 md:p-10 rounded-2xl drop-shadow-2xl">
+      <div className="max-w-7xl mx-auto bg-white shadow-2xl rounded-2xl p-8 border border-red-200">
 
         {/* Header */}
         <div className="flex flex-col sm:flex-row items-center sm:items-start space-y-4 sm:space-y-0 sm:space-x-6 mb-10">
@@ -148,10 +140,10 @@ const OwnerHome = () => {
         <hr className="my-6 border-red-200" />
 
         {/* Dashboard Grid */}
-        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
+        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6">
           {actions.map(({ icon, title, desc, link }, index) => {
             const card = (
-              <div 
+              <div
                 className="bg-red-100 hover:bg-red-200 transition p-5 rounded-xl border shadow-sm border-red-300 h-full flex flex-col"
                 key={index}
               >

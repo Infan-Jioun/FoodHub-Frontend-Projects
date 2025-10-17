@@ -1,15 +1,6 @@
 import React from 'react';
 import useAuth from '../../Hooks/useAuth';
-import {
-  FaUserShield,
-  FaFlag,
-  FaCheckCircle,
-  FaCommentDots,
-  FaUserEdit,
-  FaEdit,
-  FaUsers,
-  FaClipboardList
-} from 'react-icons/fa';
+import { FaUserShield, FaEdit, FaUsers, FaClipboardList } from 'react-icons/fa';
 import { PiContactlessPaymentLight } from 'react-icons/pi';
 import { MdOutlineAddModerator } from 'react-icons/md';
 import { FaRegUser } from 'react-icons/fa6';
@@ -51,26 +42,16 @@ const ModeratorHome = () => {
       desc: "Check payment and transaction records.",
       link: "/dashboard/paymentHistory"
     },
-    {
-      icon: <FaCheckCircle />,
-      title: "Approve Listings",
-      desc: "Review restaurant and food item submissions.",
-      link: "#" // Replace with actual route if needed
-    },
-    {
-      icon: <FaFlag />,
-      title: "Handle Reports",
-      desc: "Resolve content or user abuse reports.",
-      link: "#" // Replace with actual route if needed
-    },
-    
-  
+
+
+
+
   ];
 
   return (
-    <div className="min-h-screen bg-gradient-to-br from-red-50 to-white p-6 md:p-10">
-      <div className="max-w-6xl mx-auto bg-white shadow-2xl rounded-2xl p-8 border border-red-300">
-        
+    <div className="min-h-screen bg-gradient-to-br from-red-50 to-white p-6 md:p-10 rounded-2xl drop-shadow-2xl">
+      <div className="max-w-7xl mx-auto bg-white shadow-2xl rounded-2xl p-8 border border-red-300">
+
         {/* Moderator Header */}
         <div className="flex flex-col sm:flex-row items-center sm:items-start sm:space-x-6 mb-10">
           <FaUserShield className="w-16 h-16 mb-4 sm:mb-0" style={{ color: red }} />
@@ -105,7 +86,7 @@ const ModeratorHome = () => {
           <Link to={"/"}
             className="bg-[#ff1818] hover:bg-[#ff0000] text-white font-semibold px-6 py-2 rounded-lg shadow transition duration-300"
           >
-            Go to Home Page 
+            Go to Home Page
           </Link>
           <p className="text-sm text-gray-500 mt-3">
             You're moderating on <span className="font-semibold" style={{ color: red }}>Foodhub</span> — helping maintain quality and trust.

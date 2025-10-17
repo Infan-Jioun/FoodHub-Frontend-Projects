@@ -18,9 +18,7 @@ const MyProfile = () => {
   const [profileData, setProfileData] = useState({
     name: "",
     photoURL: "",
-    phoneNumber: "",
-    address: "",
-    bio: "",
+   
   });
   const [previewImage, setPreviewImage] = useState("");
   const [selectedFile, setSelectedFile] = useState(null);
@@ -79,9 +77,7 @@ const MyProfile = () => {
           setProfileData({
             name: data.name || "",
             photoURL: data.photo || "",
-            phoneNumber: data.phoneNumber || "",
-            address: data.address || "",
-            bio: data.bio || "",
+          
           });
           setInitialName(data.name || "");
           setPreviewImage(data.photo || "");
@@ -91,9 +87,7 @@ const MyProfile = () => {
       setProfileData({
         name: user.displayName || "",
         photoURL: user.photoURL || "",
-        phoneNumber: user.phoneNumber || "",
-        address: user.address || "",
-        bio: user.bio || "",
+     
       });
       setInitialName(user.displayName || "");
       setPreviewImage(user.photoURL || "");
@@ -151,9 +145,7 @@ const MyProfile = () => {
         name: data.name,
         photo: data.photo,
         email: user.email,
-        phoneNumber: data?.phoneNumber,
-        address: data?.address,
-        bio: data?.bio,
+   
       };
 
       const response = await axiosSecure.put(`/users/${user.email}`, userInfo);
@@ -191,9 +183,7 @@ const MyProfile = () => {
       const result = await updateUserProfileData({
         name,
         photo: imageUrl,
-        phoneNumber,
-        address,
-        bio,
+     
       });
 
       if (result.success) {
@@ -202,9 +192,7 @@ const MyProfile = () => {
         setProfileData({
           name,
           photoURL: imageUrl,
-          phoneNumber,
-          address,
-          bio,
+         
         });
         setInitialName(name);
         setPreviewImage(imageUrl);
@@ -371,45 +359,10 @@ const MyProfile = () => {
                     <FiMail className="absolute left-3 top-11 text-gray-400" />
                   </div>
 
-                  <div className="relative">
-                    <label className="text-gray-700 font-medium mb-1 flex items-center">
-                      <FiPhone className="mr-2" /> Phone Number
-                    </label>
-                    <input
-                      type="tel"
-                      name="phoneNumber"
-                      value={profileData.phoneNumber}
-                      onChange={handleInputChange}
-                      className="w-full px-4 py-3 pl-10 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-red-500 bg-white"
-                    />
-                    <FiPhone className="absolute left-3 top-11 text-gray-400" />
-                  </div>
 
-                  <div className="relative md:col-span-2">
-                    <label className="text-gray-700 font-medium mb-1 flex items-center">
-                      <FiMapPin className="mr-2" /> Address
-                    </label>
-                    <input
-                      type="text"
-                      name="address"
-                      value={profileData.address}
-                      onChange={handleInputChange}
-                      className="w-full px-4 py-3 pl-10 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-red-500 bg-white"
-                    />
-                    <FiMapPin className="absolute left-3 top-11 text-gray-400" />
-                  </div>
+                
 
-                  <div className="md:col-span-2">
-                    <label className="text-gray-700 font-medium mb-1">Bio</label>
-                    <textarea
-                      name="bio"
-                      value={profileData.bio}
-                      onChange={handleInputChange}
-                      rows="3"
-                      className="w-full px-4 py-3 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-red-500 bg-white"
-                      placeholder="Tell us about yourself..."
-                    ></textarea>
-                  </div>
+        
                 </div>
 
                 <div className="flex space-x-4 pt-4">
@@ -496,28 +449,9 @@ const MyProfile = () => {
                     </div>
                   </div>
 
-                  <div className="bg-gray-50 p-4 rounded-lg">
-                    <h3 className="text-lg font-semibold text-gray-800 mb-4 flex items-center">
-                      <FiMapPin className="mr-2" /> Contact Information
-                    </h3>
-                    <div className="space-y-3">
-                      <div>
-                        <p className="text-sm text-gray-500">Phone Number</p>
-                        <p className="text-gray-800 font-medium">{profileData.phoneNumber || "Not provided"}</p>
-                      </div>
-                      <div>
-                        <p className="text-sm text-gray-500">Address</p>
-                        <p className="text-gray-800 font-medium">{profileData.address || "Not provided"}</p>
-                      </div>
-                    </div>
-                  </div>
+                
 
-                  {profileData.bio && (
-                    <div className="md:col-span-2 bg-gray-50 p-4 rounded-lg">
-                      <h3 className="text-lg font-semibold text-gray-800 mb-2">About Me</h3>
-                      <p className="text-gray-800">{profileData.bio}</p>
-                    </div>
-                  )}
+                
                 </div>
               </div>
             </motion.div>

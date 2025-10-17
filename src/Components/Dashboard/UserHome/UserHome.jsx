@@ -8,7 +8,7 @@ const UserHome = () => {
   const { user } = useAuth();
   const red = "#ff1818";
 
-  // Action buttons including new Payment History
+
   const actions = [
     {
       icon: <FaShoppingBag />,
@@ -31,9 +31,9 @@ const UserHome = () => {
   ];
 
   return (
-    <div className="min-h-screen flex items-center justify-center px-4 py-10 bg-red-50">
+    <div className="min-h-screen flex items-center justify-center px-4 py-10 bg-red-50 rounded-2xl drop-shadow-2xl" >
       <div
-        className="bg-white rounded-2xl shadow-2xl p-8 max-w-2xl w-full text-gray-800"
+        className="bg-white rounded-2xl shadow-2xl p-8 max-w-7xl w-full text-gray-800"
         style={{ border: `2px solid ${red}` }}
       >
         {user ? (

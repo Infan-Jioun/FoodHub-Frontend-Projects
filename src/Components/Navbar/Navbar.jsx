@@ -316,8 +316,8 @@ const Navbar = () => {
                           to="/dashboard/adminHome"
                           className={({ isActive }) =>
                             isActive
-                              ? "font-extrabold text-[#ff1818] border-b-2 border-[#ff1818] relative inline-block transition-colors duration-300 before:content-[''] before:absolute before:bottom-[-2px] before:left-0 before:w-full before:h-[2px] before:bg-white before:scale-100 before:transition-transform before:duration-300 hover:before:scale-100"
-                              : "font-extrabold text-[#ff1818] relative inline-block transition-colors duration-300 before:content-[''] before:absolute before:bottom-[-2px] before:left-0 before:w-full before:h-[2px] before:bg-white before:scale-0 before:transition-transform before:duration-300 hover:before:scale-100 rounded"
+                              ? "font-extrabold text-[#ff1818] border-b-2 border-[#ff1818] relative inline-block transition-colors duration-300 before:content-[''] before:absolute before:bottom-[-2px] before:left-0 before:w-full before:h-[2px] before:bg-[#ff1818] before:scale-100 before:transition-transform before:duration-300 hover:before:scale-100"
+                              : "font-extrabold text-[#ff1818] relative inline-block transition-colors duration-300 before:content-[''] before:absolute before:bottom-[-2px] before:left-0 before:w-full before:h-[2px] before:bg-[#ff1818] before:scale-0 before:transition-transform before:duration-300 hover:before:scale-100 rounded"
                           }
                         >
                           ADMIN DASHBOARD
@@ -328,11 +328,10 @@ const Navbar = () => {
 
                       isModerator && (
                         <NavLink
-                          to="/dashboard/moderator"
                           className={({ isActive }) =>
                             isActive
-                              ? "font-extrabold text-[#ff1818] border-b-2 border-[#ff1818] relative inline-block transition-colors duration-300 before:content-[''] before:absolute before:bottom-[-2px] before:left-0 before:w-full before:h-[2px] before:bg-white before:scale-100 before:transition-transform before:duration-300 hover:before:scale-100"
-                              : "font-extrabold text-[#ff1818] relative inline-block transition-colors duration-300 before:content-[''] before:absolute before:bottom-[-2px] before:left-0 before:w-full before:h-[2px] before:bg-white before:scale-0 before:transition-transform before:duration-300 hover:before:scale-100 rounded"
+                              ? "font-extrabold text-[#ff1818] border-b-2 border-[#ff1818] relative inline-block transition-colors duration-300 before:content-[''] before:absolute before:bottom-[-2px] before:left-0 before:w-full before:h-[2px] before:bg-[#ff1818] before:scale-100 before:transition-transform before:duration-300 hover:before:scale-100"
+                              : "font-extrabold text-[#ff1818] relative inline-block transition-colors duration-300 before:content-[''] before:absolute before:bottom-[-2px] before:left-0 before:w-full before:h-[2px] before:bg-[#ff1818] before:scale-0 before:transition-transform before:duration-300 hover:before:scale-100 rounded"
                           }
                         >
                           MODERATOR DASHBOARD
@@ -345,8 +344,8 @@ const Navbar = () => {
                           to="/dashboard/ownerHome"
                           className={({ isActive }) =>
                             isActive
-                              ? "font-extrabold text-[#ff1818] border-b-2 border-[#ff1818] relative inline-block transition-colors duration-300 before:content-[''] before:absolute before:bottom-[-2px] before:left-0 before:w-full before:h-[2px] before:bg-white before:scale-100 before:transition-transform before:duration-300 hover:before:scale-100"
-                              : "font-extrabold text-[#ff1818] relative inline-block transition-colors duration-300 before:content-[''] before:absolute before:bottom-[-2px] before:left-0 before:w-full before:h-[2px] before:bg-white before:scale-0 before:transition-transform before:duration-300 hover:before:scale-100 rounded"
+                              ? "font-extrabold text-[#ff1818] border-b-2 border-[#ff1818] relative inline-block transition-colors duration-300 before:content-[''] before:absolute before:bottom-[-2px] before:left-0 before:w-full before:h-[2px] before:bg-[#ff1818] before:scale-100 before:transition-transform before:duration-300 hover:before:scale-100"
+                              : "font-extrabold text-[#ff1818] relative inline-block transition-colors duration-300 before:content-[''] before:absolute before:bottom-[-2px] before:left-0 before:w-full before:h-[2px] before:bg-[#ff1818] before:scale-0 before:transition-transform before:duration-300 hover:before:scale-100 rounded"
                           }
                         >
                           OWNER DASHBOARD
@@ -359,8 +358,8 @@ const Navbar = () => {
                         to="/dashboard/userHome"
                         className={({ isActive }) =>
                           isActive
-                            ? "font-extrabold text-white border-b-2 border-[#ff1818] relative inline-block transition-colors duration-300 before:content-[''] before:absolute before:bottom-[-2px] before:left-0 before:w-full before:h-[2px] before:bg-white before:scale-100 before:transition-transform before:duration-300 hover:before:scale-100"
-                            : "font-extrabold text-white relative inline-block transition-colors duration-300 before:content-[''] before:absolute before:bottom-[-2px] before:left-0 before:w-full before:h-[2px] before:bg-white before:scale-0 before:transition-transform before:duration-300 hover:before:scale-100 rounded"
+                            ? "font-extrabold text-[#ff1818] border-b-2 border-[#ff1818] relative inline-block transition-colors duration-300 before:content-[''] before:absolute before:bottom-[-2px] before:left-0 before:w-full before:h-[2px] before:bg-[#ff1818] before:scale-100 before:transition-transform before:duration-300 hover:before:scale-100"
+                            : "font-extrabold text-[#ff1818] relative inline-block transition-colors duration-300 before:content-[''] before:absolute before:bottom-[-2px] before:left-0 before:w-full before:h-[2px] before:bg-[#ff1818] before:scale-0 before:transition-transform before:duration-300 hover:before:scale-100 rounded"
                         }
                       >
                         YOUR DASHBOARD

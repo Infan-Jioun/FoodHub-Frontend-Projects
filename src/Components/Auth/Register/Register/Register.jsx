@@ -1,9 +1,4 @@
-import {
-  Card,
-  Input,
-  Checkbox,
-  Typography,
-} from "@material-tailwind/react";
+import { Card, Input, Checkbox, Typography } from "@material-tailwind/react";
 import { useForm } from "react-hook-form";
 import { Eye, EyeOff, Loader2 } from "lucide-react";
 import { FcGoogle } from "react-icons/fc";
@@ -15,6 +10,7 @@ import { useState, useEffect } from "react";
 import Skeleton from "react-loading-skeleton";
 import "react-loading-skeleton/dist/skeleton.css";
 import { motion } from "framer-motion";
+import { Helmet } from "react-helmet";
 
 const Register = () => {
   const { createUser, googleAuth, updateUserProfile } = useAuth();
@@ -114,6 +110,9 @@ const Register = () => {
 
   return (
     <div className="bg-red-50">
+      <Helmet>
+                <title>Register | FOODHUB</title>
+            </Helmet>
       <div className="min-h-screen max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 flex items-center justify-center">
         <div className="grid lg:grid-cols-2 gap-6 w-full bg-white rounded-2xl shadow-2xl overflow-hidden">
           {/* Image Section */}

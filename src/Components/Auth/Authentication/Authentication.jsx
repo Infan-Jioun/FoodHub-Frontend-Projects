@@ -2,6 +2,7 @@ import { LogInIcon, Utensils, User, ArrowRight } from 'lucide-react';
 import React, { useState, useEffect } from 'react';
 import { Link } from 'react-router-dom';
 import { motion } from 'framer-motion';
+import { Helmet } from 'react-helmet';
 
 function Authentication() {
     const [isLoading, setIsLoading] = useState(true);
@@ -86,6 +87,9 @@ function Authentication() {
 
     return (
         <div className="min-h-screen bg-gradient-to-br from-red-50 to-white flex flex-col md:flex-row justify-center items-center gap-8 p-6">
+             <Helmet>
+                <title>Authentication | FOODHUB</title>
+            </Helmet>
             <motion.div
                 className="flex flex-col md:flex-row justify-center items-center gap-8"
                 variants={containerVariants}

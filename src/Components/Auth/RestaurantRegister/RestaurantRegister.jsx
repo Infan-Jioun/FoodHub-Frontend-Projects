@@ -13,6 +13,7 @@ import { Eye, EyeOff, Loader2 } from "lucide-react";
 import { motion } from "framer-motion";
 import Skeleton from "react-loading-skeleton";
 import "react-loading-skeleton/dist/skeleton.css";
+import { Helmet } from "react-helmet";
 
 const RestaurantRegister = () => {
   const { createUser, updateUserProfile } = useAuth();
@@ -79,6 +80,9 @@ const RestaurantRegister = () => {
 
   return (
     <div className="bg-red-50">
+      <Helmet>
+                <title>Restaurant Register | FOODHUB</title>
+            </Helmet>
       <div className="min-h-screen max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 flex items-center justify-center">
         <div className="grid lg:grid-cols-2 w-full bg-white rounded-2xl shadow-2xl overflow-hidden mt-10">
           {/* Image Section */}

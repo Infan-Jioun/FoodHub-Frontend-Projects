@@ -9,6 +9,7 @@ import { Eye, EyeOff, Loader2 } from "lucide-react";
 import Skeleton from "react-loading-skeleton";
 import "react-loading-skeleton/dist/skeleton.css";
 import { motion } from "framer-motion";
+import { Helmet } from "react-helmet";
 
 const Login = () => {
   const { login, googleAuth } = useAuth();
@@ -59,6 +60,9 @@ const Login = () => {
 
   return (
     <div className="min-h-screen flex items-center justify-center px-4 py-10 bg-red-50">
+       <Helmet>
+                <title>Login | FOODHUB</title>
+            </Helmet>
       <div className="grid lg:grid-cols-2 shadow-2xl rounded-2xl overflow-hidden w-full max-w-6xl bg-white">
         {/* Image Section */}
         <div className="hidden lg:block bg-gray-100">

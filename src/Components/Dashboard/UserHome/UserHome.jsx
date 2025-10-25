@@ -42,9 +42,9 @@ const UserHome = () => {
             <div className="flex items-center mb-6 space-x-4">
               {
                 user ? <>
-                <img src={user.photoURL} className="w-14 h-14" alt="" />
+                  <img src={user.photoURL} className="w-14 h-14" alt="" />
                 </> : <>
-                <FaUserCircle className="text-5xl" style={{ color: red }} />
+                  <FaUserCircle className="text-5xl" style={{ color: red }} />
                 </>
               }
               <div>
@@ -63,26 +63,26 @@ const UserHome = () => {
 
             {/* Action Buttons Grid */}
             <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
-          {actions.map(({ icon, title, desc, link }, index) => {
-            const card = (
-              <div className="bg-red-100 hover:bg-red-200 transition p-5 rounded-xl border shadow-sm border-red-300 h-full">
-                <div className="text-3xl mb-2" style={{ color: red }}>
-                  {icon}
-                </div>
-                <h3 className="text-lg font-bold text-gray-800">{title}</h3>
-                <p className="text-sm text-gray-700">{desc}</p>
-              </div>
-            );
+              {actions.map(({ icon, title, desc, link }, index) => {
+                const card = (
+                  <div className="bg-red-100 hover:bg-red-200 transition p-5 rounded-xl border shadow-sm border-red-300 h-full">
+                    <div className="text-3xl mb-2" style={{ color: red }}>
+                      {icon}
+                    </div>
+                    <h3 className="text-lg font-bold text-gray-800">{title}</h3>
+                    <p className="text-sm text-gray-700">{desc}</p>
+                  </div>
+                );
 
-            return link ? (
-              <Link to={link} key={index}>
-                {card}
-              </Link>
-            ) : (
-              <div key={index}>{card}</div>
-            );
-          })}
-        </div>
+                return link ? (
+                  <Link to={link} key={index}>
+                    {card}
+                  </Link>
+                ) : (
+                  <div key={index}>{card}</div>
+                );
+              })}
+            </div>
 
             {/* Footer Note */}
             <div className="mt-8 text-center text-sm text-gray-600">
@@ -95,15 +95,15 @@ const UserHome = () => {
               </p>
             </div>
             <div className="mt-10 text-center">
-          <Link to={"/"}
-            className="bg-[#ff1818] hover:bg-[#ff0000] text-white font-semibold px-6 py-2 rounded-lg shadow transition duration-300"
-          >
-            Go to Home Page 
-          </Link>
-          <p className="text-sm text-gray-500 mt-3">
-            You're User on <span className="font-semibold" style={{ color: red }}>Foodhub</span> — helping maintain quality and trust.
-          </p>
-        </div>
+              <Link to={"/"}
+                className="bg-[#ff1818] hover:bg-[#ff0000] text-white font-semibold px-6 py-2 rounded-lg shadow transition duration-300"
+              >
+                Go to Home Page
+              </Link>
+              <p className="text-sm text-gray-500 mt-3">
+                You're User on <span className="font-semibold" style={{ color: red }}>Foodhub</span> — helping maintain quality and trust.
+              </p>
+            </div>
           </>
         ) : (
           // Not Logged In Message
@@ -115,13 +115,15 @@ const UserHome = () => {
             <p className="text-gray-600 mb-4">
               Please log in to access your Foodhub user dashboard.
             </p>
-            <button
-              aria-label="Login Now"
-              className="bg-[#ff1818] hover:bg-[#ff1818] text-white px-6 py-2 rounded-lg transition focus:outline-none focus:ring-2 focus:ring-red-600"
-              onClick={() => alert("Redirect to login page")}
-            >
-              Login Now
-            </button>
+            <Link to={"/login"}>
+              <button
+                aria-label="Login Now"
+                className="bg-[#ff1818] hover:bg-[#ff1818] text-white px-6 py-2 rounded-lg transition focus:outline-none focus:ring-2 focus:ring-red-600"
+             
+              >
+                Login Now
+              </button>
+            </Link>
           </div>
         )}
       </div>

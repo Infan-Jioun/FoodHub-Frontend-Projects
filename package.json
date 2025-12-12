@@ -28,7 +28,6 @@
     "@tanstack/react-query": "^5.62.7",
     "aos": "^2.3.4",
     "axios": "^1.7.9",
-    "caniuse-lite": "^1.0.30001721",
     "date-fns": "^4.1.0",
     "emailjs-com": "^3.2.0",
     "firebase": "^11.2.0",

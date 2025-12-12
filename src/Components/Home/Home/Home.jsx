@@ -2,12 +2,10 @@ import { Helmet } from "react-helmet";
 import Banner from "../Banner/Banner";
 import BannerTwo from "../BannerTwo/BannerTwo";
 import ServeFood from "../ServeFood/ServeFood";
-import Food from "../Food/Food";
 import AvailableItem from "../AvailableItem/AvailableItem";
 import BannerFour from "../bannerFour/BannerFour";
 import DistrictAvailable from "../DistrictAvailable/DistrictAvailable/DistrictAvailable";
 import Delivery from "../Delivery/Delivery";
-import RatingSlider from "../RatingSlider/RatingSlider";
 import WebsiteReviewFeed from "../WebsiteReviewFeed/WebsiteReviewFeed";
 
 const Home = () => {

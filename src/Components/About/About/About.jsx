@@ -5,6 +5,7 @@ import { useState } from "react";
 import Skeleton from "react-loading-skeleton";
 import "react-loading-skeleton/dist/skeleton.css";
 import { Typography } from "@material-tailwind/react";
+import { Helmet } from "react-helmet";
 
 const About = () => {
   const fadeUp = {
@@ -30,11 +31,14 @@ const About = () => {
   return (
     <div className="min-h-screen bg-gradient-to-b from-white via-gray-50 to-gray-100 py-12 px-4 md:px-20 text-gray-800 font-Kanit">
       {/* Header */}
+      <Helmet>
+       
+      </Helmet>
       <motion.div
         className="text-center mb-16"
         initial="hidden"
         whileInView="visible"
-        viewport={{ once: true }}
+        
         variants={fadeUp}
       >
         <h1 className="text-4xl font-bold text-gray-800 mb-2">
@@ -51,7 +55,7 @@ const About = () => {
           className="grid md:grid-cols-2 gap-10 items-center bg-white rounded-2xl shadow-lg p-6 md:p-10 hover:shadow-2xl transition"
           initial="hidden"
           whileInView="visible"
-          viewport={{ once: true }}
+          
           variants={fadeUp}
         >
           {!loadedImg.foodhub && <Skeleton height={400} className="rounded-xl" />}
@@ -81,7 +85,7 @@ const About = () => {
           className="grid md:grid-cols-2 gap-10 items-center bg-white rounded-2xl shadow-lg p-6 md:p-10 hover:shadow-2xl transition"
           initial="hidden"
           whileInView="visible"
-          viewport={{ once: true }}
+          
           variants={fadeUp}
         >
           <div className="space-y-4">
@@ -115,7 +119,7 @@ const About = () => {
           className="grid md:grid-cols-2 gap-10 items-center bg-white rounded-2xl shadow-lg p-6 md:p-10 hover:shadow-2xl transition"
           initial="hidden"
           whileInView="visible"
-          viewport={{ once: true }}
+          
           variants={fadeUp}
         >
           {!loadedImg.journey && <Skeleton height={400} className="rounded-xl w-full" />}
@@ -151,7 +155,7 @@ const About = () => {
             className="text-center"
             initial="hidden"
             whileInView="visible"
-            viewport={{ once: true }}
+            
             variants={fadeUp}
           >
             <img
@@ -169,7 +173,7 @@ const About = () => {
             className="grid md:grid-cols-3 gap-6"
             initial="hidden"
             whileInView="visible"
-            viewport={{ once: true }}
+            
             variants={fadeUp}
           >
             {accounts.map((acc) => (
@@ -193,7 +197,7 @@ const About = () => {
             className="grid md:grid-cols-2 gap-10 items-center bg-white rounded-2xl shadow-lg p-6 md:p-10 hover:shadow-2xl transition"
             initial="hidden"
             whileInView="visible"
-            viewport={{ once: true }}
+            
             variants={fadeUp}
           >
             <div>
@@ -224,7 +228,7 @@ const About = () => {
           className="bg-gradient-to-r from-red-500 to-red-700 text-white p-6 md:p-10 rounded-2xl shadow-2xl relative overflow-hidden"
           initial="hidden"
           whileInView="visible"
-          viewport={{ once: true }}
+          
           variants={fadeUp}
         >
           <div className="absolute inset-0 bg-[url('https://images.unsplash.com/photo-1603415526960-f8f1e8f1c0a6?w=1200')] bg-cover bg-center opacity-20" />
@@ -289,7 +293,7 @@ const About = () => {
         className="text-center mt-16"
         initial="hidden"
         whileInView="visible"
-        viewport={{ once: true }}
+        
         variants={fadeUp}
       >
         <p className="text-lg font-medium text-gray-700">

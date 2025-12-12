@@ -38,7 +38,6 @@ const DistrictAvailable = () => {
                         {/* Skeleton for loading */}
                         {!loadedImages[index] && (
                             <Skeleton
-                                height={176}
                                 width="100%"
                                 className="absolute top-0 left-0"
                                 borderRadius={12}

@@ -1,6 +1,6 @@
 # 🍽️ Food Delivery Web Application
 
-A complete food delivery platform where users can search for food and restaurants by location, place orders, and pay securely. Admins and restaurant owners can manage menus, track orders, and monitor performance.
+A complete food delivery platform where users can search for food and restaurants by location, place orders, and pay securely. Admins and restaurant owners can manage menus, track orders, and monitor performance...
 
 ---
 👉 [BACKEND](https://github.com/Infan-Jioun/FoodHub-Backend-Projects)

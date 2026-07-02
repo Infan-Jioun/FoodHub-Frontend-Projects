@@ -18,6 +18,7 @@ export const AuthContext = createContext(null);
 const auth = getAuth(app);
 const googleProvider = new GoogleAuthProvider();
 
+// eslint-disable-next-line react/prop-types
 const AuthProvider = ({ children }) => {
     const [user, setUser] = useState(null);
     const [loading, setLoading] = useState(true);
@@ -80,6 +81,7 @@ const AuthProvider = ({ children }) => {
                 });
 
                 toast.success("Profile updated successfully");
+            // eslint-disable-next-line no-unused-vars
             } catch (error) {
                 // toast.error("Failed to update profile");
             }

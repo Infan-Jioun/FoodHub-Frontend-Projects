@@ -270,7 +270,7 @@ const Search = ({ searchQuery, setSearchQuery }) => {
                       restaurantsResults.map((r, idx) => (
                         <Link
                           key={idx}
-                          to={`/restaurantUpload/${r.restaurantName}`}
+                          to={`/restaurant/${r.restaurantName}`}
                           onClick={() => handleSelect(r.restaurantName)}
                         >
                           <div className="flex items-center p-3 hover:bg-red-50/50 transition cursor-pointer rounded-lg">
@@ -304,7 +304,7 @@ const Search = ({ searchQuery, setSearchQuery }) => {
                       foodsResults.map((r, idx) => (
                         <Link
                           key={idx}
-                          to={`/restaurantUpload/${r.restaurantName}`}
+                          to={`/restaurant/${r.restaurantName}`}
                           onClick={() => handleSelect(r.foodName)}
                           state={{ scrollToFood: r.foodId }}
                         >

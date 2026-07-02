@@ -273,7 +273,7 @@ const About = () => {
                   <p className="text-base md:text-lg flex items-center gap-2">
                     <FaGlobe />
                     <a
-                      href="https://infan-portfolio.web.app/"
+                      href="https://infan-jioun.vercel.app"
                       target="_blank"
                       rel="noreferrer"
                       className="underline hover:text-gray-200 break-all"

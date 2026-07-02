@@ -22,7 +22,7 @@ const WebsiteReviewSlider = () => {
       try {
         setLoading(true);
         const res = await axiosSecure.get('/website-reviews');
-        setReviews(res.data.reviews || []);
+        setReviews(Array.isArray(res.data) ? res.data : []); // ← .data direct, .data.reviews na
       } catch (err) {
         setError(err.message || 'Failed to load reviews');
       } finally {
@@ -33,7 +33,6 @@ const WebsiteReviewSlider = () => {
     fetchReviews();
   }, [axiosSecure]);
 
-  // Star rating component
   const StarRating = ({ rating }) => {
     return (
       <div className="flex items-center">
@@ -57,7 +56,6 @@ const WebsiteReviewSlider = () => {
     );
   };
 
-  // Skeleton loader
   if (loading) {
     return (
       <div className="max-w-7xl mx-auto px-4 py-16">
@@ -124,7 +122,6 @@ const WebsiteReviewSlider = () => {
 
   return (
     <div className="max-w-7xl mx-auto px-4 py-16  my-8">
-      {/* Header */}
       <motion.div
         initial={{ opacity: 0, y: -20 }}
         animate={{ opacity: 1, y: 0 }}
@@ -139,7 +136,6 @@ const WebsiteReviewSlider = () => {
         </p>
       </motion.div>
 
-      {/* Review Slider */}
       <div className="relative">
         <Swiper
           modules={[Autoplay, Pagination, Navigation]}
@@ -179,7 +175,6 @@ const WebsiteReviewSlider = () => {
                 className={`bg-white p-6 rounded-2xl shadow-lg border hover:shadow-xl transition-all duration-300 flex flex-col h-full ${index === activeIndex ? 'ring-2 ring-[#ff1818] ring-opacity-50' : ''
                   }`}
               >
-                {/* Review Header */}
                 <div className="flex items-center gap-4 mb-4">
                   {review.photoURL ? (
                     <motion.img
@@ -213,7 +208,6 @@ const WebsiteReviewSlider = () => {
                   </div>
                 </div>
 
-                {/* Rating */}
                 <motion.div
                   initial={{ opacity: 0 }}
                   animate={{ opacity: 1 }}
@@ -223,7 +217,6 @@ const WebsiteReviewSlider = () => {
                   <StarRating rating={review.rating} />
                 </motion.div>
 
-                {/* Review Content */}
                 <motion.p
                   initial={{ opacity: 0 }}
                   animate={{ opacity: 1 }}
@@ -233,7 +226,6 @@ const WebsiteReviewSlider = () => {
                   "{review.comment}"
                 </motion.p>
 
-                {/* Decorative elements */}
                 <div className="absolute top-4 right-4 opacity-10">
                   <FiStar className="w-8 h-8 text-[#ff1818]" />
                 </div>
@@ -242,29 +234,24 @@ const WebsiteReviewSlider = () => {
           ))}
         </Swiper>
 
-        {/* Custom Navigation */}
-
         <div className="flex justify-center px-16 items-center gap-4 mt-6">
           <button className="review-prev bg-white p-3 rounded-full shadow-md hover:shadow-lg transition-shadow focus:outline-none hover:bg-[#ff1818] hover:text-white group">
             <FiChevronLeft className="w-5 h-5 text-gray-700 group-hover:text-white" />
           </button>
 
-          {/* Custom Pagination */}
           <div className="review-pagination flex justify-center gap-2 mx-4" />
 
           <button className="review-next bg-white p-3 rounded-full shadow-md hover:shadow-lg transition-shadow focus:outline-none hover:bg-[#ff1818] hover:text-white group">
             <FiChevronRight className="w-5 h-5 text-gray-700 group-hover:text-white" />
           </button>
         </div>
-
       </div>
 
-      {/* Style for custom pagination */}
       <style jsx>{`
         .review-bullet {
           width: 10px;
           height: 10px;
-         
+        
           border-radius: 50%;
           display: inline-block;
           margin: 0 4px;

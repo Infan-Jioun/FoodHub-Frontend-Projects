@@ -1,4 +1,3 @@
-import React from 'react';
 import useAxiosSecure from './useAxiosSecure';
 import useAuth from './useAuth';
 import { useQuery } from '@tanstack/react-query';
@@ -11,10 +10,10 @@ const useAddFood = () => {
     const { data: cartFood = [], refetch } = useQuery({
         queryKey: ['cartFood', user?.email],
         queryFn: async () => {
-            const res = await axiosSecure.get(`/addFood?email=${user?.email}`);
-            return res.data;
+            const res = await axiosSecure.get(`/cart?email=${user?.email}`);
+            return res.data; 
         },
-        enabled: !!user?.email, // only fetch when user email is available
+        enabled: !!user?.email,
     });
 
     const handleRemove = (id) => {
@@ -29,8 +28,8 @@ const useAddFood = () => {
                 confirmButtonText: 'Yes, delete it!',
             }).then((result) => {
                 if (result.isConfirmed) {
-                    axiosSecure.delete(`/addFood/${id}`).then((res) => {
-                        if (res.data.deletedCount > 0) {
+                    axiosSecure.delete(`/cart/${id}`).then((res) => {
+                        if (res.data.deletedCount > 0) { // ← .data.data
                             refetch();
                             Swal.fire({
                                 title: 'Deleted!',

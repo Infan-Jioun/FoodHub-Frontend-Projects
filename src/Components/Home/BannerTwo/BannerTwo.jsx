@@ -74,7 +74,7 @@ const BannerTwo = () => {
                   whileTap={{ scale: 0.95 }}
                   className="inline-block"
                 >
-                  <Link to="https://foodhub-d3e1e.web.app/restaurantUpload/pizzza%20Hut">
+                  <Link to="https://foodhub-d3e1e.web.app/restaurant/pizzza%20Hut">
                     <button className="w-full sm:w-auto rounded-lg border-2 p-3 px-5 border-[#ff1818] bg-[#ff1818] text-white font-semibold hover:bg-white hover:text-[#ff1818] transition duration-300 shadow-lg">
                       BOOK A FOOD
                     </button>

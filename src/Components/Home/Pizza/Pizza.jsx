@@ -446,7 +446,7 @@ const Pizza = () => {
                       </div>
                       <p className="text-[#ff1818] text-sm">
                         Delicious {food.foodName} from{" "}
-                        <Link to={`/restaurantUpload/${food.restaurantName}`}>
+                        <Link to={`/restaurant/${food.restaurantName}`}>
                           <span className="font-bold">{food.restaurantName}</span>
                         </Link>
                         . Price: ${food.price}

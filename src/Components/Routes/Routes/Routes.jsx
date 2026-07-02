@@ -10,7 +10,6 @@ import Login from "../../Auth/Login/Login";
 import Register from "../../Auth/Register/Register/Register";
 import ResetPassword from "../../Auth/ResetPassword/ResetPassword";
 import AddFoods from "../../Dashboard/AddFoods/AddFoods";
-import Profile from "../../Dashboard/Profle/Profile";
 import RestaurantRegister from "../../Auth/RestaurantRegister/RestaurantRegister";
 import RrestaurantProfile from "../../Dashboard/RrestaurantProfile/RrestaurantProfile";
 import PrivateRoutes from "../PrivateRoutes/PrivateRoutes";
@@ -130,11 +129,11 @@ export const router = createBrowserRouter([
         element: <ResetPassword />,
       },
       {
-        path: '/restaurantUpload/:restaurantName',
+        path: '/restaurant/:restaurantName',
         element: <DeatilsRestaurants />
       },
       {
-        path: '/restaurantUpload/district/:districtName',
+        path: '/restaurant/district/:districtName',
         element: <DistrictRes />
       },
       {

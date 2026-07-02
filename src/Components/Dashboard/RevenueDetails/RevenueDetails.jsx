@@ -1,4 +1,3 @@
-import React from 'react';
 import { useQuery } from '@tanstack/react-query';
 import useAuth from '../../Hooks/useAuth';
 import useAxiosSecure from '../../Hooks/useAxiosSecure';
@@ -10,13 +9,13 @@ const RevenueDetails = () => {
     const axiosSecure = useAxiosSecure();
     const red = '#ff1818';
 
-    // Fetch payment history for this restaurant
     const { data: paymentResponse = { data: [], totals: {} }, isLoading } = useQuery({
         queryKey: ['restaurantPayments', user?.email],
         queryFn: async () => {
-            const res = await axiosSecure.get(`/restaurantPayments/${user?.email}`);
-            return res.data;
-        }
+            const res = await axiosSecure.get(`/payments/restaurant-payments/${user?.email}`);
+            return res.data; // ← interceptor already unwrap kore dey: { data: [...], totals: {...} }
+        },
+        enabled: !!user?.email
     });
 
     const { data: payments = [], totals = {} } = paymentResponse;
@@ -43,7 +42,6 @@ const RevenueDetails = () => {
                     <FaMoneyBillWave className="mr-2" style={{ color: red }} /> Revenue Details
                 </h1>
 
-                {/* Summary Cards */}
                 <div className="grid grid-cols-1 md:grid-cols-3 gap-6 mb-8">
                     <div className="bg-red-100 p-6 rounded-xl border border-red-300">
                         <div className="flex items-center justify-between">
@@ -76,7 +74,6 @@ const RevenueDetails = () => {
                     </div>
                 </div>
 
-                {/* Transaction History */}
                 <div className="mt-8">
                     <h2 className="text-2xl font-semibold text-gray-800 mb-4 flex items-center">
                         <FaHistory className="mr-2" style={{ color: red }} /> Transaction History
@@ -103,12 +100,9 @@ const RevenueDetails = () => {
                                 </thead>
                                 <tbody>
                                     {payments.map((payment, index) => {
-                                        // Calculate amount from items instead of foodPrice
                                         const amount = payment.items?.reduce((sum, item) => {
-                                            const price = item.price?.$numberInt ? parseInt(item.price.$numberInt) : 
-                                                        typeof item.price === 'number' ? item.price : 0;
-                                            const quantity = item.quantity?.$numberInt ? parseInt(item.quantity.$numberInt) : 
-                                                          typeof item.quantity === 'number' ? item.quantity : 1;
+                                            const price = typeof item.price === 'number' ? item.price : parseFloat(item.price) || 0;
+                                            const quantity = typeof item.quantity === 'number' ? item.quantity : parseInt(item.quantity) || 1;
                                             return sum + (price * quantity);
                                         }, 0) || 0;
 
@@ -121,14 +115,14 @@ const RevenueDetails = () => {
                                                 <td className="py-3 px-4 border-b">{date}</td>
                                                 <td className="py-3 px-4 border-b">
                                                     <span className="text-xs font-mono">
-                                                        {payment._id?.$oid?.substring(0, 6) || payment._id?.substring(0, 6) || 'N/A'}...
+                                                        {payment._id?.substring(0, 6) || 'N/A'}...
                                                     </span>
                                                 </td>
                                                 <td className="py-3 px-4 border-b">{payment.customerName}</td>
                                                 <td className="py-3 px-4 border-b">
                                                     {payment.items?.map((item, i) => (
                                                         <div key={i} className="text-sm">
-                                                            {item.foodName} (x{item.quantity?.$numberInt || item.quantity || 1})
+                                                            {item.foodName} (x{item.quantity || 1})
                                                         </div>
                                                     ))}
                                                 </td>
@@ -138,11 +132,10 @@ const RevenueDetails = () => {
                                                     ${earnings.toFixed(2)}
                                                 </td>
                                                 <td className="py-3 px-4 border-b">
-                                                    <span className={`px-2 py-1 rounded-full text-xs ${
-                                                        payment.status === 'success' 
-                                                            ? 'bg-green-100 text-green-800' 
+                                                    <span className={`px-2 py-1 rounded-full text-xs ${payment.status === 'success'
+                                                            ? 'bg-green-100 text-green-800'
                                                             : 'bg-yellow-100 text-yellow-800'
-                                                    }`}>
+                                                        }`}>
                                                         {payment.status}
                                                     </span>
                                                 </td>
@@ -155,7 +148,6 @@ const RevenueDetails = () => {
                     )}
                 </div>
 
-                {/* Summary at bottom */}
                 <div className="mt-8 p-6 bg-red-50 rounded-xl border border-red-300">
                     <div className="flex flex-col md:flex-row justify-between items-center">
                         <div className="flex items-center mb-4 md:mb-0">

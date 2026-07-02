@@ -13,7 +13,7 @@ const DistrictAvailable = () => {
     const { data: districts = [] } = useQuery({
         queryKey: ["districts"],
         queryFn: async () => {
-            const res = await axiosSecure.get("/districtAvailable");
+            const res = await axiosSecure.get("/districts");
             console.log("Districts API Response:", res.data); 
             return res.data;
         }
@@ -54,7 +54,7 @@ const DistrictAvailable = () => {
                             }
                         />
 
-                        <Link to={`/restaurantUpload/district/${district.districtName}`}>
+                        <Link to={`/restaurant/district/${district.districtName}`}>
                             <motion.div className="absolute inset-0 bg-black bg-opacity-60 flex items-center justify-center opacity-0 hover:opacity-100 transition-opacity duration-300">
                                 <p className="text-white font-semibold text-lg font-Caveat hover:underline">
                                     {district.districtName || "Unknown"}

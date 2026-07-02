@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from "react";
+import  { useState, useEffect } from "react";
 import {
   Dialog,
   DialogHeader,
@@ -14,6 +14,7 @@ const FoodReviewModal = ({ open, onClose, payment }) => {
   const [ratings, setRatings] = useState({});
   const [comments, setComments] = useState({});
   const [reviewedItems, setReviewedItems] = useState([]);
+  const [submitting, setSubmitting] = useState({});
   const axiosSecure = useAxiosSecure();
 
   useEffect(() => {
@@ -38,6 +39,11 @@ const FoodReviewModal = ({ open, onClose, payment }) => {
       return;
     }
 
+    if (!payment?.email) {
+      toast.error("Customer email is missing. Cannot submit review.");
+      return;
+    }
+
     const reviewData = {
       customerName: payment.customerName || "Anonymous",
       customerEmail: payment.email,
@@ -47,21 +53,27 @@ const FoodReviewModal = ({ open, onClose, payment }) => {
       comment: foodComment,
     };
 
+    setSubmitting((prev) => ({ ...prev, [item.foodName]: true }));
+
     try {
       const res = await axiosSecure.patch(
-        `/restaurantUpload/${encodeURIComponent(item.restaurantName)}/${encodeURIComponent(item.foodName)}`,
+        `/restaurant/${encodeURIComponent(item.restaurantName)}/${encodeURIComponent(item.foodName)}/review`,
         { reviewData }
       );
 
-      if (res.data?.success) {
+      // Backend response (interceptor diye unwrap howar por): { modified: true/false }
+      if (res.data?.modified) {
         toast.success(`${item.foodName} reviewed!`);
         setReviewedItems((prev) => [...prev, item.foodName]);
       } else {
-        toast.error(res.data?.message || `Failed to review ${item.foodName}`);
+        toast.error(`Failed to review ${item.foodName}`);
       }
     } catch (err) {
       console.error("Review Error:", err);
-      toast.error(`Error reviewing ${item.foodName}`);
+      const message = err?.response?.data?.message || `Error reviewing ${item.foodName}`;
+      toast.error(message);
+    } finally {
+      setSubmitting((prev) => ({ ...prev, [item.foodName]: false }));
     }
   };
 
@@ -77,6 +89,7 @@ const FoodReviewModal = ({ open, onClose, payment }) => {
       <DialogBody className="space-y-5 max-h-[65vh] overflow-y-auto px-6 py-4">
         {payment?.items?.map((item, idx) => {
           const alreadyReviewed = reviewedItems.includes(item.foodName);
+          const isSubmitting = submitting[item.foodName];
 
           return (
             <div
@@ -140,13 +153,17 @@ const FoodReviewModal = ({ open, onClose, payment }) => {
               <div className="flex justify-end mt-3">
                 <Button
                   onClick={() => handleReview(item)}
-                  className={`px-4 py-2 rounded-lg shadow-md text-white transition-all ${alreadyReviewed
+                  className={`px-4 py-2 rounded-lg shadow-md text-white transition-all ${alreadyReviewed || isSubmitting
                     ? "bg-gray-400 cursor-not-allowed"
                     : "bg-[#ff1818] hover:bg-[#e60000]"
                     }`}
-                  disabled={alreadyReviewed}
+                  disabled={alreadyReviewed || isSubmitting}
                 >
-                  {alreadyReviewed ? "Already Reviewed" : "Submit Review"}
+                  {alreadyReviewed
+                    ? "Already Reviewed"
+                    : isSubmitting
+                      ? "Submitting..."
+                      : "Submit Review"}
                 </Button>
               </div>
             </div>

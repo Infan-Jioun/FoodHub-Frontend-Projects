@@ -1,4 +1,4 @@
-import { Card, CardHeader, CardBody, Typography, Avatar} from "@material-tailwind/react";
+import { Card, CardHeader, CardBody, Typography, Avatar } from "@material-tailwind/react";
 import useRestaurantData from "../../Hooks/useRestaurantData";
 import { Link } from "react-router-dom";
 import useAdmin from "../../Hooks/useAdmin";
@@ -45,9 +45,9 @@ const RestaurantsCard = () => {
         confirmButtonText: "Yes, delete it!",
       }).then((result) => {
         if (result.isConfirmed) {
-          axiosSecure.delete(`/restaurantManage/${restaurantName}`)
+          axiosSecure.delete(`/restaurant/${restaurantName}`)   // ← /restaurantManage → /restaurant
             .then((res) => {
-              if (res.data.deletedCount > 0) {
+              if (res.data.deletedCount > 0) {  
                 toast.success("Successfully Deleted");
               }
               refetch();
@@ -135,7 +135,7 @@ const RestaurantsCard = () => {
                         </div>
                       </div>
                       <div className="mt-4 flex justify-center">
-                        <Link to={`/restaurantUpload/${restaurant.restaurantName}`}>
+                        <Link to={`/restaurant/${restaurant.restaurantName}`}>
                           <Avatar
                             size="xl"
                             variant="circular"
@@ -168,7 +168,7 @@ const RestaurantsCard = () => {
                           <AiOutlineDelete size={18} />
                         </motion.button>
                       )}
-                      <Link to={`/restaurantUpload/${restaurant.restaurantName}`}>  <button className="w-full bg-[#ff1818] hover:bg-[#ff1818] mt-2  text-white p-2 rounded-2xl"> View Foods</button></Link>
+                      <Link to={`/restaurant/${restaurant.restaurantName}`}>  <button className="w-full bg-[#ff1818] hover:bg-[#ff1818] mt-2  text-white p-2 rounded-2xl"> View Foods</button></Link>
                     </CardBody>
                   </Card>
                 </motion.div>

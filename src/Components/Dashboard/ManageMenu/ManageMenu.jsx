@@ -2,7 +2,6 @@ import { useState } from 'react';
 import { useQuery } from '@tanstack/react-query';
 import useAxiosSecure from '../../Hooks/useAxiosSecure';
 import useAuth from '../../Hooks/useAuth';
-import { FaEdit } from 'react-icons/fa';
 import useAdmin from '../../Hooks/useAdmin';
 import useModerator from '../../Hooks/useModerator';
 import useRestaurantOwner from '../../Hooks/useRestaurantOwner';
@@ -25,8 +24,8 @@ const ManageMenu = () => {
     const { data: restaurant = {}, isLoading, refetch } = useQuery({
         queryKey: ['restaurantData', user?.email],
         queryFn: async () => {
-            const res = await axiosSecure.get(`/restaurantManage/${user?.email}`);
-            return res.data;
+            const res = await axiosSecure.get(`/restaurant/by-email/${user?.email}`);
+            return res.data; // ← interceptor already unwrap kore dey, restaurant object direct
         },
         enabled: !!user?.email
     });
@@ -46,15 +45,14 @@ const ManageMenu = () => {
             confirmButtonText: "Yes, delete it!",
         }).then((result) => {
             if (result.isConfirmed) {
-                axiosSecure.delete(`/restaurantManage/${restaurantName}/${foodName}`)
-                    .then((res) => {
-                        if (res.data.success) {
-                            Swal.fire("Deleted!", "Food item deleted successfully.", "success");
-                            refetch();
-                        }
+                axiosSecure.delete(`/restaurant/${encodeURIComponent(restaurantName)}/food/${encodeURIComponent(foodName)}`)
+                    .then(() => {
+                        Swal.fire("Deleted!", "Food item deleted successfully.", "success");
+                        refetch();
                     })
-                    .catch(() => {
-                        Swal.fire("Error", "Failed to delete", "error");
+                    .catch((err) => {
+                        const message = err?.response?.data?.message || "Failed to delete";
+                        Swal.fire("Error", message, "error");
                     });
             }
         });
@@ -91,7 +89,7 @@ const ManageMenu = () => {
                                     <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Name</th>
                                     <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Category</th>
                                     <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Price</th>
-                                   
+
                                     <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Actions</th>
                                 </tr>
                             </thead>
@@ -117,7 +115,7 @@ const ManageMenu = () => {
                                         <td className="px-6 py-4 whitespace-nowrap">
                                             <div className="text-sm text-gray-900">${item.price}</div>
                                         </td>
-                                       
+
                                         <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-500">
                                             <div className="flex space-x-2">
                                                 {(isAdmin || isModerator || isOwner) && (
@@ -132,7 +130,7 @@ const ManageMenu = () => {
                                                             whileTap={{ scale: 0.9 }}
                                                             aria-label={`Edit ${item.foodName}`}
                                                         >
-                                                            <RxUpdate/>
+                                                            <RxUpdate />
                                                         </motion.button>
                                                         <motion.button
                                                             onClick={() => handleDelete(restaurant.restaurantName, item.foodName)}
@@ -159,7 +157,6 @@ const ManageMenu = () => {
                 )}
             </div>
 
-            {/* Update Food Modal */}
             {showModal && (
                 <UpdateFoodModal
                     restaurantName={restaurant.restaurantName}

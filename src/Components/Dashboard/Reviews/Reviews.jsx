@@ -1,4 +1,3 @@
-// Reviews.js (Restaurant Owner's View)
 import React, { useState } from 'react';
 import { useQuery } from '@tanstack/react-query';
 import useAuth from '../../Hooks/useAuth';
@@ -12,16 +11,15 @@ const Reviews = () => {
     const [replyingTo, setReplyingTo] = useState(null);
     const [replyText, setReplyText] = useState('');
 
-    // Fetch restaurant data with reviews
     const { data: restaurantData = {}, isLoading, refetch } = useQuery({
         queryKey: ['restaurantReviews', user?.email],
         queryFn: async () => {
-            const res = await axiosSecure.get(`/restaurantManage/${user?.email}`);
-            return res.data;
-        }
+            const res = await axiosSecure.get(`/restaurant/by-email/${user?.email}`);
+            return res.data; 
+        },
+        enabled: !!user?.email
     });
 
-    // Extract all reviews from all foods
     const allReviews = restaurantData?.foods?.flatMap(food =>
         food.reviews?.map(review => ({
             ...review,
@@ -30,7 +28,6 @@ const Reviews = () => {
         })) || []
     ) || [];
 
-    // Function to render star ratings
     const renderStars = (rating) => {
         const stars = [];
         for (let i = 1; i <= 5; i++) {
@@ -43,17 +40,19 @@ const Reviews = () => {
         return stars;
     };
 
-    // Function to handle reply submission
     const handleReply = async (foodName, reviewId) => {
+        if (!replyText.trim()) return;
+
         try {
-            const response = await axiosSecure.patch('/addReplyToReview', {
+            const response = await axiosSecure.patch('/restaurant/reply', {
                 restaurantName: restaurantData.restaurantName,
                 foodName,
                 reviewId,
                 reply: replyText
             });
 
-            if (response.data.success) {
+      
+            if (response.data?.modified) {
                 refetch();
                 setReplyingTo(null);
                 setReplyText('');
@@ -103,7 +102,7 @@ const Reviews = () => {
                                                 <div className="flex items-center mt-1">
                                                     {renderStars(review.rating)}
                                                     <span className="ml-2 text-sm text-gray-500">
-                                                        {format(new Date(review.date), 'MMM d, yyyy')}
+                                                        {review.date ? format(new Date(review.date), 'MMM d, yyyy') : ''}
                                                     </span>
                                                 </div>
                                             </div>
@@ -121,7 +120,7 @@ const Reviews = () => {
                                                         Your reply:
                                                     </span>
                                                     <span className="text-xs text-gray-500">
-                                                        {format(new Date(review.replyDate), 'MMM d, yyyy')}
+                                                        {review.replyDate ? format(new Date(review.replyDate), 'MMM d, yyyy') : ''}
                                                     </span>
                                                 </div>
                                                 <p className="text-gray-700 mt-1">{review.reply}</p>

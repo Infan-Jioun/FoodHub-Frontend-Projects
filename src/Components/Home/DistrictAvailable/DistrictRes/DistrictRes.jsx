@@ -20,7 +20,7 @@ const DistrictRes = () => {
     const [isModerator] = useModerator();
 
     useEffect(() => {
-        axios.get(`https://foodhub-backend.vercel.app/restaurantUpload/district/${districtName}`)
+        axios.get(`https://foodhub-backend.vercel.app/restaurant/district/${districtName}`)
             .then(response => setRestaurants(response.data))
             .catch(error => console.error("Error fetching restaurants:", error));
     }, [districtName]);
@@ -63,7 +63,7 @@ const DistrictRes = () => {
               </Typography>
                                 {/* Avatar & Link */}
                                 <div className="mt-4 flex justify-center">
-                                    <Link to={`/restaurantUpload/${restaurant.restaurantName}`}>
+                                    <Link to={`/restaurant/${restaurant.restaurantName}`}>
                                         <Avatar
                                             size="xl"
                                             variant="circular"

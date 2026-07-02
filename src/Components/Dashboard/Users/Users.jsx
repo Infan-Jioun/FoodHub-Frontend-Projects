@@ -1,5 +1,4 @@
 import useAllUserHooks from "../../Hooks/useAllUserHooks";
-import { MdOutlineAdminPanelSettings } from "react-icons/md";
 import { AiOutlineUserDelete } from "react-icons/ai";
 import { MagnifyingGlassIcon } from "@heroicons/react/24/outline";
 import { useState, useRef, useEffect } from "react";
@@ -59,8 +58,8 @@ const Users = () => {
   const { user: currentUser } = useAuth();
   const USERS_PER_PAGE = 12;
   const [currentPage, setCurrentPage] = useState(1);
-
-  const currentUserInfo = users?.find((u) => u.email === currentUser?.email);
+;
+  const currentUserInfo = users?.find((u) => u.email === currentUser?.email)
   const currentRole = currentUserInfo?.role;
 
   const sortedUsers = [...users].sort((a, b) => new Date(b.date || 0) - new Date(a.date || 0));

@@ -47,6 +47,7 @@ const RestaurantRegister = () => {
       }
 
       const userResponse = await createUser(data.email, data.password);
+      // eslint-disable-next-line no-unused-vars
       const registerUser = userResponse.user;
 
       await updateUserProfile({

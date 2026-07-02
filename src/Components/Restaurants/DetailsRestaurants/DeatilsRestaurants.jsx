@@ -51,7 +51,7 @@ const ReviewModal = ({ food, open, handleOpen }) => {
       </DialogHeader>
       <DialogBody className="overflow-y-auto max-h-96">
         {food.reviews && food.reviews.length > 0 ? (
-          <motion.div 
+          <motion.div
             className="space-y-4"
             initial={{ opacity: 0 }}
             animate={{ opacity: 1 }}
@@ -75,11 +75,10 @@ const ReviewModal = ({ food, open, handleOpen }) => {
                         <svg
                           key={i}
                           xmlns="http://www.w3.org/2000/svg"
-                          className={`h-5 w-5 ${
-                            i < parseInt(review.rating?.$numberInt || review.rating || 0)
-                              ? "text-yellow-400"
-                              : "text-gray-300"
-                          }`}
+                          className={`h-5 w-5 ${i < parseInt(review.rating?.$numberInt || review.rating || 0)
+                            ? "text-yellow-400"
+                            : "text-gray-300"
+                            }`}
                           viewBox="0 0 20 20"
                           fill="currentColor"
                         >
@@ -94,7 +93,7 @@ const ReviewModal = ({ food, open, handleOpen }) => {
                 </div>
                 <p className="text-gray-700 mt-2">{review.comment}</p>
                 {review.reply && (
-                  <motion.div 
+                  <motion.div
                     initial={{ opacity: 0, height: 0 }}
                     animate={{ opacity: 1, height: "auto" }}
                     transition={{ duration: 0.3, delay: 0.2 }}
@@ -113,7 +112,7 @@ const ReviewModal = ({ food, open, handleOpen }) => {
             ))}
           </motion.div>
         ) : (
-          <motion.div 
+          <motion.div
             initial={{ opacity: 0 }}
             animate={{ opacity: 1 }}
             transition={{ duration: 0.5 }}
@@ -199,7 +198,7 @@ const FoodModal = ({ food, open, handleOpen, handleAddFood }) => {
         </Card>
 
         {food?.category?.toLowerCase() === "pizza" ? (
-          <motion.div 
+          <motion.div
             className="space-y-4"
             initial={{ opacity: 0, y: 20 }}
             animate={{ opacity: 1, y: 0 }}
@@ -244,7 +243,7 @@ const FoodModal = ({ food, open, handleOpen, handleAddFood }) => {
             />
           </motion.div>
         ) : (
-          <motion.div 
+          <motion.div
             className="space-y-4"
             initial={{ opacity: 0, y: 20 }}
             animate={{ opacity: 1, y: 0 }}
@@ -290,7 +289,7 @@ const FoodModal = ({ food, open, handleOpen, handleAddFood }) => {
           </motion.div>
         )}
 
-        <motion.div 
+        <motion.div
           className="mt-6"
           initial={{ opacity: 0 }}
           animate={{ opacity: 1 }}
@@ -365,12 +364,11 @@ const DetailsRestaurants = () => {
   const [modalOpen, setModalOpen] = useState(false);
   const [reviewModalOpen, setReviewModalOpen] = useState(false);
   const [selectedFood, setSelectedFood] = useState(null);
-
   useEffect(() => {
     const fetchData = async () => {
       try {
-        const res = await axiosSecure.get(`/restaurantUpload/${restaurantName}`);
-        setFoodItems(res.data?.foods || []);
+        const res = await axiosSecure.get(`/restaurant/${restaurantName}`);
+        setFoodItems(res.data?.foods || []);   // ← .data.data.foods
       } catch (error) {
         console.error("Error fetching food items:", error);
         Swal.fire("Error", "Failed to load food items", "error");
@@ -389,7 +387,7 @@ const DetailsRestaurants = () => {
 
   const checkCartItems = async () => {
     try {
-      const res = await axiosSecure.get(`/addItem?email=${user.email}`);
+      const res = await axiosSecure.get(`/cart?email=${user.email}`);
       const itemsMap = {};
       res.data.forEach(item => {
         itemsMap[item.foodName] = true;
@@ -399,14 +397,13 @@ const DetailsRestaurants = () => {
       console.error("Error checking cart:", error);
     }
   };
-
   const calculateAverageRating = (reviews) => {
     if (!reviews || reviews.length === 0) return 0;
     const sum = reviews.reduce((total, review) => {
-      const ratingValue = review.rating?.$numberInt 
-        ? parseInt(review.rating.$numberInt) 
-        : typeof review.rating === 'number' 
-          ? review.rating 
+      const ratingValue = review.rating?.$numberInt
+        ? parseInt(review.rating.$numberInt)
+        : typeof review.rating === 'number'
+          ? review.rating
           : 0;
       return total + ratingValue;
     }, 0);
@@ -415,17 +412,17 @@ const DetailsRestaurants = () => {
 
   const renderSingleRatingStar = (averageRating) => {
     const percentage = (averageRating / 5) * 100;
-    
+
     return (
       <div className="relative w-6 h-4">
         <div className="absolute flex">
           <svg xmlns="http://www.w3.org/2000/svg" className="h-4 w-4 text-gray-300" viewBox="0 0 20 20" fill="currentColor">
-            <path d="M9.049 2.927c.3-.921 1.603-.921 1.902 0l1.07 3.292a1 1 0 00.95.69h3.462c.969 0 1.371 1.24.588 1.81l-2.8 2.034a1 1 0 00-.364 1.118l1.07 3.292c.3.921-.755 1.688-1.54 1.118l-2.8-2.034a1 1 0 00-1.175 0l-2.8 2.034c-.784.57-1.838-.197-1.539-1.118l1.07-3.292a1 1 0 00-.364-1.118L2.98 8.72c-.783-.57-.38-1.81.588-1.81h3.461a1 1 0 00.951-.69l1.07-3.292z"/>
+            <path d="M9.049 2.927c.3-.921 1.603-.921 1.902 0l1.07 3.292a1 1 0 00.95.69h3.462c.969 0 1.371 1.24.588 1.81l-2.8 2.034a1 1 0 00-.364 1.118l1.07 3.292c.3.921-.755 1.688-1.54 1.118l-2.8-2.034a1 1 0 00-1.175 0l-2.8 2.034c-.784.57-1.838-.197-1.539-1.118l1.07-3.292a1 1 0 00-.364-1.118L2.98 8.72c-.783-.57-.38-1.81.588-1.81h3.461a1 1 0 00.951-.69l1.07-3.292z" />
           </svg>
         </div>
         <div className="absolute flex overflow-hidden" style={{ width: `${percentage}%` }}>
           <svg xmlns="http://www.w3.org/2000/svg" className="h-4 w-4 text-[#ff1818]" viewBox="0 0 20 20" fill="currentColor">
-            <path d="M9.049 2.927c.3-.921 1.603-.921 1.902 0l1.07 3.292a1 1 0 00.95.69h3.462c.969 0 1.371 1.24.588 1.81l-2.8 2.034a1 1 0 00-.364 1.118l1.07 3.292c.3.921-.755 1.688-1.54 1.118l-2.8-2.034a1 1 0 00-1.175 0l-2.8 2.034c-.784.57-1.838-.197-1.539-1.118l1.07-3.292a1 1 0 00-.364-1.118L2.98 8.72c-.783-.57-.38-1.81.588-1.81h3.461a1 1 0 00.951-.69l1.07-3.292z"/>
+            <path d="M9.049 2.927c.3-.921 1.603-.921 1.902 0l1.07 3.292a1 1 0 00.95.69h3.462c.969 0 1.371 1.24.588 1.81l-2.8 2.034a1 1 0 00-.364 1.118l1.07 3.292c.3.921-.755 1.688-1.54 1.118l-2.8-2.034a1 1 0 00-1.175 0l-2.8 2.034c-.784.57-1.838-.197-1.539-1.118l1.07-3.292a1 1 0 00-.364-1.118L2.98 8.72c-.783-.57-.38-1.81.588-1.81h3.461a1 1 0 00.951-.69l1.07-3.292z" />
           </svg>
         </div>
       </div>
@@ -448,8 +445,8 @@ const DetailsRestaurants = () => {
     }
 
     try {
-      const cartResponse = await axiosSecure.get(`/addItem?email=${user.email}`);
-      const alreadyInCart = cartResponse.data.some(item =>
+      const cartResponse = await axiosSecure.get(`/cart?email=${user.email}`);   // ← /addItem → /cart
+      const alreadyInCart = cartResponse.data.some(item =>   // ← .data.data
         item.foodName === food.foodName &&
         item.restaurantName === restaurantName
       );
@@ -483,8 +480,8 @@ const DetailsRestaurants = () => {
         ...(food.toppings && { toppings: food.toppings })
       };
 
-      const res = await axiosSecure.post("/addFood", foodInfo);
-      if (res.data.insertedId) {
+      const res = await axiosSecure.post("/cart", foodInfo);   // ← /addFood → /cart
+      if (res.data.insertedId) {   // ← .data.data
         Swal.fire({
           position: "center",
           icon: "success",
@@ -574,12 +571,12 @@ const DetailsRestaurants = () => {
             .sort((a, b) => {
               const ratingA = calculateAverageRating(a.reviews);
               const ratingB = calculateAverageRating(b.reviews);
-              return ratingB - ratingA; 
+              return ratingB - ratingA;
             })
             .map((food) => {
               const averageRating = calculateAverageRating(food.reviews);
               const hasReviews = food.reviews && food.reviews.length > 0;
-              
+
               return (
                 <motion.div
                   key={food._id}
@@ -598,7 +595,7 @@ const DetailsRestaurants = () => {
                         transition={{ duration: 0.3 }}
                       />
                       {hasReviews && (
-                        <motion.button 
+                        <motion.button
                           onClick={() => showReviews(food)}
                           className="absolute top-2 right-2 bg-white/90 backdrop-blur-sm px-2 py-1 rounded-full flex items-center shadow-sm hover:bg-white transition-colors"
                           whileHover={{ scale: 1.05 }}

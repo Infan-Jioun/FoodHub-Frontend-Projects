@@ -34,29 +34,32 @@ const SSLCommerzPayment = ({ onClose, total, cartFood, user, formData }) => {
 
         setIsProcessing(true);
         try {
-            const transactionId = "TXN" + Date.now() + Math.floor(Math.random() * 1000);
-
             const paymentData = {
                 title: "Online Payment via SSLCommerz",
                 email: user?.email || authUser?.email,
                 foodPrice: parseFloat(total.toFixed(2)),
-                transactionId,
                 date: new Date(),
-                status: "pending",
                 customerName: formData.customerName,
                 country: formData.country,
                 division: formData.division,
                 district: formData.district,
                 upazila: formData.upazila,
+                unions: formData.unions,
                 address: formData.address,
                 contactNumber: formData.contactNumber,
-                cartIds : cartFood.map((item) => item._id),
-                menuItems: cartFood.map((item) => item.foodId),
+                items: cartFood.map((item) => ({
+                    foodId: item._id,
+                    foodName: item.foodName,
+                    restaurantName: item.restaurantName,
+                    price: item.foodPrice,
+                    quantity: item.quantity || 1,
+                })),
             };
 
-            const res = await axiosSecure.post("/create-ssl-payment", paymentData);
+            const res = await axiosSecure.post("/payments/ssl/create", paymentData);
 
-            if (res.data.gatewayPageURL) {
+            // interceptor unwrap er por: res.data = { gatewayPageURL }
+            if (res.data?.gatewayPageURL) {
                 localStorage.removeItem("checkoutForm");
                 setIsRedirecting(true);
                 window.location.replace(res.data.gatewayPageURL);
@@ -65,7 +68,8 @@ const SSLCommerzPayment = ({ onClose, total, cartFood, user, formData }) => {
             }
         } catch (error) {
             console.error(error);
-            toast.error("Payment failed!");
+            const message = error?.response?.data?.message || "Payment failed!";
+            toast.error(message);
         } finally {
             setIsProcessing(false);
         }
@@ -97,7 +101,7 @@ const SSLCommerzPayment = ({ onClose, total, cartFood, user, formData }) => {
             </Box>
 
             <Typography variant="body2" color="red" sx={{ mb: 3 }}>
-                You'll be redirected to SSLCommerz secure payment page.
+                You&lsquo;ll be redirected to SSLCommerz secure payment page.
             </Typography>
 
             <Box sx={{ display: 'flex', gap: 2, mt: 3 }}>

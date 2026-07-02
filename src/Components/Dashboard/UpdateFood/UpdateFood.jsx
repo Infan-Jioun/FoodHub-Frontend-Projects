@@ -56,7 +56,7 @@ const UpdateFood = () => {
       price: parseFloat(data.price),
     };
 
-    axiosSecure.patch(`/restaurantUpload/${selectedFood._id}`, updatedFood).then((res) => {
+    axiosSecure.patch(`/restaurant/${selectedFood._id}`, updatedFood).then((res) => {
       if (res.data.modifiedCount > 0) {
         toast.success("Successfully updated food!");
         navigate("/restaurant");

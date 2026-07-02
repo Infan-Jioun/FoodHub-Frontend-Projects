@@ -1,4 +1,3 @@
-import React from 'react';
 import useRestaurantOrders from '../../Hooks/useRestaurantOrders';
 
 const red = '#ff1818';
@@ -38,7 +37,8 @@ const Orders = () => {
               </thead>
               <tbody className="divide-y">
                 {orders.map((order, idx) => {
-                  const totalQty = order.items.reduce((sum, item) => sum + item.quantity, 0);
+                  const items = order.items || [];
+                  const totalQty = items.reduce((sum, item) => sum + (item.quantity || 0), 0);
                   return (
                     <tr key={order._id} className="hover:bg-red-50 transition">
                       <td className="py-3 px-4">{idx + 1}</td>
@@ -46,7 +46,7 @@ const Orders = () => {
                       <td className="py-3 px-4">{order.district}, {order.division}</td>
                       <td className="py-3 px-4">
                         <ul className="list-disc list-inside space-y-1">
-                          {order.items.map((item, i) => (
+                          {items.map((item, i) => (
                             <li key={i}>
                               {item.foodName} x <span className="font-semibold">{item.quantity}</span>
                             </li>

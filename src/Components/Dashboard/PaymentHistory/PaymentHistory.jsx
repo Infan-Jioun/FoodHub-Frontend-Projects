@@ -32,12 +32,15 @@ const PaymentHistory = () => {
     const fetchPayments = async () => {
       try {
         setLoading(true);
+        setError(null);
         const response = await axiosSecure.get(
-          `/payments?email=${encodeURIComponent(user.email)}`
+          `/payments/email/${encodeURIComponent(user.email)}`
         );
         setPayments(response.data);
       } catch (err) {
-        setError(err.message || 'Failed to load payment history');
+        console.error("Payment fetch error:", err);
+        const message = err?.response?.data?.message || err.message || 'Failed to load payment history';
+        setError(message);
       } finally {
         setLoading(false);
       }
@@ -45,7 +48,6 @@ const PaymentHistory = () => {
 
     fetchPayments();
   }, [user?.email, axiosSecure]);
-
   const getPaymentGatewayIcon = (transactionId, title) => {
     if (!transactionId && !title) return null;
     if (transactionId?.startsWith('pi_') || title?.includes('Stripe')) {

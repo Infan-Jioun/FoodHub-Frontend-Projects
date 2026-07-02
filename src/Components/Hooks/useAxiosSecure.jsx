@@ -26,7 +26,20 @@ const useAxiosSecure = () => {
 
     // Response Interceptor
     const responseInterceptor = axiosSecure.interceptors.response.use(
-      (response) => response,
+      (response) => {
+        // Backend notun format: { success, message, data, meta }
+        // Ekhane amra .data ke unwrap kore dicchi, jate purono code (res.data direct use kora)
+        // change na kore o kaj kore
+        if (
+          response.data &&
+          typeof response.data === "object" &&
+          "success" in response.data &&
+          "data" in response.data
+        ) {
+          response.data = response.data.data;
+        }
+        return response;
+      },
       async (error) => {
         const status = error?.response?.status;
         if (status === 401 || status === 403) {

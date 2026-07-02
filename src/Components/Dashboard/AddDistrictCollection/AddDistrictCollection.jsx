@@ -44,7 +44,7 @@ const AddDistrictCollection = () => {
       districtName: data.districtName
     };
 
-    axiosSecure.post("/districtAvailable", district)
+    axiosSecure.post("/districtS", district)
       .then((res) => {
         if (res.data.insertedId) {
           toast.success("District uploaded successfully!");

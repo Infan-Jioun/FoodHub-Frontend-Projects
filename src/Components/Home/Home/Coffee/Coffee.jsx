@@ -6,9 +6,6 @@ import { motion } from "framer-motion";
 
 import Swal from "sweetalert2";
 
-import { AiOutlineDelete } from "react-icons/ai";
-
-import { RxUpdate } from "react-icons/rx";
 import {
   Dialog,
   DialogHeader,
@@ -447,7 +444,7 @@ const Coffee = () => {
                       </div>
                       <p className="text-[#ff1818] text-sm">
                         Delicious {food.foodName} from{" "}
-                        <Link to={`/restaurantUpload/${food.restaurantName}`}>
+                        <Link to={`/restaurant/${food.restaurantName}`}>
                           <span className="font-bold">{food.restaurantName}</span>
                         </Link>
                         . Price: ${food.price}

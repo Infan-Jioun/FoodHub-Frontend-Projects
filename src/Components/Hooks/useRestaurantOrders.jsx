@@ -1,4 +1,3 @@
-// useRestaurantOrders.js
 import { useQuery } from '@tanstack/react-query';
 import useAxiosSecure from './useAxiosSecure';
 import useAuth from './useAuth';
@@ -11,12 +10,13 @@ const useRestaurantOrders = () => {
     queryKey: ['restaurantOrders', user?.email],
     enabled: !!user?.email,
     queryFn: async () => {
-      // First get the restaurant name (assumes you have a route to fetch it by email)
-      const restaurantRes = await axiosSecure.get(`/restaurantManage/${user.email}`);
-      const restaurantName = restaurantRes.data?.restaurantName;
+      const restaurantRes = await axiosSecure.get(`/restaurant/by-email/${user.email}`);
+      const restaurantName = restaurantRes.data?.restaurantName; // ← .data direct, .data.data na
 
-      const ordersRes = await axiosSecure.get(`/orders?restaurantName=${restaurantName}`);
-      return ordersRes.data;
+      if (!restaurantName) return [];
+
+      const ordersRes = await axiosSecure.get(`/payments/orders?restaurantName=${encodeURIComponent(restaurantName)}`);
+      return ordersRes.data; 
     }
   });
 };

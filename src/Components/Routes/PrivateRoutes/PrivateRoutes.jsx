@@ -1,9 +1,6 @@
 import { Navigate, useLocation } from "react-router-dom";
 import useAuth from "../../Hooks/useAuth";
-import { Circles } from "react-loader-spinner";
-import useAdmin from "../../Hooks/useAdmin";
-import useModerator from "../../Hooks/useModerator";
-import useRestaurantOwner from "../../Hooks/useRestaurantOwner";
+
 
 const PrivateRoutes = ({ children }) => {
     const { user, loading } = useAuth();

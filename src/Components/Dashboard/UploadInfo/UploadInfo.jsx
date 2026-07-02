@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from "react";
+import  { useState, useEffect } from "react";
 import { useForm } from "react-hook-form";
 import { imageUpload } from '../../Hooks/imageHooks';
 import toast from 'react-hot-toast';
@@ -10,14 +10,12 @@ const UploadInfo = () => {
     const { updateUserProfile, user } = useAuth();
     const navigate = useNavigate();
     const axiosSecure = useAxiosSecure();
-
     const [isSubmitting, setIsSubmitting] = useState(false);
-    const [alreadyUploaded, setAlreadyUploaded] = useState(false);
     const [loading, setLoading] = useState(true);
 
     useEffect(() => {
         if (user?.email && user?.displayName) {
-            axiosSecure.get(`/restaurantUpload?email=${user.email}&restaurantName=${user.displayName}`)
+            axiosSecure.get(`/restaurant?email=${user.email}&restaurantName=${user.displayName}`)
                 .then(res => {
                     if (res.data?.exists) {
                         toast.error("You already uploaded your restaurant.");
@@ -94,7 +92,7 @@ const UploadInfo = () => {
             };
 
             await toast.promise(
-                axiosSecure.post("/restaurantUpload", usersInfo),
+                axiosSecure.post("/restaurant", usersInfo),
                 {
                     loading: 'Submitting...',
                     success: 'Restaurant added successfully!',

@@ -1,4 +1,4 @@
-import React, { useState, useRef } from "react";
+import  { useState, useRef } from "react";
 import { useForm } from "react-hook-form";
 import useAxiosSecure from "../../Hooks/useAxiosSecure";
 import { imageUpload } from "../../Hooks/imageHooks";
@@ -85,15 +85,15 @@ const AddFoods = () => {
       };
 
       const res = await axiosSecure.patch(
-        `/restaurantUpload/${encodeURIComponent(data.restaurantName)}`,
+        `/restaurant/${encodeURIComponent(data.restaurantName)}/food`,
         foodInfo
       );
 
-      if (res.data.success) {
+      if (res.data.modifiedCount > 0 || res.data.acknowledged) {
         toast.success("Food item added successfully!");
         reset();
         removeImage();
-        navigate(`/restaurantUpload/${data.restaurantName}`);
+        navigate(`/restaurant/${data.restaurantName}`);
       } else {
         throw new Error(res.data.message || "Failed to add food item");
       }
@@ -285,9 +285,8 @@ const AddFoods = () => {
               <button
                 type="submit"
                 disabled={isSubmitting}
-                className={`w-full py-3 px-6 bg-[#ff1818] hover:bg-[#ff1818] text-white font-medium rounded-lg transition focus:outline-none focus:ring-2 focus:ring-red-400 focus:ring-offset-2 ${
-                  isSubmitting ? "opacity-70 cursor-not-allowed" : ""
-                }`}
+                className={`w-full py-3 px-6 bg-[#ff1818] hover:bg-[#ff1818] text-white font-medium rounded-lg transition focus:outline-none focus:ring-2 focus:ring-red-400 focus:ring-offset-2 ${isSubmitting ? "opacity-70 cursor-not-allowed" : ""
+                  }`}
               >
                 {isSubmitting ? (
                   <span className="flex items-center justify-center">

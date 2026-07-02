@@ -7,14 +7,11 @@ import {
   MenuItem,
   Avatar,
   Typography,
-  IconButton,
 
 } from "@material-tailwind/react";
 import { useEffect, useState } from "react";
-import { RiShoppingBag2Line } from "react-icons/ri";
 import { Link, NavLink } from "react-router-dom";
 import useAuth from "../Hooks/useAuth";
-import Darkmode from "../Darkmode/Darkmode";
 import { IoMdHome, IoMdLogIn, IoMdLogOut, IoMdSettings } from "react-icons/io";
 import useAdmin from "../Hooks/useAdmin";
 import useModerator from "../Hooks/useModerator";

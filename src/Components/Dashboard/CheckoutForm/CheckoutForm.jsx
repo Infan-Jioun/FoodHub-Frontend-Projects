@@ -1,5 +1,5 @@
 import { Input, Textarea, Button, Spinner } from '@material-tailwind/react';
-import React, { useEffect, useState } from 'react';
+import React, { useEffect, useMemo, useState } from 'react';
 import { useForm } from 'react-hook-form';
 import { MdDeleteOutline, MdSearch } from 'react-icons/md';
 import { useNavigate } from 'react-router-dom';
@@ -30,8 +30,8 @@ const CheckoutForm = () => {
     const [selectedPaymentMethod, setSelectedPaymentMethod] = useState(null);
     const { restaurantName } = cartFood;
 
-    const stripeKey = import.meta.env.VITE_STRIPE_PAYMENT || "";
-    const stripePromise = loadStripe(stripeKey);
+    const stripeKey = import.meta.env.VITE_STRIPE_PUBLISHABLE_KEY || "";
+    const stripePromise = useMemo(() => loadStripe(stripeKey), [stripeKey]);
     const [loadingGeo, setLoadingGeo] = useState({
         division: false,
         district: false,
@@ -282,7 +282,7 @@ const CheckoutForm = () => {
                             </div>
 
                             {/* Location Search */}
-                         
+
                             <div className="relative">
                                 <Input
                                     label="Search Location"

@@ -40,10 +40,10 @@ const Revenue = () => {
           topItemsRes, 
           dailyRes
         ] = await Promise.all([
-          axiosSecure.get("/revenue-summary"),
-          axiosSecure.get("/revenue-by-month"),
-          axiosSecure.get("/top-items"),
-          axiosSecure.get("/daily-revenue")
+          axiosSecure.get("/revenue/summary"),
+          axiosSecure.get("/revenue/by-month"),
+          axiosSecure.get("/revenue/top-items"),
+          axiosSecure.get("/revenue/daily")
         ]);
 
         // Debug logging

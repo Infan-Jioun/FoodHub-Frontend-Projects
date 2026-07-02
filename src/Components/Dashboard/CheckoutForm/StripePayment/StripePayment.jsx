@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from 'react';
+import  { useEffect, useState } from 'react';
 import {
   Button, Dialog, DialogBody, DialogFooter, DialogHeader,
   IconButton, Input, Typography
@@ -33,7 +33,7 @@ const StripePayment = ({ formData }) => {
 
   useEffect(() => {
     if (total > 0) {
-      axiosSecure.post('/create-payment-intent', { price: total })
+      axiosSecure.post('/payments/create-payment-intent', { price: total })
         .then(res => {
           if (res.data?.clientSecret) {
             setClientSecret(res.data.clientSecret);
@@ -50,7 +50,7 @@ const StripePayment = ({ formData }) => {
 
   const sendConfirmationEmail = async (paymentData) => {
     try {
-        const itemsHtml = paymentData.items.map(item => `
+      const itemsHtml = paymentData.items.map(item => `
             <tr>
                 <td>${item.foodName}</td>
                 <td>${item.restaurantName}</td>
@@ -59,34 +59,34 @@ const StripePayment = ({ formData }) => {
             </tr>
         `).join('');
 
-        const templateParams = {
-            to_name: paymentData.customerName,
-            to_email: paymentData.email,
-            payment_id: paymentData.transactionId,
-            total_amount: paymentData.foodPrice.toFixed(2),
-            address: paymentData.address,
-            union: paymentData.union || 'N/A',
-            upazila: paymentData.upazila || 'N/A',
-            district: paymentData.district || 'N/A',
-            division: paymentData.division || 'N/A',
-            country: paymentData.country || 'Bangladesh',
-            contact_number: paymentData.contactNumber,
-            items_html: itemsHtml
-        };
+      const templateParams = {
+        to_name: paymentData.customerName,
+        to_email: paymentData.email,
+        payment_id: paymentData.transactionId,
+        total_amount: paymentData.foodPrice.toFixed(2),
+        address: paymentData.address,
+        union: paymentData.union || 'N/A',
+        upazila: paymentData.upazila || 'N/A',
+        district: paymentData.district || 'N/A',
+        division: paymentData.division || 'N/A',
+        country: paymentData.country || 'Bangladesh',
+        contact_number: paymentData.contactNumber,
+        items_html: itemsHtml
+      };
 
-        await emailjs.send(
-            import.meta.env.VITE_EMAILJS_SERVICE_ID,
-            import.meta.env.VITE_EMAILJS_TEMPLATE_ID,
-            templateParams,
-            import.meta.env.VITE_EMAILJS_PUBLIC_KEY
-        );
+      await emailjs.send(
+        import.meta.env.VITE_EMAILJS_SERVICE_ID,
+        import.meta.env.VITE_EMAILJS_TEMPLATE_ID,
+        templateParams,
+        import.meta.env.VITE_EMAILJS_PUBLIC_KEY
+      );
 
-        toast.success('Confirmation email sent!');
+      toast.success('Confirmation email sent!');
     } catch (err) {
-        console.error('Email send error:', err);
-        toast.error('Failed to send confirmation email, but payment was successful.');
+      console.error('Email send error:', err);
+      toast.error('Failed to send confirmation email, but payment was successful.');
     }
-};
+  };
 
   const handleSubmitStripe = async (event) => {
     event.preventDefault();
@@ -111,13 +111,16 @@ const StripePayment = ({ formData }) => {
 
       if (stripeError) throw stripeError;
 
+      if (paymentIntent.status !== "succeeded") {
+        throw new Error("Payment was not completed successfully.");
+      }
+
       const payment = {
         title: "Paid via Stripe",
         email: user?.email,
         foodPrice: total,
         date: new Date(),
-        transactionId: paymentIntent.id,
-        status: "pending",
+        transactionId: paymentIntent.id, // ← backend eta diye Stripe e verify korবে
         customerName: formData?.customerName || "Guest",
         country: formData?.country || 'Bangladesh',
         division: formData?.division || '',
@@ -127,28 +130,29 @@ const StripePayment = ({ formData }) => {
         address: formData?.address,
         contactNumber: formData?.contactNumber,
         items: cartFood?.map(item => ({
-            foodId: item?._id,
-            restaurantName: item?.restaurantName,
-            restaurantId: item?.restaurantId,
-            foodName: item?.foodName,
-            quantity: item?.quantity || 1,
-            price: item?.foodPrice,
+          foodId: item?._id,
+          restaurantName: item?.restaurantName,
+          restaurantId: item?.restaurantId,
+          foodName: item?.foodName,
+          quantity: item?.quantity || 1,
+          price: item?.foodPrice,
         })) || [],
-    };
+      };
+
       const res = await axiosSecure.post("/payments", payment);
       if (!res.data?.paymentResult?.insertedId) throw new Error("Payment record not created");
 
       setPaymentId(res.data.paymentResult.insertedId);
       toast.success("Payment successful!");
 
-      // Send email
       sendConfirmationEmail(payment);
 
       navigate("/dashboard/paymentHistory");
     } catch (err) {
       console.error("Payment error:", err);
-      setError(err.message || "Payment failed. Please try again.");
-      toast.error(err.message || "Payment failed. Please try again.");
+      const message = err?.response?.data?.message || err.message || "Payment failed. Please try again.";
+      setError(message);
+      toast.error(message);
     } finally {
       setProcessing(false);
     }

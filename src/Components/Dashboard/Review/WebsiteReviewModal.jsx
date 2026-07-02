@@ -18,7 +18,8 @@ const WebsiteReviewModal = ({ open, onClose }) => {
     useEffect(() => {
         const fetchReview = async () => {
             try {
-                const res = await axiosSecure.get(`/website-review?email=${user.email}`);
+                const res = await axiosSecure.get(`/website-reviews/mine?email=${user.email}`);
+                // interceptor unwrap er por: res.data = { review: {...} | null }
                 if (res.data?.review) {
                     const r = res.data.review;
                     setAlreadyReviewed(true);
@@ -30,6 +31,7 @@ const WebsiteReviewModal = ({ open, onClose }) => {
                 }
             } catch (err) {
                 console.log(err);
+                setPhotoURL(user.photoURL);
             }
         };
 
@@ -43,7 +45,7 @@ const WebsiteReviewModal = ({ open, onClose }) => {
 
         setLoading(true);
         try {
-            const res = await axiosSecure.post('/website-review', {
+            await axiosSecure.post('/website-reviews', {
                 email: user.email,
                 name: user.displayName,
                 photoURL: user.photoURL,
@@ -51,7 +53,8 @@ const WebsiteReviewModal = ({ open, onClose }) => {
                 comment,
                 date: new Date(),
             });
-            toast.success(res.data.message);
+            toast.success('Review submitted successfully!');
+            setAlreadyReviewed(true);
             onClose();
         } catch (err) {
             toast.error(err.response?.data?.message || 'Failed to submit review');

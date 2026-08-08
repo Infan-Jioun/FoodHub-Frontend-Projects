@@ -53,47 +53,76 @@ const items = [
   },
 ];
 
-const AvailableItem = () => {
-  const [loadedImages, setLoadedImages] = useState({});
+// ✅ আলাদা card component — প্রতিটা item এর নিজস্ব loaded state
+const FoodCard = ({ item }) => {
+  const [loaded, setLoaded] = useState(false);
 
   return (
+    <Link to={item.path} className="inline-block mx-8">
+      <motion.div
+        className="flex flex-col items-center w-32 cursor-pointer"
+        whileHover={{ scale: 1.1 }}
+        transition={{ type: "spring", stiffness: 300, damping: 20 }}
+      >
+        {/* ✅ wrapper div — skeleton আর image একই জায়গায় */}
+        <div className="w-28 h-28 relative">
+          {/* Skeleton — image load না হওয়া পর্যন্ত */}
+          {!loaded && (
+            <Skeleton
+              circle
+              width={112}
+              height={112}
+              baseColor="#ffe5e5"
+              highlightColor="#ffcccc"
+              className="absolute inset-0"
+            />
+          )}
+
+          {/* Image — সবসময় render, loaded হলে দেখাবে */}
+          <img
+            src={item.img}
+            alt={item.name}
+            onLoad={() => setLoaded(true)}
+            className={`
+              w-28 h-28 object-cover rounded-full shadow-md
+              transition-opacity duration-500
+              ${loaded ? "opacity-100" : "opacity-0"}
+            `}
+          />
+        </div>
+
+        {/* Name — skeleton থাকলে placeholder */}
+        {loaded ? (
+          <p className="mt-3 font-semibold text-center text-[#ff1818] text-sm">
+            {item.name}
+          </p>
+        ) : (
+          <Skeleton
+            width={72}
+            height={14}
+            className="mt-3"
+            baseColor="#ffe5e5"
+            highlightColor="#ffcccc"
+          />
+        )}
+      </motion.div>
+    </Link>
+  );
+};
+
+const AvailableItem = () => {
+  return (
     <div className="mt-16 mb-16 px-1">
-      {/* Title & Subtitle */}
+      {/* Title */}
       <div className="text-center mb-8">
         <h2 className="text-3xl font-bold font-Caveat text-[#ff1818]">Available Foods</h2>
         <p className="text-gray-500 mt-2">Explore our delicious menu items below</p>
       </div>
 
-      <Marquee pauseOnHover={true} speed={40} gradient={false}>
-        <div className="flex gap-16">
-          {items.map((item, index) => (
-            <Link to={item.path} key={index} className="inline-block">
-              <motion.div
-                className="flex flex-col items-center w-32 cursor-pointer relative"
-                whileHover={{ scale: 1.1, rotateX: 5, rotateY: 5 }}
-                transition={{ type: "spring", stiffness: 300, damping: 20 }}
-              >
-                {!loadedImages[index] && (
-                  <Skeleton 
-                    height={112} 
-                    width={112} 
-                    className="absolute top-0 left-0"
-                    borderRadius="12px"
-                  />
-                )}
-                <img
-                  src={item.img}
-                  alt={item.name}
-                  className={`w-28 h-28 object-contain rounded-full shadow-md transition-opacity duration-500 ${
-                    loadedImages[index] ? "opacity-100" : "opacity-0"
-                  }`}
-                  onLoad={() => setLoadedImages(prev => ({ ...prev, [index]: true }))}
-                />
-                <p className="mt-2 font-semibold text-center text-[#ff1818]">{item.name}</p>
-              </motion.div>
-            </Link>
-          ))}
-        </div>
+      <Marquee pauseOnHover speed={40} gradient={false}>
+        {items.map((item, index) => (
+          <FoodCard key={index} item={item} />
+        ))}
       </Marquee>
     </div>
   );

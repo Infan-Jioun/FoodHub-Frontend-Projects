@@ -3,18 +3,21 @@ import { useState, useEffect, useRef } from "react";
 import { Link } from "react-router-dom";
 import { useTypewriter } from "react-simple-typewriter";
 import useRestaurantData from "../../Hooks/useRestaurantData";
+import { useDebounce } from "../../Hooks/useDebounce";
+import { FaUtensils, FaStore, FaClock } from "react-icons/fa";
+import { AnimatePresence, motion } from "framer-motion";
 
 const Search = ({ searchQuery, setSearchQuery }) => {
-  const [filteredResults, setFilteredResults] = useState([]);
-  const [loading, setLoading] = useState(false);
-  const [activeTab, setActiveTab] = useState("restaurants");
-  const [restaurantData] = useRestaurantData();
   const searchRef = useRef(null);
+  const inputRef = useRef(null);
   const [recentSearches, setRecentSearches] = useState(
     JSON.parse(localStorage.getItem("recentSearches")) || []
   );
   const [showRecent, setShowRecent] = useState(false);
   const [isFocused, setIsFocused] = useState(false);
+
+  const debouncedQuery = useDebounce(searchQuery, 400);
+  const [restaurantData, , isLoading] = useRestaurantData(debouncedQuery);
 
   const [text] = useTypewriter({
     words: [
@@ -26,138 +29,77 @@ const Search = ({ searchQuery, setSearchQuery }) => {
     delaySpeed: 2000,
   });
 
+  // ✅ Restaurants
+  const restaurantsResults = (restaurantData || []).map((r) => ({
+    type: "restaurant",
+    restaurantId: r._id,
+    restaurantName: r.restaurantName,
+    restaurantCategory: r.resataurantCategory || r.category || "",
+    photo: r.photo || "/default-restaurant.png",
+    foodCount: r.foods?.length || 0,
+    location: r.location || "",
+  }));
+
+  // ✅ Foods — সব restaurant এর foods flatten
+  const foodsResults = (restaurantData || []).flatMap((r) =>
+    (r.foods || []).map((food) => ({
+      type: "food",
+      restaurantId: r._id,
+      restaurantName: r.restaurantName,
+      foodName: food.foodName,
+      foodCategory: food.category || "",
+      foodImage: food.foodImage || "/default-food.png",
+      foodId: food._id,
+      foodPrice: food.foodPrice || food.price || 0,
+    }))
+  );
+
+  // ✅ Tab নেই — সব একসাথে, restaurant আগে food পরে
+  const mergedResults = [
+    ...restaurantsResults,
+    ...foodsResults,
+  ];
+
+  const hasResults = mergedResults.length > 0;
+  const showDropdown = isFocused && (showRecent || !!debouncedQuery);
+
+  // ── Handlers ──
   const updateRecentSearches = (term) => {
-    if (!term) return;
-    const updated = [term, ...recentSearches.filter(t => t !== term)].slice(0, 5);
+    if (!term?.trim()) return;
+    const updated = [term, ...recentSearches.filter((t) => t !== term)].slice(0, 6);
     setRecentSearches(updated);
     localStorage.setItem("recentSearches", JSON.stringify(updated));
   };
 
   const handleDeleteRecent = (term, e) => {
     e.stopPropagation();
-    const updated = recentSearches.filter(t => t !== term);
+    e.preventDefault();
+    const updated = recentSearches.filter((t) => t !== term);
     setRecentSearches(updated);
     localStorage.setItem("recentSearches", JSON.stringify(updated));
   };
 
-  useEffect(() => {
-    if (!searchQuery) {
-      setFilteredResults([]);
-      if (isFocused) {
-        setShowRecent(true);
-      }
-      return;
-    }
-
-    setLoading(true);
-    const timeout = setTimeout(() => {
-      const restaurantResults = [];
-      const foodResults = [];
-      const matchedRestaurantIds = new Set();
-
-      // First pass: Find matching restaurants and their foods
-      restaurantData.forEach((restaurant) => {
-        const restaurantMatch = restaurant.restaurantName.toLowerCase().includes(searchQuery.toLowerCase());
-
-        if (restaurantMatch) {
-          restaurantResults.push({
-            type: "restaurant",
-            restaurantId: restaurant._id,
-            restaurantName: restaurant.restaurantName,
-            restaurantCategory: restaurant.resataurantCategory || restaurant.category,
-            photo: restaurant.photo || "/default-restaurant.png",
-            foodCount: restaurant.foods?.length || 0
-          });
-
-          // Add all foods from this restaurant to food results
-          restaurant.foods?.forEach((food) => {
-            foodResults.push({
-              type: "food",
-              restaurantId: restaurant._id,
-              restaurantName: restaurant.restaurantName,
-              foodName: food.foodName,
-              foodCategory: food.category,
-              foodImage: food.foodImage || "/default-food.png",
-              foodId: food._id,
-              fromMatchedRestaurant: true // Flag to indicate this food comes from a matched restaurant
-            });
-          });
-
-          matchedRestaurantIds.add(restaurant._id);
-        }
-      });
-
-      // Second pass: Find matching foods from restaurants that didn't match by name
-      restaurantData.forEach((restaurant) => {
-        if (matchedRestaurantIds.has(restaurant._id)) {
-          // Skip restaurants already processed
-          return;
-        }
-
-        restaurant.foods?.forEach((food) => {
-          if (food.foodName.toLowerCase().includes(searchQuery.toLowerCase())) {
-            foodResults.push({
-              type: "food",
-              restaurantId: restaurant._id,
-              restaurantName: restaurant.restaurantName,
-              foodName: food.foodName,
-              foodCategory: food.category,
-              foodImage: food.foodImage || "/default-food.png",
-              foodId: food._id,
-              fromMatchedRestaurant: false
-            });
-
-            // Also add the restaurant to restaurant results if it's not already there
-            if (!restaurantResults.some(r => r.restaurantId === restaurant._id)) {
-              restaurantResults.push({
-                type: "restaurant",
-                restaurantId: restaurant._id,
-                restaurantName: restaurant.restaurantName,
-                restaurantCategory: restaurant.resataurantCategory || restaurant.category,
-                photo: restaurant.photo || "/default-restaurant.png",
-                foodCount: restaurant.foods?.length || 0,
-                hasMatchingFoods: true // Flag to indicate this restaurant has matching foods
-              });
-            }
-          }
-        });
-      });
-
-      // Auto-select the appropriate tab based on search results
-      if (foodResults.length > 0 && restaurantResults.length === 0) {
-        setActiveTab("foods");
-      } else if (restaurantResults.length > 0 && foodResults.length === 0) {
-        setActiveTab("restaurants");
-      }
-
-      setFilteredResults([...restaurantResults, ...foodResults]);
-      setLoading(false);
-      setShowRecent(false);
-    }, 300);
-
-    return () => clearTimeout(timeout);
-  }, [searchQuery, restaurantData, isFocused]);
+  const handleClearAll = () => {
+    setRecentSearches([]);
+    localStorage.removeItem("recentSearches");
+  };
 
   const handleClear = () => {
     setSearchQuery("");
-    setFilteredResults([]);
-    if (isFocused) {
-      setShowRecent(true);
-    }
+    setShowRecent(true);
+    inputRef.current?.focus();
   };
 
   const handleSelect = (term) => {
     setSearchQuery(term);
     updateRecentSearches(term);
     setShowRecent(false);
-    setFilteredResults([]);
+    setIsFocused(false);
   };
 
   const handleFocus = () => {
     setIsFocused(true);
-    if (!searchQuery) {
-      setShowRecent(true);
-    }
+    if (!searchQuery) setShowRecent(true);
   };
 
   const handleBlur = () => {
@@ -167,177 +109,276 @@ const Search = ({ searchQuery, setSearchQuery }) => {
     }, 200);
   };
 
-  const highlight = (text) => {
-    if (!searchQuery) return text;
-    const parts = text.split(new RegExp(`(${searchQuery})`, "gi"));
+  // ✅ Highlight matched keyword
+  const highlight = (str = "") => {
+    if (!debouncedQuery) return str;
+    const escaped = debouncedQuery.replace(/[.*+?^${}()|[\]\\]/g, "\\$&");
+    const parts = str.split(new RegExp(`(${escaped})`, "gi"));
     return parts.map((part, idx) =>
-      part.toLowerCase() === searchQuery.toLowerCase() ? (
-        <span key={idx} className="bg-yellow-200">{part}</span>
-      ) : (
-        part
-      )
+      part.toLowerCase() === debouncedQuery.toLowerCase() ? (
+        <mark key={idx} className="bg-yellow-200 text-gray-900 rounded-sm px-0.5 not-italic">
+          {part}
+        </mark>
+      ) : part
     );
   };
 
-  const restaurantsResults = filteredResults.filter(r => r.type === "restaurant");
-  const foodsResults = filteredResults.filter(r => r.type === "food");
-
   return (
     <div className="relative w-full" ref={searchRef}>
-      <div className="flex items-center bg-white backdrop-blur-md border border-red-300 rounded-full shadow-lg hover:shadow-xl transition-all duration-300 relative">
-        <IoSearch className="absolute left-4 text-[#ff1818] text-xl" />
+
+      {/* ── Search Input ── */}
+      <div className={`flex items-center bg-white border-2 rounded-full shadow-md transition-all duration-300 relative ${isFocused ? "border-[#ff1818] shadow-red-100 shadow-lg" : "border-red-200"
+        }`}>
+        {isLoading && debouncedQuery ? (
+          <div className="absolute left-4">
+            <div className="w-4 h-4 border-2 border-[#ff1818] border-t-transparent rounded-full animate-spin" />
+          </div>
+        ) : (
+          <IoSearch className={`absolute left-4 text-lg transition-colors ${isFocused ? "text-[#ff1818]" : "text-red-300"}`} />
+        )}
+
         <input
+          ref={inputRef}
           type="text"
           placeholder={text}
           value={searchQuery}
           onChange={(e) => {
             setSearchQuery(e.target.value);
-            if (e.target.value) {
-              setShowRecent(false);
-            } else if (isFocused) {
-              setShowRecent(true);
-            }
+            if (e.target.value) setShowRecent(false);
+            else setShowRecent(true);
           }}
           onFocus={handleFocus}
           onBlur={handleBlur}
-          className="w-[240px] lg:w-[500px] pl-12 pr-10 py-2 border-2 border-[#ff1818] rounded-full bg-white text-[#ff1818] placeholder-[#ff1818] font-medium text-[16px] outline-none  transition-all duration-300"
+          className="w-[240px] lg:w-[500px] pl-11 pr-10 py-2.5 rounded-full bg-transparent text-gray-800 placeholder-red-300 font-medium text-[15px] outline-none"
         />
+
         {searchQuery && (
           <button
             onClick={handleClear}
-            className="absolute right-3 text-gray-400 hover:text-[#ff1818] transition"
+            className="absolute right-3 text-gray-300 hover:text-[#ff1818] transition"
           >
-            <IoClose size={20} />
+            <IoClose size={18} />
           </button>
         )}
       </div>
 
-      {(showRecent || filteredResults.length > 0) && (
-        <div className="absolute top-full px-3 mt-2 left-0 w-full max-h-96 overflow-y-auto bg-white/90 backdrop-blur-md border border-red-200 rounded-xl shadow-2xl z-50 animate-fadeIn">
-          {loading ? (
-            <div className="flex justify-center items-center p-6">
-              <div className="w-12 h-12 border-4 border-red-400 border-t-transparent rounded-full animate-spin"></div>
-            </div>
-          ) : showRecent && !searchQuery ? (
-            <div>
-              <p className="p-2 text-gray-500 font-semibold border-b border-gray-200">Recent Searches</p>
-              {recentSearches.length ? recentSearches.map((term, idx) => (
-                <div
-                  key={idx}
-                  className="flex justify-between items-center p-3 hover:bg-red-50 cursor-pointer rounded"
-                  onClick={() => handleSelect(term)}
-                >
-                  <div className="flex items-center">
-                    <IoSearch className="text-gray-400 mr-2" />
-                    <span className="text-gray-700">{term}</span>
-                  </div>
-                  <button
-                    className="text-gray-400 hover:text-[#ff1818] p-1 rounded-full"
-                    onClick={(e) => handleDeleteRecent(term, e)}
-                  >
-                    <IoClose size={16} />
-                  </button>
-                </div>
-              )) : <p className="p-3 text-gray-400">No recent searches</p>}
-            </div>
-          ) : (
-            filteredResults.length ? (
+      {/* ── Dropdown ── */}
+      <AnimatePresence>
+        {showDropdown && (
+          <motion.div
+            initial={{ opacity: 0, y: -6, scale: 0.99 }}
+            animate={{ opacity: 1, y: 0, scale: 1 }}
+            exit={{ opacity: 0, y: -6, scale: 0.99 }}
+            transition={{ duration: 0.15, ease: "easeOut" }}
+            className="absolute top-full mt-2 left-0 w-full bg-white border border-red-100 rounded-2xl shadow-2xl z-50 overflow-hidden"
+          >
+
+            {/* ── Recent Searches ── */}
+            {showRecent && !searchQuery && (
               <div>
-                <div className="flex border-b border-red-200">
-                  <button
-                    className={`flex-1 py-2 text-center text-[10px] lg:text-[20px] font-semibold ${activeTab === "restaurants"
-                      ? "border-b-2 border-[#ff1818] text-[#ff1818]"
-                      : "text-gray-500"
-                      } transition-colors duration-300`}
-                    onClick={() => setActiveTab("restaurants")}
-                  >
-                    Restaurants ({restaurantsResults.length})
-                  </button>
-                  <button
-                    className={`flex-1 py-2 text-center font-semibold text-[10px] lg:text-[20px]  ${activeTab === "foods"
-                      ? "border-b-2 border-[#ff1818] text-[#ff1818]"
-                      : "text-gray-500"
-                      } transition-colors duration-300`}
-                    onClick={() => setActiveTab("foods")}
-                  >
-                    Foods ({foodsResults.length})
-                  </button>
+                <div className="flex items-center justify-between px-4 py-2.5 border-b border-gray-100">
+                  <span className="text-xs font-semibold text-gray-400 uppercase tracking-wider flex items-center gap-1.5">
+                    <FaClock className="text-[#ff1818]" /> Recent Searches
+                  </span>
+                  {recentSearches.length > 0 && (
+                    <button
+                      onClick={handleClearAll}
+                      className="text-xs text-gray-400 hover:text-[#ff1818] transition"
+                    >
+                      Clear all
+                    </button>
+                  )}
                 </div>
 
-                <div className="max-h-72 overflow-y-auto">
-                  {activeTab === "restaurants" && (
-                    restaurantsResults.length ? (
-                      restaurantsResults.map((r, idx) => (
-                        <Link
-                          key={idx}
-                          to={`/restaurant/${r.restaurantName}`}
-                          onClick={() => handleSelect(r.restaurantName)}
-                        >
-                          <div className="flex items-center p-3 hover:bg-red-50/50 transition cursor-pointer rounded-lg">
-                            <img
-                              src={r.photo}
-                              alt={r.restaurantName}
-                              className="w-12 h-12 rounded-full sm:block hidden object-cover mr-3"
-                            />
-                            <div className="flex-1">
-                              <div className="flex justify-between items-start">
-                                <p className="font-bold text-[#ff1818] text-[10px] lg:text-[20px] ">{highlight(r.restaurantName)}</p>
-                                <span className="text-xs bg-red-100 text-[#ff1818] px-2 py-1 rounded-full">
-                                  {r.foodCount} foods
+                {recentSearches.length ? (
+                  recentSearches.map((term, idx) => (
+                    <div
+                      key={idx}
+                      className="flex justify-between items-center px-4 py-2.5 hover:bg-red-50 cursor-pointer group transition"
+                      onClick={() => handleSelect(term)}
+                    >
+                      <div className="flex items-center gap-3">
+                        <IoSearch className="text-gray-300 group-hover:text-[#ff1818] transition text-sm flex-shrink-0" />
+                        <span className="text-gray-700 text-sm">{term}</span>
+                      </div>
+                      <button
+                        className="text-gray-300 hover:text-[#ff1818] p-1 rounded-full opacity-0 group-hover:opacity-100 transition"
+                        onClick={(e) => handleDeleteRecent(term, e)}
+                      >
+                        <IoClose size={13} />
+                      </button>
+                    </div>
+                  ))
+                ) : (
+                  <p className="px-4 py-5 text-sm text-gray-400 text-center">No recent searches</p>
+                )}
+              </div>
+            )}
+
+            {/* ── Search Results ── */}
+            {debouncedQuery && (
+              <>
+                {isLoading ? (
+                  // Skeleton
+                  <div className="p-3 space-y-1">
+                    {[1, 2, 3, 4].map((i) => (
+                      <div key={i} className="flex items-center gap-3 px-2 py-2.5 animate-pulse">
+                        <div className="w-10 h-10 rounded-xl bg-gray-100 flex-shrink-0" />
+                        <div className="flex-1 space-y-2">
+                          <div className="h-3 bg-gray-100 rounded w-2/5" />
+                          <div className="h-2.5 bg-gray-100 rounded w-1/4" />
+                        </div>
+                        <div className="h-3 bg-gray-100 rounded w-10" />
+                      </div>
+                    ))}
+                  </div>
+
+                ) : hasResults ? (
+                  <div className="max-h-[420px] overflow-y-auto">
+
+                    {/* Section label — Restaurants */}
+                    {restaurantsResults.length > 0 && (
+                      <>
+                        <div className="px-4 py-2 bg-gray-50/80 border-b border-gray-100 sticky top-0 z-10">
+                          <span className="text-[10px] font-bold text-gray-400 uppercase tracking-widest flex items-center gap-1.5">
+                            <FaStore className="text-[#ff1818]" />
+                            Restaurants
+                            <span className="ml-1 px-1.5 py-0.5 bg-red-50 text-[#ff1818] rounded-full text-[9px]">
+                              {restaurantsResults.length}
+                            </span>
+                          </span>
+                        </div>
+
+                        {restaurantsResults.map((item, idx) => (
+                          <Link
+                            key={`r-${idx}`}
+                            to={`/restaurant/${item.restaurantName}`}
+                            onClick={() => handleSelect(item.restaurantName)}
+                          >
+                            <div className="flex items-center gap-3 px-4 py-3 hover:bg-red-50/60 transition group border-b border-gray-50">
+                              {/* Image */}
+                              <div className="relative flex-shrink-0">
+                                <img
+                                  src={item.photo}
+                                  alt={item.restaurantName}
+                                  className="w-11 h-11 rounded-xl object-cover border border-red-100"
+                                  onError={(e) => { e.target.src = "/default-restaurant.png"; }}
+                                />
+                                <span className="absolute -bottom-1 -right-1 bg-[#ff1818] rounded-full p-[3px]">
+                                  <FaStore className="text-white text-[6px]" />
                                 </span>
                               </div>
-                              <p className="text-gray-500 text-sm">{r.restaurantCategory}</p>
-                              {r.hasMatchingFoods && (
-                                <p className="text-xs text-green-600 mt-1">
-                                  Has matching foods
-                                </p>
-                              )}
-                            </div>
-                          </div>
-                        </Link>
-                      ))
-                    ) : <p className="text-center p-4 text-gray-500">No restaurants found</p>
-                  )}
 
-                  {activeTab === "foods" && (
-                    foodsResults.length ? (
-                      foodsResults.map((r, idx) => (
-                        <Link
-                          key={idx}
-                          to={`/restaurant/${r.restaurantName}`}
-                          onClick={() => handleSelect(r.foodName)}
-                          state={{ scrollToFood: r.foodId }}
-                        >
-                          <div className="flex items-center p-3 hover:bg-red-50/50 transition cursor-pointer rounded-lg">
-                            <img
-                              src={r.foodImage}
-                              alt={r.foodName}
-                              className="w-12 h-12 rounded-full sm:block hidden object-cover mr-3"
-                            />
-                            <div className="flex-1">
-                              <p className="font-bold text-[#ff1818] text-[10px] lg:text-[20px] ">{highlight(r.foodName)}</p>
-                              <p className="text-gray-700 text-sm">{r.foodCategory}</p>
-                              <div className="flex items-center mt-1">
-                                <span className="text-xs text-gray-500 mr-1">from</span>
-                                <span className="text-xs font-medium text-[#ff1818]">{r.restaurantName}</span>
-                              </div>
-                              {r.fromMatchedRestaurant && (
-                                <p className="text-xs text-green-600 mt-1">
-                                  From searched restaurant
+                              {/* Info */}
+                              <div className="flex-1 min-w-0">
+                                <p className="font-semibold text-gray-800 text-sm truncate group-hover:text-[#ff1818] transition">
+                                  {highlight(item.restaurantName)}
                                 </p>
+                                <div className="flex items-center gap-1.5 mt-0.5 flex-wrap">
+                                  {item.restaurantCategory && (
+                                    <span className="text-xs text-gray-400">{item.restaurantCategory}</span>
+                                  )}
+                                  {item.location && (
+                                    <>
+                                      <span className="text-gray-200 text-xs">•</span>
+                                      <span className="text-xs text-gray-400">{item.location}</span>
+                                    </>
+                                  )}
+                                </div>
+                              </div>
+
+                              {/* Badge */}
+                              <span className="text-[11px] bg-red-50 text-[#ff1818] px-2 py-0.5 rounded-full flex-shrink-0 font-medium">
+                                {item.foodCount} items
+                              </span>
+                            </div>
+                          </Link>
+                        ))}
+                      </>
+                    )}
+
+                    {/* Section label — Foods */}
+                    {foodsResults.length > 0 && (
+                      <>
+                        <div className="px-4 py-2 bg-gray-50/80 border-b border-gray-100 sticky top-0 z-10">
+                          <span className="text-[10px] font-bold text-gray-400 uppercase tracking-widest flex items-center gap-1.5">
+                            <FaUtensils className="text-orange-400" />
+                            Foods
+                            <span className="ml-1 px-1.5 py-0.5 bg-orange-50 text-orange-400 rounded-full text-[9px]">
+                              {foodsResults.length}
+                            </span>
+                          </span>
+                        </div>
+
+                        {foodsResults.map((item, idx) => (
+                          <Link
+                            key={`f-${idx}`}
+                            to={`/restaurant/${item.restaurantName}`}
+                            onClick={() => handleSelect(item.foodName)}
+                            state={{ scrollToFood: item.foodId }}
+                          >
+                            <div className="flex items-center gap-3 px-4 py-3 hover:bg-orange-50/40 transition group border-b border-gray-50">
+                              {/* Image */}
+                              <div className="relative flex-shrink-0">
+                                <img
+                                  src={item.foodImage}
+                                  alt={item.foodName}
+                                  className="w-11 h-11 rounded-xl object-cover border border-orange-100"
+                                  onError={(e) => { e.target.src = "/default-food.png"; }}
+                                />
+                                <span className="absolute -bottom-1 -right-1 bg-orange-400 rounded-full p-[3px]">
+                                  <FaUtensils className="text-white text-[6px]" />
+                                </span>
+                              </div>
+
+                              {/* Info */}
+                              <div className="flex-1 min-w-0">
+                                <p className="font-semibold text-gray-800 text-sm truncate group-hover:text-[#ff1818] transition">
+                                  {highlight(item.foodName)}
+                                </p>
+                                <div className="flex items-center gap-1.5 mt-0.5 flex-wrap">
+                                  {item.foodCategory && (
+                                    <span className="text-xs text-gray-400">{item.foodCategory}</span>
+                                  )}
+                                  <span className="text-gray-200 text-xs">•</span>
+                                  <span className="text-xs text-gray-400">
+                                    from{" "}
+                                    <span className="text-[#ff1818] font-medium">
+                                      {item.restaurantName}
+                                    </span>
+                                  </span>
+                                </div>
+                              </div>
+
+                              {/* Price */}
+                              {item.foodPrice > 0 && (
+                                <span className="text-xs font-bold text-[#ff1818] flex-shrink-0">
+                                  ${Number(item.foodPrice).toFixed(2)}
+                                </span>
                               )}
                             </div>
-                          </div>
-                        </Link>
-                      ))
-                    ) : <p className="text-center p-4 text-gray-500">No foods found</p>
-                  )}
-                </div>
-              </div>
-            ) : searchQuery && <p className="text-center p-4 text-gray-500">No results found</p>
-          )}
-        </div>
-      )}
+                          </Link>
+                        ))}
+                      </>
+                    )}
+                  </div>
+
+                ) : (
+                  // No results
+                  <div className="py-12 flex flex-col items-center gap-2">
+                    <IoSearch className="text-gray-200 text-5xl" />
+                    <p className="text-sm font-medium text-gray-400">
+                      No results for{" "}
+                      <span className="text-gray-600 font-semibold">&#34;{debouncedQuery}&ldquo;</span>
+                    </p>
+                    <p className="text-xs text-gray-300">Try a different keyword</p>
+                  </div>
+                )}
+              </>
+            )}
+          </motion.div>
+        )}
+      </AnimatePresence>
     </div>
   );
 };

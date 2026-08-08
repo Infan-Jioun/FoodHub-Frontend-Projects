@@ -1,5 +1,5 @@
 
-import { FaUtensils, FaBullseye, FaHistory, FaThumbsUp, FaUserTie, FaGlobe, FaPhone} from "react-icons/fa";
+import { FaUtensils, FaBullseye, FaHistory, FaThumbsUp, FaUserTie, FaGlobe, FaPhone } from "react-icons/fa";
 import { motion } from "framer-motion";
 import { useState } from "react";
 import Skeleton from "react-loading-skeleton";
@@ -32,13 +32,13 @@ const About = () => {
     <div className="min-h-screen bg-gradient-to-b from-white via-gray-50 to-gray-100 py-12 px-4 md:px-20 text-gray-800 font-Kanit">
       {/* Header */}
       <Helmet>
-       
+
       </Helmet>
       <motion.div
         className="text-center mb-16"
         initial="hidden"
         whileInView="visible"
-        
+
         variants={fadeUp}
       >
         <h1 className="text-4xl font-bold text-gray-800 mb-2">
@@ -55,7 +55,7 @@ const About = () => {
           className="grid md:grid-cols-2 gap-10 items-center bg-white rounded-2xl shadow-lg p-6 md:p-10 hover:shadow-2xl transition"
           initial="hidden"
           whileInView="visible"
-          
+
           variants={fadeUp}
         >
           {!loadedImg.foodhub && <Skeleton height={400} className="rounded-xl" />}
@@ -85,7 +85,7 @@ const About = () => {
           className="grid md:grid-cols-2 gap-10 items-center bg-white rounded-2xl shadow-lg p-6 md:p-10 hover:shadow-2xl transition"
           initial="hidden"
           whileInView="visible"
-          
+
           variants={fadeUp}
         >
           <div className="space-y-4">
@@ -119,7 +119,7 @@ const About = () => {
           className="grid md:grid-cols-2 gap-10 items-center bg-white rounded-2xl shadow-lg p-6 md:p-10 hover:shadow-2xl transition"
           initial="hidden"
           whileInView="visible"
-          
+
           variants={fadeUp}
         >
           {!loadedImg.journey && <Skeleton height={400} className="rounded-xl w-full" />}
@@ -155,7 +155,7 @@ const About = () => {
             className="text-center"
             initial="hidden"
             whileInView="visible"
-            
+
             variants={fadeUp}
           >
             <img
@@ -173,7 +173,7 @@ const About = () => {
             className="grid md:grid-cols-3 gap-6"
             initial="hidden"
             whileInView="visible"
-            
+
             variants={fadeUp}
           >
             {accounts.map((acc) => (
@@ -197,7 +197,7 @@ const About = () => {
             className="grid md:grid-cols-2 gap-10 items-center bg-white rounded-2xl shadow-lg p-6 md:p-10 hover:shadow-2xl transition"
             initial="hidden"
             whileInView="visible"
-            
+
             variants={fadeUp}
           >
             <div>
@@ -225,84 +225,134 @@ const About = () => {
 
         {/* Developer Info */}
         <motion.section
-          className="bg-gradient-to-r from-red-500 to-red-700 text-white p-6 md:p-10 rounded-2xl shadow-2xl relative overflow-hidden"
+          className="relative overflow-hidden rounded-3xl shadow-2xl"
           initial="hidden"
           whileInView="visible"
-          
           variants={fadeUp}
         >
-          <div className="absolute inset-0 bg-[url('https://images.unsplash.com/photo-1603415526960-f8f1e8f1c0a6?w=1200')] bg-cover bg-center opacity-20" />
+          {/* Background */}
+          <div className="absolute inset-0 bg-gradient-to-br from-red-600 via-red-500 to-orange-400" />
+          <div className="absolute inset-0 bg-[url('https://images.unsplash.com/photo-1603415526960-f8f1e8f1c0a6?w=1200')] bg-cover bg-center opacity-10" />
 
-          <div className="relative z-10 grid grid-cols-1 md:grid-cols-3 gap-6 md:gap-8 items-center">
-            {!loadedImg.dev && <Skeleton circle height={192} width={192} />}
-            <div className="flex justify-center md:justify-start">
-              <motion.img
-                src="https://i.ibb.co.com/wZ5pnr4K/IMG-20250907-122427-2.jpg"
-                alt="Developer"
-                className={`rounded-full w-32 h-32 md:w-48 md:h-48 object-cover shadow-2xl border-4 border-white transition-opacity duration-500 ${loadedImg.dev ? "opacity-100" : "opacity-0"
-                  }`}
-                onLoad={() => handleImgLoad("dev")}
-                whileHover={{ scale: 1.05 }}
-                transition={{ type: "spring", stiffness: 300 }}
-              />
+          {/* Decorative circles */}
+          <div className="absolute -top-16 -left-16 w-64 h-64 bg-white/10 rounded-full blur-2xl" />
+          <div className="absolute -bottom-16 -right-16 w-64 h-64 bg-orange-300/20 rounded-full blur-2xl" />
+
+          {/* Content */}
+          <div className="relative z-10 flex flex-col md:flex-row items-center gap-10 p-8 md:p-14">
+
+            {/* Avatar */}
+            <div className="flex-shrink-0 flex flex-col items-center gap-3">
+              <div className="relative">
+                {/* Glow ring */}
+                <div className="absolute inset-0 rounded-full bg-white/30 blur-md scale-110" />
+                {!loadedImg.dev && (
+                  <Skeleton circle height={176} width={176} />
+                )}
+                <motion.img
+                  src="https://i.ibb.co.com/Kc7F21y5/professional-photo.png"
+                  alt="Developer"
+                  onLoad={() => handleImgLoad("dev")}
+                  whileHover={{ scale: 1.05 }}
+                  transition={{ type: "spring", stiffness: 300 }}
+                  className={`relative w-36 h-36 md:w-44 md:h-44 rounded-full object-cover border-4 border-white shadow-2xl transition-opacity duration-500 ${loadedImg.dev ? "opacity-100" : "opacity-0 absolute"
+                    }`}
+                />
+              </div>
+              {/* Badge */}
+              <span className="mt-2 px-4 py-1 bg-white/20 backdrop-blur-sm border border-white/30 rounded-full text-sm font-semibold tracking-wide text-white">
+                Full-Stack Developer
+              </span>
             </div>
 
-            <div className="md:col-span-2 space-y-4">
-              <h2 className="text-xl md:text-3xl font-bold flex items-center gap-2 md:gap-3">
-                <FaUserTie /> Developer Info
-              </h2>
-              <div className="grid grid-cols-1 md:grid-cols-2 gap-4 md:gap-6">
-                <div className="bg-white/10 p-4 md:p-5 rounded-xl backdrop-blur-md hover:bg-white/20 transition">
-                  <p className="text-base md:text-lg mb-1 md:mb-2">
-                    <span className="font-semibold">Name:</span> Infan Jioun Rahman
-                  </p>
-                  <p className="text-base md:text-lg">
-                    <span className="font-semibold">Email:</span>{" "}
-                    <a
-                      href="mailto:infanjiounrahman20606@gmail.com"
-                      className="underline hover:text-gray-200 break-all"
-                    >
-                      infanjiounrahman20606@gmail.com
-                    </a>
-                  </p>
-                </div>
-                <div className="bg-white/10 p-4 md:p-5 rounded-xl backdrop-blur-md hover:bg-white/20 transition">
-                  <p className="text-base md:text-lg mb-1 md:mb-2 flex items-center gap-2">
-                    <FaPhone /> 01610240096
-                  </p>
-                  <p className="text-base md:text-lg flex items-center gap-2">
-                    <FaGlobe />
-                    <a
-                      href="https://infan-jioun.vercel.app"
-                      target="_blank"
-                      rel="noreferrer"
-                      className="underline hover:text-gray-200 break-all"
-                    >
-                      Portfolio Website
-                    </a>
-                  </p>
+            {/* Divider - desktop only */}
+            <div className="hidden md:block w-px self-stretch bg-white/20" />
+
+            {/* Info */}
+            <div className="flex-1 space-y-6 text-white">
+              {/* Title */}
+              <div>
+                <p className="text-sm uppercase tracking-widest text-white/60 mb-1 flex items-center gap-2">
+                  <FaUserTie /> Developer Info
+                </p>
+                <h2 className="text-3xl md:text-4xl font-bold">Infan Jioun Rahman</h2>
+              </div>
+
+              {/* Info cards */}
+              <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
+                {/* Email */}
+                <div className="flex items-start gap-3 bg-white/10 hover:bg-white/20 transition-all duration-300 backdrop-blur-sm border border-white/20 rounded-2xl p-4">
+                  <div className="w-9 h-9 rounded-full bg-white/20 flex items-center justify-center flex-shrink-0 mt-0.5">
+                    <svg className="w-4 h-4 text-white" fill="currentColor" viewBox="0 0 20 20">
+                      <path d="M2.003 5.884L10 9.882l7.997-3.998A2 2 0 0016 4H4a2 2 0 00-1.997 1.884z" />
+                      <path d="M18 8.118l-8 4-8-4V14a2 2 0 002 2h12a2 2 0 002-2V8.118z" />
+                    </svg>
+                  </div>
+                  <div className="min-w-0">
+                    <p className="text-xs text-white/50 uppercase tracking-wider mb-0.5">Email</p>
+
+                <a href="mailto:infanjiounrahman20606@gmail.com"
+                    className="text-sm font-medium hover:text-orange-200 transition-colors break-all"
+            >
+                    infanjiounrahman20606@gmail.com
+                  </a>
                 </div>
               </div>
+
+              {/* Phone */}
+              <div className="flex items-start gap-3 bg-white/10 hover:bg-white/20 transition-all duration-300 backdrop-blur-sm border border-white/20 rounded-2xl p-4">
+                <div className="w-9 h-9 rounded-full bg-white/20 flex items-center justify-center flex-shrink-0 mt-0.5">
+                  <FaPhone className="w-4 h-4 text-white" />
+                </div>
+                <div>
+                  <p className="text-xs text-white/50 uppercase tracking-wider mb-0.5">Phone</p>
+
+                <a href="tel:01610240096"
+                  className="text-sm font-medium hover:text-orange-200 transition-colors"
+            >
+                  01610240096
+                </a>
+              </div>
+            </div>
+
+            {/* Portfolio */}
+            <div className="flex items-start gap-3 bg-white/10 hover:bg-white/20 transition-all duration-300 backdrop-blur-sm border border-white/20 rounded-2xl p-4 sm:col-span-2">
+              <div className="w-9 h-9 rounded-full bg-white/20 flex items-center justify-center flex-shrink-0 mt-0.5">
+                <FaGlobe className="w-4 h-4 text-white" />
+              </div>
+              <div>
+                <p className="text-xs text-white/50 uppercase tracking-wider mb-0.5">Portfolio</p>
+
+               <a href="https://infan-jioun.vercel.app"
+                target="_blank"
+                rel="noreferrer"
+                className="text-sm font-medium hover:text-orange-200 transition-colors"
+            >
+                infan-jioun.vercel.app ↗
+              </a>
             </div>
           </div>
-        </motion.section>
       </div>
-
-      {/* Thank You */}
-      <motion.section
-        className="text-center mt-16"
-        initial="hidden"
-        whileInView="visible"
-        
-        variants={fadeUp}
-      >
-        <p className="text-lg font-medium text-gray-700">
-          Thank you for choosing{" "}
-          <span className="text-[#ff1818] font-bold">Foodhub</span> — where your
-          next favorite meal is just a click away!
-        </p>
-      </motion.section>
     </div>
+  </div >
+</motion.section >
+      </div >
+
+  {/* Thank You */ }
+  < motion.section
+className = "text-center mt-16"
+initial = "hidden"
+whileInView = "visible"
+
+variants = { fadeUp }
+  >
+  <p className="text-lg font-medium text-gray-700">
+    Thank you for choosing{" "}
+    <span className="text-[#ff1818] font-bold">Foodhub</span> — where your
+    next favorite meal is just a click away!
+  </p>
+      </motion.section >
+    </div >
   );
 };
 

@@ -5,7 +5,6 @@ import { MdDeleteOutline } from "react-icons/md";
 import useAuth from "../../Hooks/useAuth";
 import Swal from "sweetalert2";
 import useAxiosSecure from "../../Hooks/useAxiosSecure";
-import { IoArrowBackCircleOutline } from "react-icons/io5";
 
 const MyOrder = () => {
   const [cartFood, refetch] = useAddFood();
@@ -44,7 +43,7 @@ const MyOrder = () => {
     try {
       setQuantities(prev => ({ ...prev, [id]: newQuantity }));
 
-      const res = await axiosSecure.patch(`/addFood/${id}`, { quantity: newQuantity });
+      const res = await axiosSecure.patch(`/cart/${id}`, { quantity: newQuantity });
 
       if (res.data.modifiedCount > 0) {
         refetch();
@@ -72,7 +71,7 @@ const MyOrder = () => {
         confirmButtonText: "Yes, delete it!",
       }).then((result) => {
         if (result.isConfirmed) {
-          axiosSecure.delete(`/addFood/${id}`).then((res) => {
+          axiosSecure.delete(`/cart/${id}`).then((res) => {
             refetch();
             if (res.data.deletedCount > 0) {
               Swal.fire({

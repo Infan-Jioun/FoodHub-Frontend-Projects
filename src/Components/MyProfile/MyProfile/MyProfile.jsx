@@ -135,6 +135,7 @@ const MyProfile = () => {
   };
 
   const updateUserProfileData = async (data) => {
+    // eslint-disable-next-line no-useless-catch
     try {
       await updateUserProfile({
         displayName: data.name,

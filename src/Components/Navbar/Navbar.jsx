@@ -20,6 +20,7 @@ import useAddFood from "../Hooks/useAddFood";
 import { GiHamburger } from "react-icons/gi";
 import { useTypewriter } from "react-simple-typewriter";
 import Search from "./Search/Search";
+import { CgProfile } from "react-icons/cg";
 const Navbar = () => {
   const DashboardLink = ({ to, icon, label }) => (
     <Link to={to}>
@@ -185,7 +186,7 @@ const Navbar = () => {
                 {/* Menu Items */}
                 <Link to="/myProfile">
                   <MenuItem className="flex items-center gap-3 hover:bg-gray-50 rounded-lg p-2">
-                    <IoMdSettings className="text-gray-600" size={18} />
+                    <CgProfile className="text-gray-600" size={18} />
                     <Typography className="font-medium">Edit Profile</Typography>
                   </MenuItem>
                 </Link>

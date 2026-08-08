@@ -8,6 +8,7 @@ import { Toaster } from 'react-hot-toast';
 import { QueryClient, QueryClientProvider } from '@tanstack/react-query';
 import ReactGA from 'react-ga4';
 import { motion } from 'framer-motion';
+import { ReactLenis } from "lenis/react";
 import { FiX, FiArrowRight, FiWifiOff, FiAlertCircle } from 'react-icons/fi';
 import {
   Dialog,
@@ -195,7 +196,13 @@ createRoot(document.getElementById('root')).render(
         <Toaster />
         <QueryClientProvider client={queryClient}>
           <div className="font-Poppins bg-white text-black min-h-screen">
-            <AppWithLoader />
+            <ReactLenis root
+              options={{
+                lerp: 0.1,
+                smoothWheel: true,
+              }}>
+              <AppWithLoader />
+            </ReactLenis>
           </div>
         </QueryClientProvider>
       </AuthProvider>
